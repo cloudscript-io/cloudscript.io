@@ -378,6 +378,40 @@ footer.site-footer { background: var(--ink); color: #C8D2E0; padding: 48px 0 30p
 .prose td { color: var(--ink-soft); }
 .back-link { display: inline-block; margin-top: 40px; }
 
+/* ---- News (/news stream, post pages, per-app release history) ------------ */
+.post-kicker { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 10px; }
+.post-kicker a { color: var(--slate); }
+.post-kicker a:hover { color: var(--blue); }
+.prose .post-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.app-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600; color: var(--ink);
+  background: var(--cloud-2); border: 1px solid var(--chip-border);
+  border-radius: 999px; padding: 3px 10px 3px 4px; line-height: 1.4;
+}
+.app-chip img { width: 20px; height: 20px; border-radius: 5px; }
+.app-chip:hover { border-color: var(--sky); color: var(--blue); }
+.prose a.app-chip:not(.btn) { color: var(--ink); }
+.prose a.app-chip:not(.btn):hover { color: var(--blue); }
+.post-version { font-size: 13px; font-weight: 600; color: var(--slate); }
+.news-stream { list-style: none; margin: 0; padding: 0; }
+.news-item {
+  display: grid; grid-template-columns: 110px 1fr; gap: 18px;
+  padding: 22px 0; border-bottom: 1px solid var(--line);
+}
+.news-item time { font-size: 14px; color: var(--slate); padding-top: 4px; white-space: nowrap; }
+.prose .news-item h2 { font-size: 20px; margin: 0 0 6px; }
+.prose .news-item h2 a { color: var(--ink); font-weight: 700; }
+.prose .news-item h2 a:hover { color: var(--blue); }
+.prose .news-item p { margin: 0 0 10px; font-size: 15px; }
+.news-tags { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.prose ul.release-history { list-style: none; padding: 0; }
+.prose ul.release-history li { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.release-history time { font-size: 14px; color: var(--slate); min-width: 92px; }
+@media (max-width: 760px) {
+  .news-item { grid-template-columns: 1fr; gap: 6px; }
+}
+
 /* ---- Responsive --------------------------------------------------------- */
 /* The featured thumbnail costs the description column 242px (image + gap), and that
    column only has room for it while #apps is at its full 1080px max-width. One pixel

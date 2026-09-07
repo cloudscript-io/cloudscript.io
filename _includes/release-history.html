@@ -1,0 +1,16 @@
+{% comment %}
+  Release history for one app, drawn from /news. Usage on an app page:
+    {% include release-history.html app="radar-renderer" %}
+  Lists every post whose `app` front-matter key matches, newest first, and renders nothing
+  at all for an app with no posts yet — so it is safe to include on every app page.
+{% endcomment %}
+{% assign app_posts = site.posts | where: "app", include.app %}
+{% if app_posts.size > 0 %}
+    <h2 id="release-history">Release history</h2>
+    <ul class="release-history">
+      {% for post in app_posts %}
+      <li><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%-d %b %Y" }}</time> <a href="{{ post.url }}">{{ post.title | escape }}</a>{% if post.version %} <span class="post-version">Version {{ post.version | escape }}</span>{% endif %}</li>
+      {% endfor %}
+    </ul>
+    <p>Announcements for every app are on the <a href="/news/">News</a> page.</p>
+{% endif %}

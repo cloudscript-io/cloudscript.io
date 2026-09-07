@@ -6,6 +6,18 @@ title: CloudScript.io
 description: "CloudScript.io builds practical, purpose-driven apps for Confluence Cloud. Each asks only for the access its job needs, each backed by clear documentation and a plain-English privacy policy."
 url: https://www.cloudscript.io
 
+# News (release announcements). Posts live in _posts/ as dated Markdown files
+# (YYYY-MM-DD-<app-slug>-<version>.md) and are served at /news/<slug>, e.g.
+# /news/radar-renderer-2-5 — the permanent URL quoted on Crunchbase, LinkedIn
+# and the Atlassian Community. This is a SITE-LEVEL permalink for posts only:
+# it emits news/<slug>.html, which Pages serves extensionless, exactly like
+# the hand-authored flat pages. (The CLAUDE.md rule against `permalink` front
+# matter on individual pages still stands: a per-page permalink ending in "/"
+# forces a trailing-slash redirect; this one does not end in "/".)
+# The stream itself is news/index.html (-> /news/) and the Atom feed is
+# news/feed.xml, both hand-authored Liquid — no jekyll-feed, no plugins.
+permalink: /news/:title
+
 # Internal / authoring files must NOT be published to the live site.
 exclude:
   - CLAUDE.md

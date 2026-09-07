@@ -190,6 +190,8 @@ description: "Build a quadrant tech radar in a Confluence page: enter blips in a
     <p>The editor's file and clipboard handling stays inside the browser as well. An uploaded file is read with the browser's own file reader and checked against the size cap before its contents can touch the list; an Excel workbook is recognised by its extension and its file signature and refused without being parsed. Spreadsheet paste prefers the plain tab-separated text the clipboard carries, and falls back to the clipboard's HTML table only when no usable text is present, parsing it as an inert document from which only cell text is read, so no script in a pasted table can run. Names and descriptions entering by any route (typed, pasted or uploaded) are neutralised on render and on export exactly as before: HTML in a label is inert, and bidirectional and zero-width characters are neutralised in display.</p>
     <p>Full detail can be found in the app's <a href="/apps/radar-renderer/privacy">Privacy Policy</a>, and our broader approach is described in the <a href="/security">Security Policy</a> and <a href="/trust">Trust Center</a>.</p>
 
+    {% include release-history.html app="radar-renderer" %}
+
     <h2>Legal</h2>
     <p>Terms and privacy specific to this app:</p>
     <ul>

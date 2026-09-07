@@ -108,6 +108,8 @@ description: "A niko-niko calendar for Confluence: one entry a day per person on
     <p>Every seven days the app reports each stored account ID to Atlassian's personal data reporting API, a platform-internal call under the <code>report:personal-data</code> scope. When Atlassian returns an account as closed, every entry for that account is erased within one cycle, automatically. Alongside that automatic path, each person can permanently delete their own entries, and site administrators can delete any person's entries, or all entries older than a chosen date, from the app's administration screen (see Deleting entries). Administrative deletion is refused server-side for anyone who is not a site administrator, and the app never deletes entries on a schedule of its own.</p>
     <p>The full detail is in the app's <a href="/apps/nikoniko/privacy">Privacy Policy</a> and <a href="/apps/nikoniko/dpa">Data Processing Addendum</a>, and our broader approach is described in the <a href="/security">Security Policy</a> and <a href="/trust">Trust Center</a>.</p>
 
+    {% include release-history.html app="nikoniko" %}
+
     <h2>Legal</h2>
     <p>Terms, privacy and data processing specific to this app:</p>
     <ul>
