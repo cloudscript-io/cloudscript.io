@@ -15,8 +15,14 @@ layout: null
   announced). The same text is emitted as <summary> and <content> so the Zap can map
   whichever field Zapier surfaces. Zapier keys on <id>, so editing a published post does not
   re-post it.
+
+  The post's `image:` (the same file as og:image) is emitted twice per entry, as an Atom
+  enclosure link and as a Media RSS <media:thumbnail>, because LinkedIn's API does not scrape
+  og:image for posts created through it (confirmed 7 Sep 2026: Post Inspector showed the
+  image, the Zapier-created post did not). The Zap maps whichever of the two Zapier's parser
+  surfaces to the LinkedIn action's Content Image field.
 {% endcomment %}
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
   <title>CloudScript.io News (LinkedIn syndication)</title>
   <id>{{ "/news/linkedin.xml" | absolute_url }}</id>
   <link href="{{ "/news/" | absolute_url }}"/>
@@ -28,7 +34,9 @@ layout: null
     <title>{{ post.title | xml_escape }}</title>
     <id>{{ post.url | absolute_url }}</id>
     <link href="{{ post.url | absolute_url }}"/>
-    <published>{{ post.date | date_to_xmlschema }}</published>
+{% if post.image %}{% assign img = post.image | absolute_url %}{% if post.image contains ".png" %}{% assign mime = "image/png" %}{% else %}{% assign mime = "image/jpeg" %}{% endif %}    <link rel="enclosure" type="{{ mime }}" href="{{ img }}"/>
+    <media:thumbnail url="{{ img }}"/>
+{% endif %}    <published>{{ post.date | date_to_xmlschema }}</published>
     <updated>{{ post.date | date_to_xmlschema }}</updated>
     <summary type="text">{{ body | xml_escape }}</summary>
     <content type="text">{{ body | xml_escape }}</content>
