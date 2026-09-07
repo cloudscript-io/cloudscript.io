@@ -1,0 +1,37 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="utf-8"?>
+{% comment %}
+  Syndication feed for the Cloudscript LinkedIn Page, consumed by the Zapier "New Item in
+  Feed" -> LinkedIn Pages "Create Company Update" Zap. Deliberately NOT advertised: no
+  <link rel="alternate"> in default.html, no mention on /news/, so subscribers to the public
+  Atom feed (news/feed.xml) never see the LinkedIn copy. It is still a public URL, so nothing
+  confidential belongs in it.
+
+  Each entry's body is the post's `linkedin:` front matter (copy written for the LinkedIn
+  audience), falling back to `description` when a post has none. A post with `linkedin: false`
+  is omitted entirely (use this for retrodated or housekeeping posts that must not be
+  announced). The same text is emitted as <summary> and <content> so the Zap can map
+  whichever field Zapier surfaces. Zapier keys on <id>, so editing a published post does not
+  re-post it.
+{% endcomment %}
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>CloudScript.io News (LinkedIn syndication)</title>
+  <id>{{ "/news/linkedin.xml" | absolute_url }}</id>
+  <link href="{{ "/news/" | absolute_url }}"/>
+  <link rel="self" type="application/atom+xml" href="{{ "/news/linkedin.xml" | absolute_url }}"/>
+  <updated>{% if site.posts.size > 0 %}{{ site.posts.first.date | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}</updated>
+  <author><name>CloudScript.io</name></author>
+{% for post in site.posts limit: 20 %}{% if post.linkedin == false %}{% continue %}{% endif %}{% if post.linkedin %}{% assign body = post.linkedin | strip %}{% else %}{% assign body = post.description | strip %}{% endif %}
+  <entry>
+    <title>{{ post.title | xml_escape }}</title>
+    <id>{{ post.url | absolute_url }}</id>
+    <link href="{{ post.url | absolute_url }}"/>
+    <published>{{ post.date | date_to_xmlschema }}</published>
+    <updated>{{ post.date | date_to_xmlschema }}</updated>
+    <summary type="text">{{ body | xml_escape }}</summary>
+    <content type="text">{{ body | xml_escape }}</content>
+  </entry>
+{% endfor %}
+</feed>

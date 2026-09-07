@@ -16,6 +16,8 @@ url: https://www.cloudscript.io
 # forces a trailing-slash redirect; this one does not end in "/".)
 # The stream itself is news/index.html (-> /news/) and the Atom feed is
 # news/feed.xml, both hand-authored Liquid — no jekyll-feed, no plugins.
+# news/linkedin.xml is a second, unadvertised Atom feed read only by the Zapier -> LinkedIn
+# Page Zap (body from each post's `linkedin:` front matter, else `description`).
 permalink: /news/:title
 
 # Internal / authoring files must NOT be published to the live site.

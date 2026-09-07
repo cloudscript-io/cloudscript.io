@@ -12,7 +12,18 @@ layout: default
                    no chip, no buttons. An inline Marketplace link in the opening sentence is
                    still written by hand in the post body, house convention for releases.
     version      — the Marketplace-visible version string (e.g. "2.5"); omit for non-releases
-    image        — optional raster share image, see the layout's og:image comment
+    image        — REQUIRED for every post: the raster share image (og:image), which is also
+                   the picture on the LinkedIn link card, and every LinkedIn post must carry
+                   one. Prefer a rendered-output hero over a settings screenshot; 1200x628
+                   (1.91:1) crops cleanly on LinkedIn (see radar-renderer/share-radar-legend.png).
+    linkedin     — optional block scalar (`linkedin: |`): the post text for the Cloudscript
+                   LinkedIn Page, written for that audience (~120-150 words, house voice, no
+                   hashtags, no URL — the Zap attaches the article as the link card). Where
+                   the app has not been introduced on LinkedIn before, open with what the
+                   app does before what the release changes. Read
+                   only by news/linkedin.xml, never rendered on the page or in the public
+                   feed. Omit to fall back to `description`; set `linkedin: false` to keep a
+                   post (e.g. a retrodated one) off LinkedIn entirely.
   The date and the URL slug come from the filename (YYYY-MM-DD-<slug>.md).
 {% endcomment %}
 {% if page.app %}{% assign app = site.data.apps[page.app] %}{% endif %}
