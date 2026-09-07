@@ -19,8 +19,16 @@ layout: null
   The post's `image:` (the same file as og:image) is emitted twice per entry, as an Atom
   enclosure link and as a Media RSS <media:thumbnail>, because LinkedIn's API does not scrape
   og:image for posts created through it (confirmed 7 Sep 2026: Post Inspector showed the
-  image, the Zapier-created post did not). The Zap maps whichever of the two Zapier's parser
-  surfaces to the LinkedIn action's Content Image field.
+  image, the Zapier-created post did not).
+
+  Zap configuration as shipped (7 Sep 2026), LinkedIn Pages "Create Company Update":
+    Update Content = Description + "\n\nFull release notes: " + ID
+    Image Type     = post_media          Image = Link Enclosure
+    Media URL, Preview Title, Preview Description = empty
+  Zapier flattens the two <link> elements into one space-joined "Link" value, so the article
+  URL must come from ID (= the post URL), never from Link. An image post and a link card
+  cannot be combined (LinkedIn API: "DataMap should have no more than one entry for a union
+  type"), which is why the URL travels in the text and the card is not used.
 {% endcomment %}
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
   <title>CloudScript.io News (LinkedIn syndication)</title>
