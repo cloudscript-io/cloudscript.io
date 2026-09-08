@@ -37,4 +37,6 @@ Below the 400-blip limit a quadrant can still hold more blips than can be drawn 
 
 The app still requests no permissions and sends nothing outside Atlassian: the blip list is stored in the macro on your page and the chart is drawn in the reader's browser. This release makes no change to the app's scopes or data handling, so existing installations update automatically and no administrator action is needed.
 
+A two-minute demo of the app is on the [user guide](/apps/radar-renderer#demo) and on [YouTube](https://www.youtube.com/watch?v=X9wxTSpgqzw).
+
 Read more in our updated [User guide](/apps/radar-renderer).

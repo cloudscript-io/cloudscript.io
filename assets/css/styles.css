@@ -330,6 +330,7 @@ footer.site-footer { background: var(--ink); color: #C8D2E0; padding: 48px 0 30p
   border-top: 1px solid #26384F; padding-top: 18px; font-size: 13px; color: #7C8AA0;
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
 }
+.foot-socials { display: inline-flex; gap: 14px; align-items: center; }
 .foot-social { display: inline-flex; line-height: 0; color: var(--sky); }
 .foot-social:hover { color: #fff; }
 .foot-social svg { width: 20px; height: 20px; }

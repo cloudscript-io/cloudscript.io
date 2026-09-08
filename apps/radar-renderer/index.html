@@ -11,6 +11,8 @@ description: "Build a quadrant tech radar in a Confluence page: enter blips in a
     <style>
       .prose figure.shot { margin: 1.6rem 0; }
       .prose figure.shot img { width: 100%; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #FFFFFF; }
+      .prose figure.shot video { width: 100%; height: auto; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #13243B; }
+      .prose figure.shot figcaption a { color: #2E6FE0; }
       .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
       .prose ol { margin: 0 0 16px; padding-left: 22px; color: #3A4A60; }
       .prose ol li { margin: 0 0 8px; }
@@ -36,6 +38,16 @@ description: "Build a quadrant tech radar in a Confluence page: enter blips in a
     <figure class="shot">
       <img src="guide-hero.png" alt="The sample radar rendered on a page: four quadrant cards in blue, green, orange and purple, a movement key row, and a numbered legend grouped by quadrant and ring.">
       <figcaption>The sample blip list rendered as a quadrant radar on a Confluence page.</figcaption>
+    </figure>
+
+    <figure class="shot video" id="demo">
+      <video controls playsinline preload="metadata" width="1920" height="1080"
+             poster="demo-poster.jpg" aria-label="Demo video: Tech Adoption Radar for Confluence">
+        <source src="demo.mp4" type="video/mp4">
+        <track kind="captions" src="demo.vtt" srclang="en" label="English">
+        Your browser does not play embedded video. <a href="https://www.youtube.com/watch?v=X9wxTSpgqzw" target="_blank" rel="noopener">Watch the demo on YouTube</a>.
+      </video>
+      <figcaption>A two-minute tour of the app. Captions are available from the player; the video is also on <a href="https://www.youtube.com/watch?v=X9wxTSpgqzw" target="_blank" rel="noopener">YouTube</a>.</figcaption>
     </figure>
 
     <h2>Adding a radar</h2>
