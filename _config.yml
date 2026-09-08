@@ -3,7 +3,7 @@
 # Everything else is hand-authored HTML + CSS. No theme, no plugins, no build pipeline.
 
 title: CloudScript.io
-description: "CloudScript.io builds practical, purpose-driven apps for Confluence Cloud. Each asks only for the access its job needs, each backed by clear documentation and a plain-English privacy policy."
+description: "CloudScript.io builds practical, purpose-driven apps for the Atlassian ecosystem. Each asks only for the access its job needs, each backed by clear documentation and a plain-English privacy policy."
 url: https://www.cloudscript.io
 
 # Fallback link-preview image for any page without its own `image:` front matter
