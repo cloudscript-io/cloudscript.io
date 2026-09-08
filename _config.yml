@@ -6,6 +6,12 @@ title: CloudScript.io
 description: "CloudScript.io builds practical, purpose-driven apps for Confluence Cloud. Each asks only for the access its job needs, each backed by clear documentation and a plain-English privacy policy."
 url: https://www.cloudscript.io
 
+# Fallback link-preview image for any page without its own `image:` front matter
+# (homepage, /news, /about, /trust, /support, /security, the Mermaid guide, 404).
+# Vendor-level by design: a page that can show its own screenshot should set `image:`
+# instead. Raster, 1120x548 — unfurlers do not render the SVG logos in assets/img/.
+default_image: /assets/img/share-default.png
+
 # News (release announcements). Posts live in _posts/ as dated Markdown files
 # (YYYY-MM-DD-<app-slug>-<version>.md) and are served at /news/<slug>, e.g.
 # /news/radar-renderer-2-5 — the permanent URL quoted on Crunchbase, LinkedIn
