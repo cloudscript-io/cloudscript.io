@@ -9,7 +9,10 @@ url: https://www.cloudscript.io
 # Fallback link-preview image for any page without its own `image:` front matter
 # (homepage, /news, /about, /trust, /support, /security, the Mermaid guide, 404).
 # Vendor-level by design: a page that can show its own screenshot should set `image:`
-# instead. Raster, 1120x548 — unfurlers do not render the SVG logos in assets/img/.
+# instead. Raster PNG, 1200x630 — unfurlers do not render the SVG logos in assets/img/.
+# Source: Marketing/Branding/share-default-1200x630.source.html (render with headless
+# Chrome at --window-size=1200,630). Vendor-neutral wording on purpose: it says
+# "Atlassian", not "Confluence", so it still holds when Jira apps ship.
 default_image: /assets/img/share-default.png
 
 # News (release announcements). Posts live in _posts/ as dated Markdown files
