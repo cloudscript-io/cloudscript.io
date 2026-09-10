@@ -1,0 +1,74 @@
+# kb-sync: mirror the user guides on cloudscript.io into the Cloudscript Help knowledge base
+# space in Confluence. See scripts/kb-sync/README.md and the OpenSpec change
+# openspec/changes/sync-guides-to-confluence-kb/ (design D8 to D11).
+#
+# Independent of GitHub Pages: Pages keeps building the site natively, and this workflow only
+# reads the repository and talks to Confluence. A push to main that changes a guide, a registry
+# file or the sync itself runs a live sync. Manual dispatch defaults to a dry run that prints the
+# intended writes and writes nothing. The four secrets are created by hand (task 5.1); until they
+# exist a live run is refused and the job fails, on purpose, rather than pretending to succeed.
+name: kb-sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/**/index.html"
+      - "_data/apps/*.yml"
+      - "scripts/kb-sync/**"
+      - ".github/workflows/kb-sync.yml"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: read Confluence and print every intended write without writing"
+        type: boolean
+        default: true
+
+# Read the repository, nothing else. The workflow never writes to GitHub.
+permissions:
+  contents: read
+
+# Two pushes must never interleave writes to the same space; the second waits for the first.
+concurrency:
+  group: kb-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync guides to Confluence
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node 20
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: scripts/kb-sync/package-lock.json
+
+      - name: Install the sync from the committed lockfile
+        run: npm ci --no-audit --no-fund
+        working-directory: scripts/kb-sync
+
+      # The explicit file list works on every Node release; `node --test <directory>` recurses
+      # on Node 20 only.
+      - name: Run the sync tests
+        run: node --test tests/kb-sync/*.test.mjs
+
+      # Secrets reach the script as environment variables and nowhere else. A manual dispatch
+      # with dry_run ticked (the default) sets KB_SYNC_DRY_RUN=1; a push runs live. The script
+      # appends its per-page result table to the job summary itself.
+      - name: Sync
+        env:
+          CONFLUENCE_BASE_URL: ${{ secrets.CONFLUENCE_BASE_URL }}
+          CONFLUENCE_USER_EMAIL: ${{ secrets.CONFLUENCE_USER_EMAIL }}
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+          KB_SPACE_KEY: ${{ secrets.KB_SPACE_KEY }}
+          KB_SYNC_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == true && '1' || '0' }}
+        run: node scripts/kb-sync/sync.mjs

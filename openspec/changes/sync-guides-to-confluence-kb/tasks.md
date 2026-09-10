@@ -60,7 +60,19 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
 
 ## 4. Workflow
 
-- [ ] 4.1 `.github/workflows/kb-sync.yml`: triggers per spec (push to `main` on guide/registry/script paths; `workflow_dispatch` with `dry_run` default `true`); `permissions: contents: read`; concurrency group `kb-sync`; actions pinned by full SHA; Node 20 LTS; `npm ci` in `scripts/kb-sync`; run with secrets mapped to env; write the result table to `$GITHUB_STEP_SUMMARY`; `timeout-minutes: 10`. Validate with `actionlint` if available, else by a dispatch dry run in 5.1. Commit.
+- [x] 4.1 `.github/workflows/kb-sync.yml`: triggers per spec (push to `main` on guide/registry/script paths; `workflow_dispatch` with `dry_run` default `true`); `permissions: contents: read`; concurrency group `kb-sync`; actions pinned by full SHA; Node 20 LTS; `npm ci` in `scripts/kb-sync`; run with secrets mapped to env; write the result table to `$GITHUB_STEP_SUMMARY`; `timeout-minutes: 10`. Validate with `actionlint` if available, else by a dispatch dry run in 5.1. Commit.
+  Verified 2026-09-10: `actionlint` is not installed here, so the file was parsed with Ruby's YAML
+  library (clean) and is covered by `tests/kb-sync/workflow.test.mjs` (5 tests): `permissions`
+  is exactly `contents: read`, the push trigger is `main` on the three guide/registry/sync path
+  filters (plus the workflow file itself), the path filters are exercised against guide, legal,
+  news and asset paths, `workflow_dispatch` has `dry_run` boolean defaulting to true, the
+  concurrency group is `kb-sync`, both actions are pinned by full commit SHA (checkout v7.0.1,
+  setup-node v7.0.0, resolved from the GitHub API on 2026-09-10), Node 20, `npm ci` in
+  `scripts/kb-sync`, `timeout-minutes: 10`, and the four secrets map to the four environment
+  variables with `KB_SYNC_DRY_RUN` derived from the dispatch input. The script appends the
+  result table to `$GITHUB_STEP_SUMMARY` itself. The test step uses the explicit file list
+  (`tests/kb-sync/*.test.mjs`) because `node --test <directory>` recurses on Node 20 only.
+  The dispatch dry run of 5.1 remains the live validation.
 
 ## 5. One-off setup and live verification (Natasha; automation stops at each gate until she confirms)
 
