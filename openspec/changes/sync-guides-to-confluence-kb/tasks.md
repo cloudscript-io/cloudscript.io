@@ -46,7 +46,17 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
   indexes content properties for CQL only when an app declares them, so `indexSyncedPages`
   reads each page's property directly and the CQL search is an optimisation that falls back
   to that index; and moving a page uses the v1 move endpoint because v2 has none.
-- [ ] 3.2 `sync.mjs`: orchestrate per app independently; hash per D5; create / update / skip / archive per D2, D5, D6; `--dry-run` and `KB_SYNC_DRY_RUN=1` perform reads only and print intentions; per-page result table; non-zero exit if any page failed. Tests with the mocked client: unchanged-skip, single-version update, rename-keeps-page, retire-archives, dry-run-writes-nothing, one-failing-page (spec `kb-sync`). Commit.
+- [x] 3.2 `sync.mjs`: orchestrate per app independently; hash per D5; create / update / skip / archive per D2, D5, D6; `--dry-run` and `KB_SYNC_DRY_RUN=1` perform reads only and print intentions; per-page result table; non-zero exit if any page failed. Tests with the mocked client: unchanged-skip, single-version update, rename-keeps-page, retire-archives, dry-run-writes-nothing, one-failing-page (spec `kb-sync`). Commit.
+  Verified 2026-09-10: `tests/kb-sync/sync.test.mjs` (16 tests, in-memory client) green under Node
+  20 and 24: dry-run-writes-nothing (seven `create` intentions, `email-viewer-jira` listed as
+  `skipped (status: coming-soon)`, zero writes), create-then-unchanged, unchanged-skip via CQL
+  and via the property index, single-version update with `kb-sync <short commit>`, rename keeps
+  the page, retire archives (retitled, moved under `Archived guides`, `archivedAt` stamped, no
+  delete operation exists), un-archive, D7 ordering move on create, one failing page (conversion
+  failure and a rejected update) leaving the others done and the run non-zero, a read-back that
+  disagrees reported as failed, and the CLI itself (`--dry-run` exits 0 with seven intentions and
+  the markdown table in `$GITHUB_STEP_SUMMARY`; a live run without credentials exits 2).
+  `node scripts/kb-sync/sync.mjs --dry-run` succeeds offline against an empty in-memory space.
 
 ## 4. Workflow
 

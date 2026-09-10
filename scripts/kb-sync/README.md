@@ -45,6 +45,27 @@ synced page ends with a footer that links to the dated legal pages on the websit
 - Retirement (design D6): a page whose slug is no longer `live` is retitled `[Archived] <title>`,
   moved under the `Archived guides` parent and stamped `archivedAt`. Nothing is ever deleted.
 
+## How a run decides
+
+For every `status: live` entry, in registry order and independently of the others:
+
+1. The guide is extracted and converted; a page that fails extraction, conversion or the XML
+   check is reported as `failed` before any write, and the run moves on.
+2. The page is located by its `cloudscript-kb` property: the design's CQL search first, then a
+   per-run index built by reading the property of every page in the space (Confluence indexes
+   content properties for CQL only when an app declares them, so the index is the fallback that
+   always works). The result table says which path found it.
+3. No page: `create` under the space home page, then a single move so it sits before the next
+   live app by registry `order` (design D7, on creation only). Page archived: `unarchive`. Stored
+   hash equal to the computed hash: `unchanged`, no request. Otherwise `update` with
+   `version.number + 1` and the message `kb-sync <short commit>`.
+4. Every write is read back (title, version number, property hash) before it is reported.
+
+Then every registry entry that is not live, and every synced page whose slug has left the
+registry, is `archive`d if it is not already; an entry with no page is `skipped`. The run exits
+non-zero if any page failed, after processing all of them, and prints a per-page table (also
+appended to the job summary in Actions).
+
 ## Environment variables
 
 The script reads credentials from `process.env` only, never from a file, and redacts the
@@ -58,6 +79,7 @@ The script reads credentials from `process.env` only, never from a file, and red
 | `KB_SPACE_KEY`          | `CSHELP`                                                                |
 | `KB_SYNC_DRY_RUN`       | `1` performs reads only and prints every intended write                 |
 | `GITHUB_SHA`            | Set by Actions; named in the version message and the page property      |
+| `KB_SYNC_VERBOSE`       | `1` prints every request (method and path only) to stderr; `--verbose` too |
 
 In GitHub Actions the four credentials are repository secrets with the same names. Nothing in
 this repository holds a value for any of them.
@@ -82,6 +104,19 @@ node scripts/kb-sync/sync.mjs --dry-run
 Node 20 or newer. The only dependency is `parse5` (pinned exactly, one transitive package,
 installed with `npm ci` against the committed lockfile). Live runs from a laptop work with the
 same environment variables but the workflow is the intended path.
+
+## Files
+
+| File                     | Role                                                                   |
+| ------------------------ | ---------------------------------------------------------------------- |
+| `sync.mjs`               | Entry point and orchestration (`runSync`, the result table, the CLI)   |
+| `registry.mjs`           | Reads `_data/apps/*.yml` with a strict flat-YAML subset parser         |
+| `extract.mjs`            | The extraction boundary and the footer                                 |
+| `convert.mjs`            | HTML to storage format, the no-text-lost check, the content hash       |
+| `xml.mjs`                | Strict XML well-formedness parser for the converted body               |
+| `confluence.mjs`         | The REST client: env-only credentials, redaction, the calls the sync needs |
+| `mock-confluence.mjs`    | In-memory stand-in with the same interface, for the offline dry run and tests |
+| `text.mjs`               | Escaping, whitespace normalisation and URL resolution helpers          |
 
 ## Tests
 
