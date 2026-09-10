@@ -79,3 +79,68 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
 - [ ] 5.1 Natasha: create Confluence space `CSHELP` "Cloudscript Help" (space description states it is generated from cloudscript.io and manual edits are overwritten); create the service account (`support-sync@cloudscript.io` or equivalent) with Confluence product access only and space permissions (view, add page, edit page) on `CSHELP` only; mint a scoped API token (`read:page:confluence`, `write:page:confluence`, `read:content.property:confluence`, `write:content.property:confluence`, `read:space:confluence`); add the four repository secrets. Then run `workflow_dispatch` with `dry_run=true` and confirm seven `create` intentions and zero errors in the job summary. Record the token scopes actually granted (if scoped tokens lack a needed scope, note the fallback per design Risks).
 - [ ] 5.2 Run `workflow_dispatch` with `dry_run=false`. Read each of the seven pages back through the REST API and compare body to the golden for that slug; open each in Confluence and confirm images render from cloudscript.io. Re-run the workflow and confirm seven `unchanged` results and no new versions. Push a one-word edit to one guide on `main` and confirm exactly that page gains one version. Write `run-report.md` in this change directory (versions, screenshots, any deviation).
 - [ ] 5.3 Natasha: in project CUS, link `CSHELP` as the knowledge base and set article visibility to match the portal's customer access setting; search for one article from the help centre and open it; then enable the virtual service agent on the knowledge base and ask it one question whose answer is in a guide. Append results to `run-report.md`. Update `PROJECT_STATUS.md` and `README.md` with the sync description and the one-off setup facts (space key, service account name, secret names, never their values). Commit and push.
+
+## Handover for 5.1 (2026-09-10, written after 4.1)
+
+Tasks 1.1 to 4.1 are six commits on local `main` (f756811, 458fdc2, 49d6bfe, 2721132, 23ffb0a,
+cf2bf38) plus one follow-up fix to the CQL fallback; nothing is pushed and nothing has contacted
+Confluence. The gate holds at HEAD: 66 tests green under Node 20 and 24, and
+`node scripts/kb-sync/sync.mjs --dry-run` exits 0 with seven `create` intentions.
+
+What Natasha creates by hand before 5.1 (none of it is automated, and no value goes into the repo):
+
+1. **Confluence space** on `https://cloudscript.atlassian.net`: key `CSHELP`, title
+   `Cloudscript Help`. Space description: "Generated from the user guides on cloudscript.io by
+   the kb-sync workflow. Manual edits to these pages are overwritten." Leave the space home page
+   in place: the seven guide pages are created as its children, and an `Archived guides` page is
+   created under it on demand.
+2. **Service account**: a dedicated Atlassian account (proposed `support-sync@cloudscript.io`)
+   with product access to Confluence only, and space permissions on `CSHELP` only: view space,
+   view pages, add pages, edit pages. Moving a page under a parent is an edit; the sync never
+   deletes and needs no delete permission. No site-admin or org-admin role.
+3. **API token** minted by that account with these scopes: `read:page:confluence`,
+   `write:page:confluence`, `read:content.property:confluence`,
+   `write:content.property:confluence`, `read:space:confluence`. Two calls use v1 endpoints that a
+   scoped token may refuse: the CQL search (`/wiki/rest/api/search`; optional, a refusal falls
+   back to the property index and is logged, not an error) and the page move
+   (`/wiki/rest/api/content/{id}/move/...`; used only for out-of-order creates, archive and
+   un-archive; a refusal fails that one page loudly). If the move is refused in 5.2, the fallback
+   per design Risks is a classic token on the same restricted account. Record whichever was granted.
+4. **Four repository secrets** (GitHub, Settings, Secrets and variables, Actions), names exactly:
+   - `CONFLUENCE_BASE_URL` = `https://cloudscript.atlassian.net`
+   - `CONFLUENCE_USER_EMAIL` = the service account's email address
+   - `CONFLUENCE_API_TOKEN` = the token from step 3
+   - `KB_SPACE_KEY` = `CSHELP`
+5. Then run the `kb-sync` workflow by hand in GitHub Actions with `dry_run` ticked (the default).
+   Expect in the job summary: seven `create` rows (mermaid, page-sharing, typst-renderer,
+   mcp-renderer, radar-renderer, nikoniko, email-viewer), one `skipped` row for
+   `email-viewer-jira` (`status: coming-soon`), zero `failed`. A log line "CQL lookup
+   unavailable" is expected with a scoped token and is not an error.
+
+Things to know before the live run (5.2):
+
+- Until the four secrets exist, every push to `main` that touches `apps/**/index.html`,
+  `_data/apps/*.yml`, `scripts/kb-sync/**` or the workflow file fails the kb-sync job (the live
+  run is refused, exit 2). Deliberate per D9, no masking; it stops once the secrets are in place.
+- No endpoint shape has been tried live. The 5.1 dry run exercises the space lookup, page
+  listing, property reads and the CQL search; 5.2 exercises create, update, property writes and
+  the move. Every write is read back before it is reported, and a mismatch is reported as `failed`.
+- Page Sharing's page has no `div.prose`; the extractor falls back to the whole page fragment.
+  Its article carries the eyebrow labels ("How it works", "For the Publisher") and the step
+  numbers ("1", "2", "3") as short paragraphs, and "Limitation" is appended to the FAQ questions
+  that carry that badge. Content-complete, cosmetically plain.
+- Links and images in synced pages use `https://www.cloudscript.io/...` as the spec says; www
+  redirects to the apex. Changing to the apex is one constant (`SITE_BASE` in `extract.mjs`), a
+  golden regeneration (`node tests/kb-sync/update-goldens.mjs`) and a spec edit.
+- Image `alt` text is dropped by the D4 attribute whitelist. Emitting `ac:alt` is a small
+  converter change if the help centre needs it.
+- The workflow pins Node 20 as task 4.1 says; Node 20 left support in April 2026 and everything
+  here also runs on 22 and 24. `node --test tests/kb-sync/` (the directory form in the gate)
+  recurses on Node 20 only; on 22 and later use `node --test tests/kb-sync/*.test.mjs`, which is
+  what the workflow runs.
+- `actionlint` was not available; the workflow was parsed with Ruby's YAML library and is
+  covered by `tests/kb-sync/workflow.test.mjs`. The 5.1 dispatch dry run is the live validation.
+- Pre-existing and untouched: Jekyll copies `openspec/` into the built site as static files.
+  Adding `openspec/` to `exclude` in `_config.yml` is a one-line fix outside this change.
+- The goldens freeze conversion behaviour, not guide text: a guide edit never touches them.
+  After a deliberate converter change, regenerate them and review the diff by eye.
