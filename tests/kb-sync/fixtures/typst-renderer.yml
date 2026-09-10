@@ -1,0 +1,17 @@
+name: Cloudscript Typst Renderer
+slug: typst-renderer
+order: 25
+status: live
+homepage_visible: true
+featured: false
+platform: Forge
+product: Confluence
+description: Render Typst documents and mathematics right on your Confluence pages — live from source, entirely in the browser, storing nothing.
+marketplace_url: https://marketplace.atlassian.com/apps/1871294913/cloudscript-typst-renderer
+badges: [runs-on-atlassian]
+stores_personal_data: "No"
+documents:
+  - label: Privacy
+    url: /apps/typst-renderer/privacy
+  - label: Terms
+    url: /apps/typst-renderer/terms

@@ -1,0 +1,38 @@
+# SYNCED to the live repo state 7 Aug 2026 (Cowork), replacing the stale
+# 1 Aug staged variant whose only deltas against live were REGRESSIVE (it
+# still carried the DPA `documents` row Natasha removed on 5 Aug, commit
+# 05f01c5 — the update-publish run correctly refused to place it).
+#
+# TWO CONTENT CHANGES vs live, both PENDING NATASHA'S APPROVAL (7 Aug):
+#   stores_personal_data  gains the fifth stored item (the calendar
+#                         reference) — aligns the Trust Center disclosure
+#                         with the live app and the 7 Aug privacy policy
+#   description           follows the 6 Aug picked b5 summary (the registry
+#                         description mirrors the picked summary by
+#                         convention; the 1 Aug pick it mirrored is
+#                         superseded)
+# If either is declined, revert that field to the live value before any
+# placement.
+#
+# badges: a trust badge is listed only once observed as assigned on the live
+# listing, never pre-emptively and never carried over from another app.
+# runs-on-atlassian was observed on the live listing 2026-09-02 (Trust
+# signals: RUNS ON ATLASSIAN) and added on that observation.
+
+name: NikoNiko Calendar
+slug: nikoniko
+order: 40
+status: live
+homepage_visible: true
+featured: false
+platform: Forge
+product: Confluence
+description: "Puts the niko-niko team practice on a Confluence page: one entry a day per person builds a shared grid, several labelled calendars can share one page to track separate questions, and entries stay in storage on Forge."
+marketplace_url: https://marketplace.atlassian.com/apps/1223001/cloudscript-io-nikoniko-calendar
+badges: [runs-on-atlassian]
+stores_personal_data: "Yes &mdash; a Confluence account identifier, an entry date, the scale value entered (0&ndash;5), an entry timestamp and a reference to the calendar the entry was recorded on, held in Atlassian's Forge storage"
+documents:
+  - label: Privacy
+    url: /apps/nikoniko/privacy
+  - label: Terms
+    url: /apps/nikoniko/terms

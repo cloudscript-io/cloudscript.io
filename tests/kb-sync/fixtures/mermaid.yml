@@ -1,0 +1,24 @@
+# CloudScript.io app registry — one YAML file per app in _data/apps/.
+# Drives the homepage app directory and the /trust app table. Adding an
+# app to the site = one file here + one icon at
+# /assets/img/icons/<slug>.svg. stores_personal_data and documents are
+# legal-adjacent: they render verbatim into the /trust table, so they are
+# part of each app's human legal-review surface. An app gets a /trust
+# row only once stores_personal_data is non-null.
+name: CloudScript Mermaid Diagrams for Confluence
+slug: mermaid
+order: 10
+status: live
+homepage_visible: true
+featured: false
+platform: Forge
+product: Confluence
+description: Author Mermaid diagrams directly in Confluence Cloud. Flowcharts, sequence diagrams and more, rendered cleanly inside your pages. A full user guide, kept current with the app.
+marketplace_url: https://marketplace.atlassian.com/apps/1219878/cloudscript-mermaid-diagrams-for-confluence
+badges: [runs-on-atlassian]
+stores_personal_data: "No"
+documents:
+  - label: Privacy
+    url: /apps/mermaid/privacy
+  - label: Terms
+    url: /apps/mermaid/terms

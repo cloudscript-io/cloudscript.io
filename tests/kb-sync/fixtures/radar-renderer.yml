@@ -1,0 +1,41 @@
+# CloudScript.io app registry entry — Tech Adoption Radar for Confluence.
+# Staged by launch-app draft (Mode A, coming-soon); placed into the live
+# repo by the website publish Claude Code handoff (cc-prompt-website.md),
+# 2026-07-21.
+#
+# order: 35 confirmed against the live _data/apps/ directory at placement
+# time (mermaid=10, page-sharing=20, typst-renderer=25, mcp-renderer=30,
+# nikoniko=40, cloudscript-for-confluence=50) — no conflicting slot.
+#
+# stores_personal_data and documents are populated (not left null/absent)
+# because Natasha recorded per-document legal sign-off of privacy.html and
+# terms.html, both 2026-07-21 — decisions ledger,
+# Plugins/Radar/_launch/app-facts.md. The data-protection characterisation
+# concluded software supplier / no DPA required (Natasha, 2026-07-21), so
+# there is no DPA row here.
+#
+# has_page: omitted deliberately — this app's guide (index.html) IS its
+# /apps/radar-renderer landing page: the same page serves as both the
+# product description and the user guide. This matches mcp-renderer's
+# precedent (has_page omitted), not typst-renderer's (has_page: false,
+# legal pages only).
+name: Tech Adoption Radar for Confluence
+slug: radar-renderer
+order: 35
+status: live
+homepage_visible: true
+featured: true
+featured_label: New
+platform: Forge
+product: Confluence
+description: "Build a quadrant tech radar in your Confluence page: enter blips in a table, paste from a spreadsheet, or upload a CSV or radar.js JSON list. Works with Thoughtworks BYOR and Zalando radar.js formats. Zero scopes, zero egress."
+feature_image: /assets/img/features/radar-renderer.png
+feature_image_alt: A four-quadrant tech radar rendered in a Confluence page, its blips grouped by ring from Adopt to Hold.
+marketplace_url: https://marketplace.atlassian.com/apps/2543668212/tech-adoption-radar-for-confluence
+badges: [runs-on-atlassian]
+stores_personal_data: "No"
+documents:
+  - label: Privacy
+    url: /apps/radar-renderer/privacy
+  - label: Terms
+    url: /apps/radar-renderer/terms

@@ -15,7 +15,16 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
 
 ## 2. Extract and convert
 
-- [ ] 2.1 `extract.mjs`: load the registry (`_data/apps/*.yml`, parse without a YAML dependency if the files stay flat, otherwise pin one), select `status: live`, read `apps/<slug>/index.html`, strip front matter, locate `div.prose`, apply the boundary in design D3 (drop `h1`, `.trust-badges`, `style`/`script`/`noscript`; keep from `p.lede` to before `<h2>Legal</h2>`), and build the footer from the registry `documents`. Fixtures: copy each live app page into `tests/kb-sync/fixtures/<slug>.html` plus its registry yml. Tests: boundary scenarios in spec `kb-sync` (lede kept, Legal excluded, badges/style/h1 stripped, coming-soon skipped). Commit.
+- [x] 2.1 `extract.mjs`: load the registry (`_data/apps/*.yml`, parse without a YAML dependency if the files stay flat, otherwise pin one), select `status: live`, read `apps/<slug>/index.html`, strip front matter, locate `div.prose`, apply the boundary in design D3 (drop `h1`, `.trust-badges`, `style`/`script`/`noscript`; keep from `p.lede` to before `<h2>Legal</h2>`), and build the footer from the registry `documents`. Fixtures: copy each live app page into `tests/kb-sync/fixtures/<slug>.html` plus its registry yml. Tests: boundary scenarios in spec `kb-sync` (lede kept, Legal excluded, badges/style/h1 stripped, coming-soon skipped). Commit.
+  Verified 2026-09-10: `tests/kb-sync/extract.test.mjs` (15 tests) green under Node 20 and 24 over
+  fixtures for all seven live apps plus `email-viewer-jira`. Two facts the design did not
+  anticipate, both handled and tested: Page Sharing has no `div.prose` (its page is a bespoke
+  section layout), so a page without that wrapper uses the whole page fragment as the root with
+  the same drop rules and boundary; and six guides carry a Jekyll
+  `{% include release-history.html %}` inside the kept range, so Liquid tags are removed before
+  parsing. The registry is read by a strict flat-YAML subset parser (`registry.mjs`) that errors
+  on anything outside the subset. `sync.mjs` does not exist yet, so the dry-run half of the gate
+  starts at 3.2.
 - [ ] 2.2 `convert.mjs`: element mapping per design D4, absolute URL rewriting (base `https://www.cloudscript.io`, resolving relative to `/apps/<slug>/`), `figure.shot` to `ac:image` + caption paragraph, `pre > code` to the `code` macro, unknown elements unwrapped, attribute whitelist, XML well-formedness validation. Goldens: `tests/kb-sync/golden/<slug>.storage.xml` for all seven live apps, reviewed by eye once and then frozen. Tests: relative links, figure conversion, malformed output rejection, and the no-text-lost invariant over every fixture (spec `kb-sync`). Commit.
 
 ## 3. Confluence client and upsert

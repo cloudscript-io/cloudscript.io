@@ -1,0 +1,107 @@
+---
+layout: default
+title: "Cloudscript Typst Renderer"
+description: "Render Typst documents and mathematics directly on Confluence pages. A modern alternative to LaTeX screenshot workflows, compiled entirely in your browser."
+image: /apps/typst-renderer/render-maths.png
+---
+
+<div class="page wrap">
+  <div class="prose">
+    <style>
+      .prose figure.shot { margin: 1.6rem 0; }
+      .prose figure.shot img { width: 100%; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #FFFFFF; }
+      .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
+    </style>
+    <h1>Cloudscript Typst Renderer</h1>
+    <div class="trust-badges">
+      <a class="trust-badge" href="/trust#badges">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M2 12l10 5 10-5"/><path d="M2 16l10 5 10-5"/></svg>Runs on Atlassian
+      </a>
+    </div>
+
+    <p class="lede">Cloudscript Typst Renderer is a Confluence Cloud app, built on Atlassian Forge, that renders <a href="https://typst.app" target="_blank" rel="noopener">Typst</a> source and the mathematics Typst is known for directly on a Confluence page. You paste Typst source into the macro's configuration, and the document is compiled and drawn in the reader's browser when the page is viewed. Because the page holds the source, each view renders it afresh, so an edit to the source is what the next viewer sees.</p>
+
+    <p>Typst is a typesetting language covering the same ground as LaTeX. If your team maintains a LaTeX-screenshot workflow for maths in Confluence, this macro replaces it with source that renders on the page: mathematical notation is set in Typst's own maths font, as vector output you can select and zoom, alongside the headings, prose, tables and code that make up the rest of a Typst document.</p>
+
+    <p>Every document is compiled in your browser, not on a server, and is never sent to Cloudscript.io or any third party; the app requests no Confluence permissions and stores nothing outside the macro on your page. Because this security posture keeps rendering on the live page, a page exported to PDF or Word cannot display the macro's content in its rendered form; the export carries the Typst source instead. The macro also renders self-contained documents only, without package imports or external images.</p>
+
+    <p class="cta-row">
+      <a class="btn btn-primary" href="https://marketplace.atlassian.com/apps/1871294913/cloudscript-typst-renderer" target="_blank" rel="noopener">View on Marketplace</a>
+    </p>
+
+    <figure class="shot">
+      <img src="render-maths.png" alt="The bundled maths sample rendered on the page: the Cauchy-Schwarz inequality, a Gaussian integral, a matrix, and Maxwell's equations, followed by prose and a syntax-highlighted code block.">
+      <figcaption>The bundled maths sample rendered live on the page: mathematics, prose and code, set in Typst's own fonts.</figcaption>
+    </figure>
+
+    <h2>Adding a document</h2>
+    <p>Edit a Confluence page and insert the <strong>Typst</strong> macro, either by typing <code>/typst</code> in the editor or by choosing it from the macro browser, where it also answers to searches for "latex", "math", "equation" and "typesetting". Open the macro's configuration panel, paste your Typst source, then save the macro and publish the page. The document compiles and renders when the page is viewed. Each macro holds and renders its own source. To place several documents on one page, add a separate macro for each.</p>
+
+    <h2>The configuration editor</h2>
+    <p>The configuration panel is a single monospace editor titled <strong>Typst source</strong>. You paste Typst source into the panel and save to see the rendered result on the page. A size meter tracks how close the source is to the 64 KiB input cap as you type. From an empty editor you can load a maths-heavy sample document, which compiles and renders without edits and gives you a working example to adapt.</p>
+
+    <figure class="shot">
+      <img src="config-editor.png" alt="The Typst source configuration editor with sample source pasted in, a size meter reading 866 bytes of 64 KiB, and Cancel and Save buttons.">
+      <figcaption>The configuration editor: paste your Typst source and save. The meter shows how close you are to the 64 KiB limit.</figcaption>
+    </figure>
+
+    <h2>What renders</h2>
+    <p>The macro compiles complete Typst documents: headings, prose, lists, tables and code blocks render as they do in Typst itself, and mathematical notation renders in Typst's own maths font. Multi-page documents render as pages stacked vertically down the macro. The rendered output is vector graphics (SVG), so it scales cleanly at any zoom. The text stays selectable, and a reader can highlight it and use the browser's in-page find. Confluence's own page search does not index the Typst source held in the macro configuration. A space search will not find a document by its rendered content.</p>
+
+    <figure class="shot">
+      <img src="render-document.png" alt="A multi-section document titled Project Aurora rendered on the page, with a heading, prose, a latency-budget table, and a numbered rollout-plan list.">
+      <figcaption>A full document rendered on the page: headings, prose, a table and stacked pages, from a single macro.</figcaption>
+    </figure>
+
+    <h2>Fonts</h2>
+    <p>The app bundles Typst's default font families and renders with them: Libertinus Serif for text, New Computer Modern Math for mathematics, and DejaVu Sans Mono for monospaced content. A document that uses these families, which covers Typst's default output, renders as it does locally. Supplying your own fonts is not part of the current version. A document that names a font outside the bundled set still renders, with no warning or error: the compiler substitutes a bundled family in its place (a request for Arial, for example, renders in Libertinus Serif). Output that depends on locally installed fonts will therefore differ from your local render.</p>
+
+    <h2>Page size and layout</h2>
+    <p>A Typst document usually opens with a <code>#set page(...)</code> rule that fixes its geometry, and when your source includes one the macro renders it unchanged. When the source has no page rule, the macro applies a default in its place (<code>#set page(width: 16cm, height: auto, margin: 1.2em)</code>): the 16cm width fixes the page width inside a Confluence column, and <code>height: auto</code> grows the page to fit its content. Your own <code>#set page</code> always takes precedence. To set the width, height or margins of the output, include the rule you want. Compile-error locations are reported against the source you pasted, so line numbers stay accurate even when the default rule is applied behind the scenes.</p>
+
+    <h2>Known limitations</h2>
+    <p>The app's security posture keeps all data within your Confluence space, and some limitations follow from it. Where a document runs into one, the macro shows an error message naming what happened.</p>
+    <p><strong>Page exports (PDF and Word) carry the Typst source, not the rendered output.</strong> Confluence's export pipeline cannot run the in-browser compiler, so a page exported to PDF or Word reproduces the macro's Typst source in a code block under the caption "Typst source — rendered on the live page", in place of the typeset result. When a macro has no source configured, the export states that plainly instead of showing an empty code block.</p>
+    <p><strong>Documents are self-contained.</strong> Typst package imports (<code>@preview/…</code>) and file access (<code>image()</code> and <code>#include</code>) are not supported in the current version. Documents render from the source you paste, with no network or file access, and source that uses one of these features is caught before compiling and shown a message naming it.</p>
+    <p><strong>The app publishes documents you author elsewhere.</strong> It has no live preview or editing IDE, and no button to download the render as a PDF or PNG image. Confluence pages are the surface it targets, and Typst authors write in their own tooling.</p>
+    <p><strong>Source and compile time are capped.</strong> Source is limited to 64 KiB and compilation to 10 seconds, each with a message naming the limit reached, which keeps a large or pathological paste from affecting the host page.</p>
+
+    <h3>Error messages</h3>
+    <p>When the macro cannot render a document, it shows a card on the page explaining why:</p>
+    <ul>
+      <li><strong>Empty.</strong> A macro with no source saved invites you to add some, or to load the maths sample.</li>
+      <li><strong>Compile error.</strong> Invalid source shows the compiler's own message together with a humanised, 1-based line and column pointing at the source you pasted.</li>
+      <li><strong>Unsupported feature.</strong> A check before compilation catches a <code>@preview/</code> package import, an <code>image()</code> call, or <code>#include</code>, and names the specific feature and the version limit. Left to the compiler, these surface as a missing-file or missing-package error. The check reports the feature by name before that happens. It scans the raw source, comments included: a token mentioned in a comment triggers it too.</li>
+      <li><strong>Timeout.</strong> A compile running longer than 10 seconds is stopped and reported as a timeout; the underlying worker is torn down and rebuilt for your next attempt.</li>
+      <li><strong>Over the size cap.</strong> Source over 64 KiB is stopped before it reaches the compiler, with a message explaining the limit. The cap is enforced in both the configuration editor and the live page, so a document that was valid when saved cannot later blow the limit and break the page.</li>
+      <li><strong>Internal error.</strong> Anything else that goes wrong falls back to an error card carrying the engine's message.</li>
+    </ul>
+    <p>Each card carries the rendering engine's version in a small footer; quote it if you contact support.</p>
+
+    <figure class="shot">
+      <img src="error-card.png" alt="A compile-error card reading 'Typst could not compile this document', an error at line 5 (unknown variable: openIssues), and the engine version typst.ts 0.7.0.">
+      <figcaption>When source is invalid, the card shows the compiler's message with a humanised line and column, plus the engine version.</figcaption>
+    </figure>
+
+    <h2>Security and privacy</h2>
+    <p>The Typst compiler runs as WebAssembly inside the macro's own sandboxed iframe, so your documents are compiled in your browser and are never sent to Cloudscript.io or any third party. The app requests no Confluence permissions (<code>scopes: []</code>), declares no external network destinations, and stores nothing outside the macro on your page. The compiler and fonts ship inside the app and load from Atlassian's own infrastructure, so a render makes no request to any non-Atlassian origin.</p>
+    <p>One narrow exception applies at export. When a page is exported to PDF or Word, a stateless Forge function reads the pasted source from the export payload for the single purpose of writing it into the exported document (see "Known limitations" above). It stores nothing, and logs nothing beyond the structural shape of the payload when the source cannot be found.</p>
+    <p>Technical note: the macro's iframe declares the <code>unsafe-eval</code> content-security directive, because instantiating the WebAssembly compiler requires it and Forge offers no narrower WASM-only directive. The directive applies only inside the macro's own sandboxed iframe, and it does not permit loading remote code, making network calls, or reaching the host page. The full detail is in the app's <a href="/apps/typst-renderer/privacy">Privacy Policy</a>, and our broader approach is described in the <a href="/security">Security Policy</a> and <a href="/trust">Trust Center</a>.</p>
+
+    <h2>About Typst</h2>
+    <p>Cloudscript Typst Renderer is an independent integration and is not affiliated with, or endorsed by, Typst. Learn more about the language at <a href="https://typst.app" target="_blank" rel="noopener">typst.app</a>.</p>
+    <p>The app bundles the typst.ts / reflexo-typst WebAssembly toolchain and Typst's default fonts under their respective open-source licences.</p>
+
+    {% include release-history.html app="typst-renderer" %}
+
+    <h2>Legal</h2>
+    <p>Terms and privacy specific to this app:</p>
+    <ul>
+      <li><a href="/apps/typst-renderer/terms">Terms of Service</a></li>
+      <li><a href="/apps/typst-renderer/privacy">Privacy Policy</a></li>
+    </ul>
+
+    <p class="back-link"><a href="/">← Back to home</a></p>
+
+  </div>
+</div>

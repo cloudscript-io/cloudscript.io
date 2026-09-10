@@ -1,0 +1,17 @@
+name: Page Sharing for Confluence
+slug: page-sharing
+order: 20
+status: live
+homepage_visible: true
+featured: false
+platform: Forge
+product: Confluence
+description: Enables collaboration by sharing a Confluence page across instances or between spaces by link invitation. Subscribers always see the latest published version, and your original stays the source of truth.
+marketplace_url: https://marketplace.atlassian.com/apps/3283173088/page-sharing-for-confluence
+badges: []
+stores_personal_data: "Only UserId"
+documents:
+  - label: Privacy
+    url: /apps/page-sharing/privacy
+  - label: Terms
+    url: /apps/page-sharing/terms

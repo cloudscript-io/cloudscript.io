@@ -1,0 +1,27 @@
+# CloudScript.io app registry entry — MSG/EML Email Viewer for Jira.
+#
+# In development, not submitted: coming-soon card on the home page only.
+# order: 50 continues the established 5-point spacing after the highest slot
+# in use (email-viewer=45); no conflicting slot.
+#
+# has_page: false — no app page exists yet, so the card renders the name as
+# plain text with no "Learn more" foot. It gains a page (and its legal pages)
+# with its launch-app website phase. Contrast the Confluence sibling, where
+# has_page is omitted because its guide IS its /apps/email-viewer page.
+#
+# marketplace_url: null and badges: [] until the listing is actually
+# published; a trust badge is listed only once observed on the live listing.
+#
+# No `documents` block: no privacy/terms/DPA pages exist for this app yet.
+name: MSG/EML Email Viewer for Jira
+slug: email-viewer-jira
+order: 50
+status: coming-soon
+homepage_visible: true
+featured: false
+platform: Forge
+product: Jira
+has_page: false
+description: "The same faithful in-place rendering of .msg and .eml attachments, on Jira issues: subject, sender, recipients, date, body, inline images and attachments, read from your own Jira and parsed in your browser. In development."
+marketplace_url: null
+badges: []

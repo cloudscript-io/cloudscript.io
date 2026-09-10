@@ -1,0 +1,23 @@
+# Replaces the 2026-07-11 stub (old working name + TODO description).
+# Name is the LF-approved Marketplace listing name (clearance granted
+# 16 Jul 2026; see Plugins/MCP/launch-docs/mcp-name-authorisation-email.md).
+# stores_personal_data and documents populated on Natasha's recorded
+# per-document legal sign-off of privacy.html and terms.html (both signed
+# off 2026-07-16 — decisions ledger, Plugins/MCP/_launch/app-facts.md).
+name: Cloudscript Renderer for MCP Documentation
+slug: mcp-renderer
+order: 30
+status: live
+homepage_visible: true
+featured: false
+platform: Forge
+product: Confluence
+description: Renders a pasted MCP Registry server.json or tools/list result as structured, readable Confluence documentation. The source stays canonical and re-renders on edit. Zero scopes, zero egress, no app-side storage.
+marketplace_url: https://marketplace.atlassian.com/apps/2358641825/cloudscript-renderer-for-mcp-documentation
+badges: [runs-on-atlassian]
+stores_personal_data: "No"
+documents:
+  - label: Privacy
+    url: /apps/mcp-renderer/privacy
+  - label: Terms
+    url: /apps/mcp-renderer/terms

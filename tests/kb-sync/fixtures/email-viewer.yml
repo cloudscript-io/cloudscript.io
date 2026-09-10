@@ -1,0 +1,37 @@
+# CloudScript.io app registry entry — MSG/EML Email Viewer for Confluence.
+#
+# order: 45 continues the established 5-point spacing after the highest slot
+# in use (mermaid=10, page-sharing=20, typst-renderer=25, mcp-renderer=30,
+# radar-renderer=35, nikoniko=40); no conflicting slot.
+#
+# status: live and marketplace_url set 2026-09-02, when Natasha switched the
+# listing on after it passed Atlassian security review.
+#
+# badges: a trust badge is listed only once observed as assigned on the live
+# listing, never pre-emptively and never carried over from another app.
+# runs-on-atlassian was observed on the live listing 2026-09-02 (Trust
+# signals: RUNS ON ATLASSIAN) and added on that observation.
+#
+# has_page: omitted deliberately. This app's guide IS its /apps/email-viewer
+# landing page, so the same page serves as both product description and user
+# guide. Matches the radar-renderer and mcp-renderer precedent (field
+# omitted), not typst-renderer's (has_page: false, legal pages only).
+name: MSG/EML Email Viewer for Confluence
+slug: email-viewer
+order: 45
+status: live
+homepage_visible: true
+featured: false
+platform: Forge
+product: Confluence
+description: "Renders a .msg or .eml file attached to a Confluence page as a faithful email card: subject, sender, recipients, date, body, inline images and attachments. Read from your own Confluence and parsed in your browser."
+marketplace_url: https://marketplace.atlassian.com/apps/2052211522/msg-eml-email-viewer-for-confluence
+badges: [runs-on-atlassian]
+stores_personal_data: "No"
+documents:
+  - label: Privacy
+    url: /apps/email-viewer/privacy
+  - label: Terms
+    url: /apps/email-viewer/terms
+  - label: DPA
+    url: /apps/email-viewer/dpa
