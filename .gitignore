@@ -21,3 +21,9 @@ content-drafts/
 .DS_Store
 .fuse_hidden*
 .playwright-mcp/
+
+# kb-sync (scripts/kb-sync): its manifest and lockfile ARE committed so the workflow can
+# `npm ci`; its node_modules never is. These negate the blanket package.json rules above.
+!scripts/kb-sync/package.json
+!scripts/kb-sync/package-lock.json
+scripts/kb-sync/node_modules/

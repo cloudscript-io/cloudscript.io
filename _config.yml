@@ -43,3 +43,9 @@ exclude:
   - .mcp.json
   - vendor/
   - node_modules/
+  # kb-sync (the Confluence knowledge base mirror, see scripts/kb-sync/README.md) and its
+  # tests are automation, not site content. Jekyll would otherwise copy scripts/ verbatim
+  # (including scripts/kb-sync/node_modules once installed) and render the test fixtures,
+  # which carry front matter, as duplicate pages under /tests/.
+  - scripts/
+  - tests/

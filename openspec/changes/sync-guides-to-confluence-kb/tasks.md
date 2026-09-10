@@ -4,7 +4,14 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
 
 ## 1. Scaffold
 
-- [ ] 1.1 Create `scripts/kb-sync/` with `package.json` (`"private": true`, `"type": "module"`, one pinned dependency for HTML parsing, `npm ci`-able lockfile committed), `.gitignore` entry for its `node_modules/`, and a `README.md` describing purpose, env vars, dry run, and the one-way rule (Confluence edits are overwritten). Confirm the site's Pages build is unaffected (no Jekyll processing of `scripts/`; add `scripts/kb-sync/node_modules` to `_config.yml` `exclude` if Jekyll would otherwise walk it). Commit.
+- [x] 1.1 Create `scripts/kb-sync/` with `package.json` (`"private": true`, `"type": "module"`, one pinned dependency for HTML parsing, `npm ci`-able lockfile committed), `.gitignore` entry for its `node_modules/`, and a `README.md` describing purpose, env vars, dry run, and the one-way rule (Confluence edits are overwritten). Confirm the site's Pages build is unaffected (no Jekyll processing of `scripts/`; add `scripts/kb-sync/node_modules` to `_config.yml` `exclude` if Jekyll would otherwise walk it). Commit.
+
+  Verified 2026-09-10: `npm ci` from the committed lockfile installs parse5 8.0.1 (+ its one
+  transitive package, entities 8.1.0); `tests/kb-sync/scaffold.test.mjs` green under Node 20 and
+  24; local Jekyll build emits no `_site/scripts` or `_site/tests`. Jekyll would have copied all
+  of `scripts/` and rendered the fixtures, so the whole `scripts/` and `tests/` directories are
+  excluded, not just `node_modules`. The root `.gitignore` blanket-ignores `package.json` and
+  `package-lock.json`, so two negation lines were needed for the manifest and lockfile.
 
 ## 2. Extract and convert
 
