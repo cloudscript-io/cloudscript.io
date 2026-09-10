@@ -37,7 +37,15 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
 
 ## 3. Confluence client and upsert
 
-- [ ] 3.1 `confluence.mjs`: minimal REST v2 client (fetch only): find page by CQL property, get page with body and version, create page in space under an optional parent, update page (body, title, version+1, message), get/set the `cloudscript-kb` content property, move page under parent, create the `Archived guides` parent on demand. Auth from env only; redact `Authorization` in all error paths. Tests with a mocked `fetch`: request shapes, redaction scenario (spec `kb-sync`). Commit.
+- [x] 3.1 `confluence.mjs`: minimal REST v2 client (fetch only): find page by CQL property, get page with body and version, create page in space under an optional parent, update page (body, title, version+1, message), get/set the `cloudscript-kb` content property, move page under parent, create the `Archived guides` parent on demand. Auth from env only; redact `Authorization` in all error paths. Tests with a mocked `fetch`: request shapes, redaction scenario (spec `kb-sync`). Commit.
+  Verified 2026-09-10: `tests/kb-sync/confluence.test.mjs` (12 tests, mocked `fetch`) green under
+  Node 20 and 24: request shapes for every call, pagination, the redaction scenario (a 400 whose
+  body echoes the header still yields status, path and body with the token and Basic value
+  replaced by `[REDACTED]` in message, body, stack and JSON), transport and non-JSON failures.
+  Two defensive additions beyond the letter of D2, both untestable before task 5: Confluence
+  indexes content properties for CQL only when an app declares them, so `indexSyncedPages`
+  reads each page's property directly and the CQL search is an optimisation that falls back
+  to that index; and moving a page uses the v1 move endpoint because v2 has none.
 - [ ] 3.2 `sync.mjs`: orchestrate per app independently; hash per D5; create / update / skip / archive per D2, D5, D6; `--dry-run` and `KB_SYNC_DRY_RUN=1` perform reads only and print intentions; per-page result table; non-zero exit if any page failed. Tests with the mocked client: unchanged-skip, single-version update, rename-keeps-page, retire-archives, dry-run-writes-nothing, one-failing-page (spec `kb-sync`). Commit.
 
 ## 4. Workflow
