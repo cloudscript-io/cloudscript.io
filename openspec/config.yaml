@@ -1,0 +1,24 @@
+schema: spec-driven
+
+context: |
+  Tech stack: hand-authored HTML + CSS, Jekyll used ONLY for shared layouts/includes, served by
+  GitHub Pages at https://www.cloudscript.io/ (no theme, no plugins, no build pipeline for the site).
+  CLAUDE.md is normative for site conventions and guardrails; PROJECT_STATUS.md for live state.
+  The app page under apps/<slug>/index.html IS the user guide; _data/apps/<slug>.yml is the registry.
+  Guardrails: no secrets in the repo, no external font CDN, GoatCounter is the only analytics,
+  Australian English, no em/en dashes in copy, no dev/test hostnames in committed content.
+
+rules:
+  proposal:
+    - Identify affected teams
+    - Think about the impact on existing users
+    - Adversarial security review
+    - Include a test plan for the proposed changes
+  specs:
+    - Use Given/When/Then format
+    - Reference existing patterns before inventing new ones
+  tasks:
+    - A task may be marked complete only when its automated verification passes; never sign off on expected or untested behaviour
+    - Nothing in this repo may write to a third-party system without a dry-run mode that prints the exact intended writes and exits without writing
+    - Any live write to Confluence is verified by reading the page back through the REST API, never assumed from a 2xx status
+    - Credentials are never handled by automation beyond reading them from GitHub Actions secrets; never print, log or echo them

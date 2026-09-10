@@ -1,0 +1,27 @@
+# sync-guides-to-confluence-kb — tasks
+
+One commit per task. Gate for every commit: `node --test tests/kb-sync/` green and `node scripts/kb-sync/sync.mjs --dry-run` succeeding against the fixtures. Nothing writes to Confluence until task 5.2. Environment-blocked steps (space or secrets not yet created) are recorded as blocked, never ticked.
+
+## 1. Scaffold
+
+- [ ] 1.1 Create `scripts/kb-sync/` with `package.json` (`"private": true`, `"type": "module"`, one pinned dependency for HTML parsing, `npm ci`-able lockfile committed), `.gitignore` entry for its `node_modules/`, and a `README.md` describing purpose, env vars, dry run, and the one-way rule (Confluence edits are overwritten). Confirm the site's Pages build is unaffected (no Jekyll processing of `scripts/`; add `scripts/kb-sync/node_modules` to `_config.yml` `exclude` if Jekyll would otherwise walk it). Commit.
+
+## 2. Extract and convert
+
+- [ ] 2.1 `extract.mjs`: load the registry (`_data/apps/*.yml`, parse without a YAML dependency if the files stay flat, otherwise pin one), select `status: live`, read `apps/<slug>/index.html`, strip front matter, locate `div.prose`, apply the boundary in design D3 (drop `h1`, `.trust-badges`, `style`/`script`/`noscript`; keep from `p.lede` to before `<h2>Legal</h2>`), and build the footer from the registry `documents`. Fixtures: copy each live app page into `tests/kb-sync/fixtures/<slug>.html` plus its registry yml. Tests: boundary scenarios in spec `kb-sync` (lede kept, Legal excluded, badges/style/h1 stripped, coming-soon skipped). Commit.
+- [ ] 2.2 `convert.mjs`: element mapping per design D4, absolute URL rewriting (base `https://www.cloudscript.io`, resolving relative to `/apps/<slug>/`), `figure.shot` to `ac:image` + caption paragraph, `pre > code` to the `code` macro, unknown elements unwrapped, attribute whitelist, XML well-formedness validation. Goldens: `tests/kb-sync/golden/<slug>.storage.xml` for all seven live apps, reviewed by eye once and then frozen. Tests: relative links, figure conversion, malformed output rejection, and the no-text-lost invariant over every fixture (spec `kb-sync`). Commit.
+
+## 3. Confluence client and upsert
+
+- [ ] 3.1 `confluence.mjs`: minimal REST v2 client (fetch only): find page by CQL property, get page with body and version, create page in space under an optional parent, update page (body, title, version+1, message), get/set the `cloudscript-kb` content property, move page under parent, create the `Archived guides` parent on demand. Auth from env only; redact `Authorization` in all error paths. Tests with a mocked `fetch`: request shapes, redaction scenario (spec `kb-sync`). Commit.
+- [ ] 3.2 `sync.mjs`: orchestrate per app independently; hash per D5; create / update / skip / archive per D2, D5, D6; `--dry-run` and `KB_SYNC_DRY_RUN=1` perform reads only and print intentions; per-page result table; non-zero exit if any page failed. Tests with the mocked client: unchanged-skip, single-version update, rename-keeps-page, retire-archives, dry-run-writes-nothing, one-failing-page (spec `kb-sync`). Commit.
+
+## 4. Workflow
+
+- [ ] 4.1 `.github/workflows/kb-sync.yml`: triggers per spec (push to `main` on guide/registry/script paths; `workflow_dispatch` with `dry_run` default `true`); `permissions: contents: read`; concurrency group `kb-sync`; actions pinned by full SHA; Node 20 LTS; `npm ci` in `scripts/kb-sync`; run with secrets mapped to env; write the result table to `$GITHUB_STEP_SUMMARY`; `timeout-minutes: 10`. Validate with `actionlint` if available, else by a dispatch dry run in 5.1. Commit.
+
+## 5. One-off setup and live verification (Natasha; automation stops at each gate until she confirms)
+
+- [ ] 5.1 Natasha: create Confluence space `CSHELP` "Cloudscript Help" (space description states it is generated from cloudscript.io and manual edits are overwritten); create the service account (`support-sync@cloudscript.io` or equivalent) with Confluence product access only and space permissions (view, add page, edit page) on `CSHELP` only; mint a scoped API token (`read:page:confluence`, `write:page:confluence`, `read:content.property:confluence`, `write:content.property:confluence`, `read:space:confluence`); add the four repository secrets. Then run `workflow_dispatch` with `dry_run=true` and confirm seven `create` intentions and zero errors in the job summary. Record the token scopes actually granted (if scoped tokens lack a needed scope, note the fallback per design Risks).
+- [ ] 5.2 Run `workflow_dispatch` with `dry_run=false`. Read each of the seven pages back through the REST API and compare body to the golden for that slug; open each in Confluence and confirm images render from cloudscript.io. Re-run the workflow and confirm seven `unchanged` results and no new versions. Push a one-word edit to one guide on `main` and confirm exactly that page gains one version. Write `run-report.md` in this change directory (versions, screenshots, any deviation).
+- [ ] 5.3 Natasha: in project CUS, link `CSHELP` as the knowledge base and set article visibility to match the portal's customer access setting; search for one article from the help centre and open it; then enable the virtual service agent on the knowledge base and ask it one question whose answer is in a guide. Append results to `run-report.md`. Update `PROJECT_STATUS.md` and `README.md` with the sync description and the one-off setup facts (space key, service account name, secret names, never their values). Commit and push.
