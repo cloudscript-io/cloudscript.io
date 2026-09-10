@@ -152,8 +152,12 @@ test("searchPageIdBySlug: the D2 CQL, one hit returns the id, none or an unavail
   assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), null, "an ambiguous result is not trusted");
   status = 400;
   assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), null, "an unavailable search falls back to the index");
+  status = 403;
+  assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), null, "a scope refusal on the optional v1 search falls back to the index");
   status = 401;
-  await assert.rejects(c.searchPageIdBySlug("CSHELP", "typst-renderer"), (err) => err instanceof ConfluenceError && err.status === 401, "an auth failure is never swallowed");
+  assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), null, "a bad credential surfaces on the index reads that follow, not here");
+  status = 503;
+  await assert.rejects(c.searchPageIdBySlug("CSHELP", "typst-renderer"), (err) => err instanceof ConfluenceError && err.status === 503, "a server failure is never swallowed");
 });
 
 test("indexSyncedPages maps slug to page and property, ignores unmarked pages, refuses duplicates", async () => {

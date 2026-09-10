@@ -232,7 +232,10 @@ export class ConfluenceClient {
 
   /**
    * Design D2's CQL lookup. Returns the page id when the search returns exactly what the slug
-   * asks for, and null when it returns nothing or fails: the caller falls back to the index.
+   * asks for, and null when it returns nothing or is refused: the caller falls back to the
+   * property index. Any 4xx is treated as "unavailable" (a scoped token may lack a scope for
+   * the v1 search endpoint, or the property may not be indexed); a bad credential still
+   * surfaces, because the index reads that follow use the same credential and fail loudly.
    */
   async searchPageIdBySlug(spaceKey, slug) {
     const cql = `space = ${quoteCql(spaceKey)} and type = page and content.property[${PROPERTY_KEY}].slug = ${quoteCql(slug)}`;
@@ -240,7 +243,7 @@ export class ConfluenceClient {
     try {
       data = await this.#request("GET", "/wiki/rest/api/search", { query: { cql, limit: 5 } });
     } catch (err) {
-      if (err instanceof ConfluenceError && err.status >= 400 && err.status < 500 && err.status !== 401 && err.status !== 403) {
+      if (err instanceof ConfluenceError && err.status >= 400 && err.status < 500) {
         this.#log(`CQL lookup unavailable (${err.status}); using the property index`);
         return null;
       }
