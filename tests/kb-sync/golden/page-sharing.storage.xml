@@ -1,0 +1,115 @@
+<p>Page Sharing for Confluence</p>
+<p>Enable collaboration by sharing a Confluence page across instances or between spaces, by link invitation. Subscribers always see the latest published version, and your original stays the source of truth.</p>
+<p><a href="https://marketplace.atlassian.com/apps/3283173088/page-sharing-for-confluence">View on Marketplace</a> <a href="https://www.cloudscript.io/apps/page-sharing/#how">How it works ↓</a></p>
+<p>How it works</p>
+<h2>One page, three roles, a read-only copy that stays current.</h2>
+<p>Page Sharing pushes a page from one Confluence site to another. The publisher shares it, an admin approves the partner site, and the subscriber gets a read-only copy that refreshes every time the publisher edits the original.</p>
+<p>1</p>
+<h3>Publisher shares</h3>
+<p>An editor approves a page for sharing and sends a reusable subscription link to one or more partner sites.</p>
+<p>2</p>
+<h3>Admin approves</h3>
+<p>A Confluence admin allow-lists the partner site — or approves it when its subscribe request lands as pending.</p>
+<p>3</p>
+<h3>Subscriber receives</h3>
+<p>The partner site gets a real, read-only Confluence page that re-syncs on every publish from the source.</p>
+<p>Security &amp; data flow</p>
+<h2>Where your data goes.</h2>
+<p>Page Sharing runs entirely on Atlassian's Forge platform. Your content only ever moves between the two Confluence sites involved — the publisher's and the subscriber's — over a single Atlassian-hosted endpoint. Nothing passes through a third-party server.</p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/network-architecture.svg"/></ac:image>
+<p><em>The publisher hands over a share link on the frontend; content then flows one way, over a single Atlassian-hosted endpoint. The app only reads the original and only writes the copy.</em></p>
+<p><strong>What this means for your data</strong></p>
+<ul><li>Page content moves only between the publisher's and the subscriber's Confluence sites — there are no third-party servers in the path.</li><li>That traffic uses a single Atlassian-hosted app endpoint; the app makes no other outbound connections.</li><li>The share link (which carries a token) is generated on the publisher's side and handed to the subscriber on the frontend, out of band — it isn't sent over the app's own channel.</li><li>On the publisher's side the app only <strong>reads</strong> the shared page — it never changes your original. On the subscriber's side it only <strong>writes</strong> the synced copy.</li><li>The app acts only with the permissions granted when it is installed — it never signs in as another user.</li><li>The subscribed copy is a read-only replica: editing is restricted where the subscriber's Confluence plan supports page restrictions, and on any plan local edits are overwritten by the next sync — the publisher's original always stays the source of truth.</li><li>Only plain page structure is sent — macros, embedded apps, attachments and scripts are dropped before content leaves the publisher's site.</li><li>Approving a subscriber is reversible: disable a subscriber or stop sharing at any time, and their copy is moved to their site's trash. Revoking a subscription link blocks new subscriptions (existing subscribers are disabled individually).</li></ul>
+<p><strong>Data residency.</strong> If your site is pinned to a data residency location, everything the app itself stores is in scope: its operational records (sharing approvals, the allow-list, subscription and audit entries) live in Atlassian's Forge hosted storage for your site, which Atlassian hosts in, and migrates with, your site's pinned location. The synced copy on a subscribing site is an ordinary Confluence page in that site, so it follows that site's own residency settings. Out of scope is the content of a page you choose to share: it travels to each partner site you approve, wherever that site is hosted, because sending it there is the purpose of sharing, and which sites receive it stays entirely under your control through the allow-list and approvals. In short, everything the app stores follows the residency of the site it is stored in, and shared content follows the subscriber's site, because the publisher chose to send it there.</p>
+<p>See the <a href="https://www.cloudscript.io/apps/page-sharing/privacy.html">privacy policy</a> for how data is handled.</p>
+<p>For the Publisher</p>
+<h2>Share a page you own with a partner.</h2>
+<p>You have a Confluence page and want a partner on another site to see it — always up to date, but never editable by them.</p>
+<h3>Share it</h3>
+<p>On the page, open the <code>•••</code> menu → <code>Apps</code> → <strong>Share Page Externally</strong>.</p>
+<ol><li>Choose <strong>Approve &amp; generate link</strong>. This approves the current page for sharing and mints a <strong>reusable subscription link</strong> — hand it to as many partner sites as you like.</li><li>Copy the link and send it to each partner's admin (it looks like <code>https://cloudscript.io/share#PS1.…</code>). The same link works for any number of sites.</li><li>That's it. Every time you edit and publish the page, the change is pushed to every approved subscriber automatically.</li></ol>
+<p><strong>Who can share:</strong> you need to be an <strong>administrator of the page's space</strong>, and a Confluence (org) admin must have <a href="https://www.cloudscript.io/apps/page-sharing/#admin">enabled that space</a> for external sharing. Sharing with a site that isn't approved yet? Their subscribe request lands as <strong>pending</strong> — your <a href="https://www.cloudscript.io/apps/page-sharing/#admin">org admin</a> approves it before any content is pushed.</p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/publisher-menu.png"/></ac:image>
+<p><em>The ••• menu → “Share Page Externally”.</em></p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/publisher-share.png"/></ac:image>
+<p><em>Approve &amp; generate the reusable subscription link.</em></p>
+<p>For the Subscriber</p>
+<h2>Receive a shared page on your own site.</h2>
+<p>Someone sent you a share link. Subscribe from the page you want the copy to live under — it becomes a real, read-only Confluence page that stays in sync.</p>
+<h3>Subscribe</h3>
+<p>Open the page you want as the <strong>parent</strong>, then its <code>•••</code> menu → <code>Apps</code> → <strong>Subscribe to External Page</strong>.</p>
+<ol><li>Paste the share link (or the <code>PS1.…</code> code) and choose <strong>Subscribe</strong>. The synced page is created <strong>in the current space, under the current page</strong> — no extra picker.</li><li>A <strong>read-only</strong> copy appears and keeps itself in sync. If the publisher hasn't approved your site yet, it shows as <em>awaiting approval</em> until they do.</li><li>Manage everything from the <strong>Subscribed Pages</strong> page (Confluence left nav → Apps): each subscription shows <strong>who subscribed, when, and its live status</strong>, with an <strong>Unsubscribe</strong> button (also cancels a pending request). Ended rows are kept as an audit log. It also shows <strong>this site's cloud ID</strong> — give it to the publisher's admin to get allow-listed.</li></ol>
+<p>Every synced page carries a <strong>“Read-only replica”</strong> lozenge in its byline. Click it to see which external page it mirrors. The app applies Confluence's own edit restrictions to each replica, so ordinary users on your site can't edit it. Content restrictions aren't available on Confluence Free, and a site administrator can always override them — but in every case the source page overwrites any local edit on the next sync, so the replica can't drift from the source. If a page with the same title already exists in your space, the subscription shows a <strong>“title conflict”</strong> status instead of syncing — rename or remove the clashing page and the sync recovers by itself on the next source update.</p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/subscriber-menu.png"/></ac:image>
+<p><em>The ••• menu → “Subscribe to External Page”.</em></p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/subscriber-modal.png"/></ac:image>
+<p><em>Paste the link and subscribe — no space picker.</em></p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/subscriber-replica.png"/></ac:image>
+<p><em>The read-only replica, with its byline lozenge.</em></p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/subscriber-byline.png"/></ac:image>
+<p><em>The byline dialog names the source page.</em></p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/subscriber-list.png"/></ac:image>
+<p><em>“Subscribed Pages” — who subscribed and when, live status, and Unsubscribe; ended rows stay as an audit log.</em></p>
+<p>For the Space Admin</p>
+<h2>Govern sharing for your own space.</h2>
+<p>You administer a Confluence space. Once an org admin has enabled it for external sharing, you decide which of its pages go out — and you can see exactly what's shared and to whom, without needing site-admin access.</p>
+<h3>Your space's sharing</h3>
+<p>Space <strong>Settings → Page Sharing</strong> (visible to administrators of that space).</p>
+<ol><li>A banner shows whether the space is <strong>enabled for external sharing</strong>. If it isn't, ask a Confluence (org) admin to enable it on the <a href="https://www.cloudscript.io/apps/page-sharing/#admin">Spaces</a> switchboard.</li><li><strong>Shared from here</strong> — every page shared out of this space, with its live subscribers. <strong>Stop sharing</strong> a page, or <strong>Disable</strong> a single subscriber.</li><li><strong>Links</strong> — the active subscription links minted for this space's pages, with their use counts and a <strong>Revoke</strong> action.</li><li><strong>Subscribed here</strong> — external pages subscribed <em>into</em> this space (the read-only replicas that live here), with their sync status. Monitoring only: manage or unsubscribe from the <strong>Subscribed Pages</strong> page.</li><li><strong>Ended</strong> — the audit trail of subscriptions into this space that have ended, whether unsubscribed here or cancelled by the publisher.</li></ol>
+<p>The space panel deliberately <strong>omits</strong> instance trust (the allow-list and pending approvals) — those are organisation-wide and stay with your <a href="https://www.cloudscript.io/apps/page-sharing/#admin">org admin</a>. You only ever see your own space, in both directions: what it shares out, and what it receives.</p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/space-panel.png"/></ac:image>
+<p><em>Space settings → Page Sharing — your space's shares.</em></p>
+<p>For the Org Admin</p>
+<h2>Set the policy for the whole site.</h2>
+<p>You run Confluence. You decide which <strong>spaces</strong> may share externally at all, and which partner <strong>sites</strong> are allowed to receive content — the two organisation-wide controls. The allow-list is the real access control: content is only ever pushed to sites you've approved.</p>
+<h3>Manage sharing</h3>
+<p>Confluence <strong>Settings → Apps → Page Sharing Admin</strong> (visible to Confluence admins only).</p>
+<ol><li><strong>Spaces</strong> — enable or disable each space for external sharing. Enabling lets that space's admins share its pages; <strong>disabling a space stops all its shares</strong> (moving subscriber copies to trash) and revokes its links, behind a confirmation that counts what's affected. Default is off — but spaces that already had a shared page are kept enabled automatically.</li><li><strong>Instances</strong> — add a partner site's cloud ID (with an optional human label), or remove one. The cloud ID is what's enforced.</li><li><strong>Pending</strong> — when a not-yet-approved site subscribes, its request lands here. <strong>Approve</strong> (which also allow-lists it) or <strong>Deny</strong>.</li><li><strong>Active</strong> — every shared page across all spaces, with its live subscribers (who shared it, when they subscribed, the last publish time). <strong>Stop sharing</strong> a page, or <strong>Disable</strong> an individual subscriber.</li><li><strong>Links</strong> — every subscription link minted, <strong>including revoked ones</strong>, with how many times each has been used and a <strong>Revoke</strong> action. Links are reusable until revoked; revoking blocks new subscribers but leaves existing ones syncing.</li><li><strong>Subscribed</strong> — an org-wide, read-only review of every external page this site subscribes to from other instances, across all spaces.</li></ol>
+<p><strong>Stop sharing</strong> pushes a purge — the subscriber's read-only copy is moved to their trash. Ended subscriptions move to the <strong>Disabled</strong> tab for the record.</p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/admin-spaces.png"/></ac:image>
+<p><em>Spaces — enable or disable each space for sharing.</em></p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/admin-active.png"/></ac:image>
+<p><em>Active — shared pages and their subscribers.</em></p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/admin-allowlist.png"/></ac:image>
+<p><em>Instances — the cloud ID allow-list.</em></p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/admin-pending.png"/></ac:image>
+<p><em>Pending — approve or deny a requesting site.</em></p>
+<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/admin-links.png"/></ac:image>
+<p><em>Links — minted links with use counts and Revoke.</em></p>
+<p><strong>A note for developers.</strong> In user-facing docs we say <strong>Publisher</strong> and <strong>Subscriber</strong>. In the source code and specs these are the <em>producer</em> (owns and shares the page) and the <em>consumer</em> (subscribes and receives the read-only copy). Same roles, different vocabulary.</p>
+<p>FAQ</p>
+<h2>“I want to…”</h2>
+<p>Straight answers, including what the app can't do yet.</p>
+<p>I want my edits to show up on the subscriber's side</p>
+<p>They do — automatically. Every time you publish an edit to the source page, the page's supported content is pushed to every approved subscriber and their copy updates. See below for what "supported content" covers.</p>
+<p>I want my space's team to share pages without making them site admins</p>
+<p>Have a Confluence (org) admin <strong>enable your space</strong> on <strong>Page Sharing Admin → Spaces</strong>. After that, any <strong>administrator of that space</strong> can share its pages and manage them from <strong>Space Settings → Page Sharing</strong> — no site-admin rights needed. Instance trust (the allow-list and pending approvals) stays org-admin only.</p>
+<p>I tried to share a page but it was refused</p>
+<p>Two things gate sharing: you must be an <strong>administrator of the page's space</strong>, and that space must be <strong>enabled for external sharing</strong> by an org admin (the space panel's banner tells you). If the space isn't enabled, ask an org admin to enable it on <strong>Page Sharing Admin → Spaces</strong>.</p>
+<p>I can't subscribe to a page — it says I need permission</p>
+<p>Subscribing creates a real page in the space you subscribe from, so you need permission to <strong>create a page in that space</strong>. Pick a space you can add pages to, or ask a space admin to grant it.</p>
+<p>My subscription says “title conflict” — what now?</p>
+<p>Confluence page titles are unique per space, and a page with the shared page's title already exists in the space you subscribed from — so the synced copy can't be created (or a source rename can't be applied). <strong>Rename or remove the clashing page</strong>, and the sync recovers automatically on the next source update. Subscribing is refused up front when the conflict is already detectable, so you'll usually see this only when the publisher renames their page onto a title you already use.</p>
+<p>I want a live, editable page shared between both sites Limitation</p>
+<p>Not supported. The subscriber gets a <strong>point-in-time, read-only replica</strong> that refreshes when you publish — it is not a live, co-edited page. There is no real-time collaboration and no edits flow back to the source.</p>
+<p>I want to be sure subscribers can't change my content Limitation</p>
+<p>Synced pages are created read-only (edit-restricted to the app). That restriction is only enforceable on <strong>paid Confluence</strong> — on Confluence Free the copy is technically editable, but any local change is overwritten on the next sync.</p>
+<p>I want to stop sharing a page</p>
+<p>In <strong>Settings → Apps → Page Sharing Admin → Active</strong>, choose <strong>Stop sharing</strong> on the page (or <strong>Disable</strong> a single subscriber). This pushes a purge and the subscriber's copy is moved to their trash.</p>
+<p>I want to revoke a subscription link I sent out</p>
+<p>In <strong>Settings → Apps → Page Sharing Admin → Links</strong>, find the link and choose <strong>Revoke</strong>. Links are <strong>reusable until revoked</strong> — one link can onboard any number of partner sites, and the <strong>Links</strong> tab shows how many times each has been used. Revoking blocks <em>new</em> subscriptions; sites already subscribed keep syncing until you <strong>Disable</strong> them on the Active tab.</p>
+<p>I want the copy removed by deleting my original page Limitation</p>
+<p>Deleting or trashing the source page does <strong>not</strong> withdraw the subscriber's copy — there's no delete trigger, so the replica would linger. To withdraw it, use <strong>Stop sharing</strong> in the admin panel instead.</p>
+<p>I want to share a whole space at once Limitation</p>
+<p>Sharing is <strong>page by page</strong>. There's no whole-space or page-tree sharing — share each page you want to publish.</p>
+<p>I want to share a blog post Limitation</p>
+<p>Pages only. The action appears on blog posts too, but it will tell you Page Sharing supports Confluence pages only.</p>
+<p>I want to know why an image or macro is missing from the subscriber's copy Limitation</p>
+<p>By design, only standard Confluence content crosses the instance boundary: text, headings, lists, quotes, code blocks, tables, dividers, emoji, status lozenges, dates, and links. Images and attachments, macros and app content, @-mentions, expands, panels, and task lists are <strong>removed from the copy</strong> before it leaves your site — they don't appear as placeholders; they are simply absent. This is a security measure: nothing embedded or executable is ever sent to the partner site, and the receiving site independently applies the same filter to everything it accepts. If a page relies heavily on images or macros, expect the shared copy to carry the text and structure only.</p>
+<p>I moved a shared page to another space and my subscribers stopped getting updates Limitation</p>
+<p>Sharing is a managed use case: your Confluence admin decides, space by space, where external sharing is allowed, and the app enforces that decision on every push. If a shared page is moved into a space that isn't enabled for external sharing, updates stop leaving your site — deliberately, so that moving a page can never carry content out of a space your admin hasn't opened up. Your subscribers keep their last synced copy; nothing is deleted. Syncing resumes automatically on the next edit once the page is back in an enabled space (move it back, or ask your admin to enable the new space).</p>
+<p>I want to share with a partner who isn't approved yet</p>
+<p>Send them the link anyway. When they subscribe, their request lands as <strong>pending</strong> in your admin panel; once an admin approves it (which also allow-lists their site), their copy syncs. A pending request <strong>expires after 14 days</strong> — if it lapses before anyone approves it, the partner simply subscribes again. Each link can hold up to <strong>25 outstanding pending requests</strong> at a time.</p>
+<p>I want to report a problem or contact support</p>
+<p>Email <a href="https://www.cloudscript.io/support">support</a>. When you get in touch, include the version shown at the bottom of the admin, space settings, or Subscribed Pages screen (for example <em>Page Sharing · v1.0.0-abc12</em>) — it identifies the exact build you're on.</p>
+<p>This article is generated from the user guide at <a href="https://www.cloudscript.io/apps/page-sharing/">https://www.cloudscript.io/apps/page-sharing/</a> and is updated automatically. Terms, privacy and data-processing documents for this app: <a href="https://www.cloudscript.io/apps/page-sharing/privacy">Privacy</a>, <a href="https://www.cloudscript.io/apps/page-sharing/terms">Terms</a>.</p>
