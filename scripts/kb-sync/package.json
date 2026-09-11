@@ -6,7 +6,7 @@
   "type": "module",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "test": "node --test ../../tests/kb-sync/*.test.mjs",

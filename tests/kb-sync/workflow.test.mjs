@@ -69,13 +69,13 @@ test("scenario: a push that touches no guide does not run the sync (path filters
   assert.equal(runsFor(".github/workflows/kb-sync.yml"), true);
 });
 
-test("hardening: concurrency group, actions pinned by full commit SHA, Node 20, npm ci, timeout", () => {
+test("hardening: concurrency group, actions pinned by full commit SHA, Node 22, npm ci, timeout", () => {
   assert.deepEqual(block("concurrency:"), ["group: kb-sync", "cancel-in-progress: false"]);
   const uses = lines.filter((l) => /^\s*(- )?uses:/.test(l)).map((l) => l.trim());
   assert.equal(uses.length, 2);
   for (const u of uses) assert.match(u, /^(- )?uses: actions\/[a-z-]+@[0-9a-f]{40} # v\d+\.\d+\.\d+$/, `${u} is pinned by a 40-character SHA with the version in a comment`);
   assert.ok(uses.some((u) => u.includes("actions/checkout@")) && uses.some((u) => u.includes("actions/setup-node@")));
-  assert.match(text, /node-version: 20\b/);
+  assert.match(text, /node-version: 22\b/);
   assert.match(text, /cache-dependency-path: scripts\/kb-sync\/package-lock\.json/);
   assert.match(text, /run: npm ci\b/);
   assert.match(text, /working-directory: scripts\/kb-sync/);

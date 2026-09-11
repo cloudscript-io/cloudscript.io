@@ -101,7 +101,7 @@ node --test tests/kb-sync/*.test.mjs
 node scripts/kb-sync/sync.mjs --dry-run
 ```
 
-Node 20 or newer. The only dependency is `parse5` (pinned exactly, one transitive package,
+Node 22 or newer. The only dependency is `parse5` (pinned exactly, one transitive package,
 installed with `npm ci` against the committed lockfile). Live runs from a laptop work with the
 same environment variables but the workflow is the intended path.
 

@@ -67,7 +67,8 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
   filters (plus the workflow file itself), the path filters are exercised against guide, legal,
   news and asset paths, `workflow_dispatch` has `dry_run` boolean defaulting to true, the
   concurrency group is `kb-sync`, both actions are pinned by full commit SHA (checkout v7.0.1,
-  setup-node v7.0.0, resolved from the GitHub API on 2026-09-10), Node 20, `npm ci` in
+  setup-node v7.0.0, resolved from the GitHub API on 2026-09-10), Node 22 (changed from the
+  task's Node 20 on 2026-09-11, Node 20 having left support in April 2026), `npm ci` in
   `scripts/kb-sync`, `timeout-minutes: 10`, and the four secrets map to the four environment
   variables with `KB_SYNC_DRY_RUN` derived from the dispatch input. The script appends the
   result table to `$GITHUB_STEP_SUMMARY` itself. The test step uses the explicit file list
@@ -135,10 +136,10 @@ Things to know before the live run (5.2):
   regenerated goldens. The spec and design text still say www and are Natasha's to align.
 - Image `alt` text is dropped by the D4 attribute whitelist. Emitting `ac:alt` is a small
   converter change if the help centre needs it.
-- The workflow pins Node 20 as task 4.1 says; Node 20 left support in April 2026 and everything
-  here also runs on 22 and 24. `node --test tests/kb-sync/` (the directory form in the gate)
-  recurses on Node 20 only; on 22 and later use `node --test tests/kb-sync/*.test.mjs`, which is
-  what the workflow runs.
+- The workflow pins Node 22 (task 4.1 said Node 20, which left support in April 2026; changed
+  2026-09-11, `engines` in package.json is `>=22`). `node --test tests/kb-sync/` (the directory
+  form in the gate) recurses on Node 20 only; use `node --test tests/kb-sync/*.test.mjs`, which
+  is what the workflow and the README run.
 - `actionlint` was not available; the workflow was parsed with Ruby's YAML library and is
   covered by `tests/kb-sync/workflow.test.mjs`. The 5.1 dispatch dry run is the live validation.
 - Pre-existing and untouched: Jekyll copies `openspec/` into the built site as static files.
