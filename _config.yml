@@ -49,3 +49,5 @@ exclude:
   # which carry front matter, as duplicate pages under /tests/.
   - scripts/
   - tests/
+  # OpenSpec change proposals, designs and task lists are internal design documents.
+  - openspec/
