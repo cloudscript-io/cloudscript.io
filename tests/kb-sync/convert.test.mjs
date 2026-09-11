@@ -13,7 +13,7 @@ import { XmlError, assertWellFormed, parseXmlFragment, xmlTextOf } from "../../s
 import { parseFragment } from "../../scripts/kb-sync/node_modules/parse5/dist/index.js";
 
 const bySlug = Object.fromEntries(loadRegistry(fixturesDir).map((app) => [app.slug, app]));
-const TYPST_BASE = "https://www.cloudscript.io/apps/typst-renderer/";
+const TYPST_BASE = "https://cloudscript.io/apps/typst-renderer/";
 
 /** Convert a snippet of HTML as if it were the kept range of a guide under `base`. */
 function convertSnippet(html, base = TYPST_BASE) {
@@ -26,22 +26,22 @@ const readGolden = (slug) => readFileSync(path.join(goldenDir, `${slug}.storage.
 
 test("scenario: relative links become absolute", () => {
   const { body } = convertGuide(fixtureHtml("typst-renderer"), bySlug["typst-renderer"]);
-  assert.ok(body.includes('href="https://www.cloudscript.io/apps/typst-renderer/privacy"'));
-  assert.ok(body.includes('href="https://www.cloudscript.io/security"'));
+  assert.ok(body.includes('href="https://cloudscript.io/apps/typst-renderer/privacy"'));
+  assert.ok(body.includes('href="https://cloudscript.io/security"'));
   assert.ok(body.includes('href="https://typst.app/"'), "absolute links pass through");
   assert.ok(!/href="\//.test(body), "no root-relative href survives");
   assert.ok(!/href="[a-z-]+\.(html|png)"/.test(body), "no file-relative href survives");
   assert.equal(
     convertSnippet('<p><a href="/apps/typst-renderer/privacy">x</a></p>'),
-    '<p><a href="https://www.cloudscript.io/apps/typst-renderer/privacy">x</a></p>',
+    '<p><a href="https://cloudscript.io/apps/typst-renderer/privacy">x</a></p>',
   );
   assert.equal(
     convertSnippet('<p><a href="#formats">x</a></p>'),
-    '<p><a href="https://www.cloudscript.io/apps/typst-renderer/#formats">x</a></p>',
+    '<p><a href="https://cloudscript.io/apps/typst-renderer/#formats">x</a></p>',
   );
   assert.equal(
-    convertSnippet('<p><a href="privacy.html">x</a></p>', "https://www.cloudscript.io/apps/page-sharing/"),
-    '<p><a href="https://www.cloudscript.io/apps/page-sharing/privacy.html">x</a></p>',
+    convertSnippet('<p><a href="privacy.html">x</a></p>', "https://cloudscript.io/apps/page-sharing/"),
+    '<p><a href="https://cloudscript.io/apps/page-sharing/privacy.html">x</a></p>',
   );
 });
 
@@ -51,13 +51,13 @@ test("scenario: a screenshot figure becomes an external image with its caption",
   );
   assert.equal(
     out,
-    '<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/typst-renderer/render-maths.png"/></ac:image>\n' +
+    '<ac:image ac:align="center"><ri:url ri:value="https://cloudscript.io/apps/typst-renderer/render-maths.png"/></ac:image>\n' +
       "<p><em>Maths rendered on the page</em></p>",
   );
   const { body } = convertGuide(fixtureHtml("typst-renderer"), bySlug["typst-renderer"]);
   assert.ok(
     body.includes(
-      '<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/typst-renderer/render-maths.png"/></ac:image>\n' +
+      '<ac:image ac:align="center"><ri:url ri:value="https://cloudscript.io/apps/typst-renderer/render-maths.png"/></ac:image>\n' +
         "<p><em>The bundled maths sample rendered live on the page: mathematics, prose and code, set in Typst's own fonts.</em></p>",
     ),
   );
@@ -137,9 +137,9 @@ test("pre > code becomes the code macro, with the language from a language-* cla
 test("an img outside a figure becomes a plain ac:image; an img without src is dropped", () => {
   const out = convertSnippet(
     '<img src="/apps/nikoniko/assets/guide-hero.png" alt="x" width="1520" loading="lazy" style="max-width:100%">',
-    "https://www.cloudscript.io/apps/nikoniko/",
+    "https://cloudscript.io/apps/nikoniko/",
   );
-  assert.equal(out, '<ac:image><ri:url ri:value="https://www.cloudscript.io/apps/nikoniko/assets/guide-hero.png"/></ac:image>');
+  assert.equal(out, '<ac:image><ri:url ri:value="https://cloudscript.io/apps/nikoniko/assets/guide-hero.png"/></ac:image>');
   assert.equal(convertSnippet('<dialog class="lightbox"><img alt=""></dialog>'), "");
 });
 
@@ -252,7 +252,7 @@ test("goldens: only whitelisted storage-format elements appear, all references a
     for (const m of golden.matchAll(/(?:href|ri:value)="([^"]*)"/g)) {
       assert.match(m[1], /^https?:\/\//, `${slug}: ${m[1]} is absolute`);
     }
-    assert.ok(golden.includes(`href="https://www.cloudscript.io/apps/${slug}/"`), `${slug}: footer names the guide URL`);
+    assert.ok(golden.includes(`href="https://cloudscript.io/apps/${slug}/"`), `${slug}: footer names the guide URL`);
     assert.ok(!golden.includes("Runs on Atlassian") && !golden.includes("{%") && !golden.includes("<h1"), `${slug}: chrome absent`);
   }
 });
@@ -274,23 +274,23 @@ test("goldens: page-specific spot checks", () => {
   );
   assert.ok(radar.includes("<ol><li><strong>Enter data in a table:</strong> Enter data directly into the table in the macro editor.</li>"));
   const niko = readGolden("nikoniko");
-  assert.ok(niko.includes('<ac:image><ri:url ri:value="https://www.cloudscript.io/apps/nikoniko/assets/guide-hero.png"/></ac:image>'));
-  assert.ok(niko.includes('href="https://www.cloudscript.io/apps/nikoniko/dpa"'));
+  assert.ok(niko.includes('<ac:image><ri:url ri:value="https://cloudscript.io/apps/nikoniko/assets/guide-hero.png"/></ac:image>'));
+  assert.ok(niko.includes('href="https://cloudscript.io/apps/nikoniko/dpa"'));
   const ps = readGolden("page-sharing");
   assert.ok(ps.includes("<p>I want to stop sharing a page</p>"));
-  assert.ok(ps.includes('href="https://www.cloudscript.io/apps/page-sharing/privacy.html"'));
-  assert.ok(ps.includes('href="https://www.cloudscript.io/apps/page-sharing/#admin"'));
+  assert.ok(ps.includes('href="https://cloudscript.io/apps/page-sharing/privacy.html"'));
+  assert.ok(ps.includes('href="https://cloudscript.io/apps/page-sharing/#admin"'));
   assert.ok(
     ps.includes(
-      '<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/page-sharing/network-architecture.svg"/></ac:image>',
+      '<ac:image ac:align="center"><ri:url ri:value="https://cloudscript.io/apps/page-sharing/network-architecture.svg"/></ac:image>',
     ),
   );
   assert.ok(!ps.includes("showModal") && !ps.includes("ps-docs"));
   const email = readGolden("email-viewer");
   assert.ok(
     email.includes(
-      '<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/email-viewer/guide-hero.png"/></ac:image>\n<p><em>A .eml attachment rendered in place',
+      '<ac:image ac:align="center"><ri:url ri:value="https://cloudscript.io/apps/email-viewer/guide-hero.png"/></ac:image>\n<p><em>A .eml attachment rendered in place',
     ),
   );
-  assert.ok(email.endsWith('<a href="https://www.cloudscript.io/apps/email-viewer/dpa">DPA</a>.</p>\n'));
+  assert.ok(email.endsWith('<a href="https://cloudscript.io/apps/email-viewer/dpa">DPA</a>.</p>\n'));
 });

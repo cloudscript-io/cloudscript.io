@@ -9,7 +9,7 @@
 // with block-level unknowns acting as paragraph boundaries, so no text is ever dropped: the
 // converter checks that invariant itself, then checks the result is well-formed XML, and refuses
 // the page otherwise. Attributes other than `href`, `src`, `colspan` and `rowspan` are removed.
-// Every `href` and `src` is resolved against `https://www.cloudscript.io/apps/<slug>/`.
+// Every `href` and `src` is resolved against `https://cloudscript.io/apps/<slug>/`.
 import { createHash } from "node:crypto";
 import {
   SITE_BASE,

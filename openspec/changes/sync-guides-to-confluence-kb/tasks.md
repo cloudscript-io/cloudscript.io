@@ -129,9 +129,10 @@ Things to know before the live run (5.2):
   Its article carries the eyebrow labels ("How it works", "For the Publisher") and the step
   numbers ("1", "2", "3") as short paragraphs, and "Limitation" is appended to the FAQ questions
   that carry that badge. Content-complete, cosmetically plain.
-- Links and images in synced pages use `https://www.cloudscript.io/...` as the spec says; www
-  redirects to the apex. Changing to the apex is one constant (`SITE_BASE` in `extract.mjs`), a
-  golden regeneration (`node tests/kb-sync/update-goldens.mjs`) and a spec edit.
+- Links and images in synced pages use the apex `https://cloudscript.io/...` (changed 2026-09-11
+  from the `www` host that the spec and design text name; www redirects to the apex and the apex
+  is the site canonical per CLAUDE.md). It is one constant, `SITE_BASE` in `extract.mjs`, plus the
+  regenerated goldens. The spec and design text still say www and are Natasha's to align.
 - Image `alt` text is dropped by the D4 attribute whitelist. Emitting `ac:alt` is a small
   converter change if the help centre needs it.
 - The workflow pins Node 20 as task 4.1 says; Node 20 left support in April 2026 and everything

@@ -195,19 +195,19 @@ test("footer: names the absolute guide URL and links every registry document", (
   const { xml, text } = buildFooter(bySlug["typst-renderer"]);
   assert.equal(
     xml,
-    '<p>This article is generated from the user guide at <a href="https://www.cloudscript.io/apps/typst-renderer/">https://www.cloudscript.io/apps/typst-renderer/</a> and is updated automatically. ' +
-      'Terms, privacy and data-processing documents for this app: <a href="https://www.cloudscript.io/apps/typst-renderer/privacy">Privacy</a>, <a href="https://www.cloudscript.io/apps/typst-renderer/terms">Terms</a>.</p>',
+    '<p>This article is generated from the user guide at <a href="https://cloudscript.io/apps/typst-renderer/">https://cloudscript.io/apps/typst-renderer/</a> and is updated automatically. ' +
+      'Terms, privacy and data-processing documents for this app: <a href="https://cloudscript.io/apps/typst-renderer/privacy">Privacy</a>, <a href="https://cloudscript.io/apps/typst-renderer/terms">Terms</a>.</p>',
   );
   assert.equal(
     text,
-    "This article is generated from the user guide at https://www.cloudscript.io/apps/typst-renderer/ and is updated automatically. Terms, privacy and data-processing documents for this app: Privacy, Terms.",
+    "This article is generated from the user guide at https://cloudscript.io/apps/typst-renderer/ and is updated automatically. Terms, privacy and data-processing documents for this app: Privacy, Terms.",
   );
   const three = buildFooter(bySlug["email-viewer"]).xml;
-  assert.ok(three.includes('href="https://www.cloudscript.io/apps/email-viewer/dpa">DPA</a>'));
+  assert.ok(three.includes('href="https://cloudscript.io/apps/email-viewer/dpa">DPA</a>'));
 });
 
 test("footer: an app without documents gets the first sentence only", () => {
   const { xml, text } = buildFooter({ slug: "example", documents: [] });
-  assert.equal(xml, '<p>This article is generated from the user guide at <a href="https://www.cloudscript.io/apps/example/">https://www.cloudscript.io/apps/example/</a> and is updated automatically.</p>');
+  assert.equal(xml, '<p>This article is generated from the user guide at <a href="https://cloudscript.io/apps/example/">https://cloudscript.io/apps/example/</a> and is updated automatically.</p>');
   assert.ok(!text.includes("Terms, privacy"));
 });

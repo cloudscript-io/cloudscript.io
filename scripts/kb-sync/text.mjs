@@ -17,7 +17,7 @@ export function escapeAttr(text) {
 
 /**
  * Resolve a link or image reference against the guide's own URL so that every reference in
- * the synced page is absolute. `base` is `https://www.cloudscript.io/apps/<slug>/`, so
+ * the synced page is absolute. `base` is `https://cloudscript.io/apps/<slug>/`, so
  * `render-maths.png` resolves next to the guide and `/apps/x/privacy` resolves at the root.
  * Absolute URLs pass through untouched.
  */

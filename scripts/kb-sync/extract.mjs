@@ -12,7 +12,7 @@ import path from "node:path";
 import { parseFragment } from "parse5";
 import { absoluteUrl, escapeAttr, escapeText, guideUrl, normaliseText } from "./text.mjs";
 
-export const SITE_BASE = "https://www.cloudscript.io";
+export const SITE_BASE = "https://cloudscript.io";
 export const GUIDE_ROOT_CLASS = "prose";
 export const LEGAL_HEADING = "Legal";
 const DROP_TAGS = new Set(["h1", "style", "script", "noscript"]);
