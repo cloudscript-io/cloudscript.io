@@ -9,7 +9,7 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
   <div class="prose">
     <style>
       .prose figure.shot { margin: 1.6rem 0; }
-      .prose figure.shot img { width: 100%; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #FFFFFF; }
+      .prose figure.shot img { width: 100%; height: auto; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #FFFFFF; }
       .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
     </style>
     <h1>MSG/EML Email Viewer for Jira</h1>
@@ -22,7 +22,7 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
 
 
     <figure class="shot">
-      <img src="/apps/email-viewer-jira/guide-emails-tab.png" alt="The Emails tab on a Jira issue showing three attached emails: the first expanded as a full email card with subject, sender, recipients, date and body, and two more collapsed to single header rows ending in Show email." width="1808" height="784" loading="lazy">
+      <img src="/apps/email-viewer-jira/guide-emails-tab.png" alt="The Emails tab on a Jira issue showing three attached emails: the first expanded as a full email card with subject, sender, recipients, date and body, and two more collapsed to single header rows ending in Show email. Beside the tab, the issue's right-hand column shows its detail fields and the expanded Attached emails group." width="1840" height="900" loading="lazy">
       <figcaption>The Emails tab on an issue with three attached emails: one expanded as a full card, two collapsed to header rows.</figcaption>
     </figure>
 
@@ -39,7 +39,7 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
     <p>The attached date is formatted in the locale and time zone the Forge context supplies. The context's time zone follows your browser and its locale follows your Jira profile, and Jira's own Attachments panel also follows the browser's zone, so the sidebar and the panel agree on the instant and the zone and differ only in format: 24-hour for an <code>en_GB</code> profile, where Jira's panel prints a 12-hour time.</p>
 
     <figure class="shot">
-      <img src="/apps/email-viewer-jira/guide-sidebar-index.png" alt="The expanded Attached emails group in the sidebar of a Jira issue, reading &quot;3 emails attached:&quot; above three rows that each name an email file and the date and person who attached it, and &quot;Read them in the Emails tab.&quot; beneath." width="974" height="314" loading="lazy">
+      <img src="/apps/email-viewer-jira/guide-sidebar-index.png" alt="The expanded Attached emails group in the sidebar of a Jira issue, reading &quot;3 emails attached:&quot; above three rows that each name an email file and the date and person who attached it, and &quot;Read them in the Emails tab.&quot; beneath. To its left, the Emails tab shows the first of those emails rendered as a card with two attachment tiles." width="1840" height="900" loading="lazy">
       <figcaption>The expanded Attached emails group: the count line, one row per attached email, and the pointer to the Emails tab.</figcaption>
     </figure>
 
