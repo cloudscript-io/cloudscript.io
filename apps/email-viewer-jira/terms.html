@@ -1,0 +1,333 @@
+---
+layout: default
+title: MSG/EML Email Viewer for Jira — Terms
+---
+
+<div class="page wrap">
+  <div class="prose">
+
+<h1>MSG/EML Email Viewer for Jira Terms of Use</h1>
+
+<p><em>Effective 22 September 2026</em></p>
+
+<h2>About these terms</h2>
+
+<p>
+  These are Provider-Specific Terms that supplement the Bonterms Standard End
+  User Agreement, Version 1.0 (the "Standard Agreement"). The Standard Agreement
+  governs your use of MSG/EML Email Viewer for Jira and is incorporated by
+  reference, except where these Provider-Specific Terms expressly override or
+  supplement it. Where a provision of these Provider-Specific Terms conflicts
+  with the Standard Agreement, these Provider-Specific Terms prevail to the
+  extent of the conflict, and in all other respects the Standard Agreement
+  continues to apply. Capitalised terms used and not defined here have the
+  meanings given to them in the Standard Agreement. The current text of the
+  Bonterms Standard End User Agreement, Version 1.0 is published at
+  <a href="https://bonterms.com/standard/end-user-agreement-v1/">https://bonterms.com/standard/end-user-agreement-v1/</a>.
+</p>
+
+<h2>Who we are</h2>
+
+<p>
+  MSG/EML Email Viewer for Jira is provided by Cloudscript Pty Ltd
+  (ABN 14 700 662 362) ("we", "us"), as a plugin available on the Atlassian
+  Marketplace for Forge. By installing or using MSG/EML Email Viewer for Jira,
+  you agree to these terms.
+</p>
+
+<h2>The service</h2>
+
+<p>
+  MSG/EML Email Viewer for Jira renders a <code>.msg</code> or <code>.eml</code>
+  file attached to a Jira work item as a faithful email card: subject, sender,
+  recipients, date, body, inline images and attachments. It adds two surfaces to
+  the work item, both always present and requiring no configuration of any kind.
+  The first is an "Emails" tab in the issue's Activity section, which is the only
+  place email content is rendered. The second is an "Attached emails" group in
+  the sidebar, whose header carries a count of the <code>.msg</code> and
+  <code>.eml</code> files attached to that work item, and whose expanded body
+  shows a count line, an index of those files (each row giving the filename, the
+  date it was attached and the display name of the person who attached it, as
+  Jira's own answer returns them, newest attached first) and a line pointing to
+  the Emails tab. The sidebar group renders no email content and its index rows
+  are labels rather than links. Each of an email's own attachments can be
+  downloaded individually from the card, byte for byte as it was received.
+  Attachments are listed rather than opened in place, and a message nested inside
+  another message is listed rather than expanded. Files above 50 MiB
+  (52,428,800 bytes) are declined rather than retrieved.
+</p>
+
+<p>
+  From inside a rendered email in the Emails tab, a reader can promote one of
+  that email's own files to the work item being viewed, using "Attach to work
+  item" on an individual file or "Attach all N files" for the email. This happens
+  only when the reader clicks, never automatically. The file is posted from the
+  reader's own browser, as that reader, to the same work item in the same Jira
+  site, and it becomes an ordinary Jira attachment: it is visible to whoever
+  Jira's attachment permissions allow to see that work item's attachments, it
+  carries no link back to the email it came from, and it remains on the work item
+  after the source email attachment is removed. Jira's own permission to create
+  attachments governs every such request, so a reader who does not hold that
+  permission is refused by Jira, and the app reports the refusal as the
+  permission outcome it is.
+</p>
+
+<p>
+  The app declares eleven granular Forge permission scopes: ten reads, which are
+  the set Jira requires for reading a work item and its attachments, and one
+  write, <code>write:attachment:jira</code>, which exists solely for the attach
+  action described above. No delete scope is declared, so the app cannot rename,
+  replace or remove anything in your Jira. It declares no outbound network access
+  to any host: the manifest contains no <code>remotes</code> block, no
+  <code>permissions.external</code> block and no storage declaration. Every call
+  the app makes runs as the user viewing the work item, never as the app itself,
+  so what a given viewer can see is decided by Jira's own permissions and not by
+  us. A viewer who is not permitted to see an attachment receives an empty
+  listing, with no count, no index row and no card, which is indistinguishable
+  from a work item that has no email attachments. The app shows a viewer exactly
+  what Jira's own Attachments panel shows that viewer, and never more.
+</p>
+
+<p>
+  Email content is retrieved from the work item's own Jira attachments over
+  Atlassian's platform APIs. The file's bytes are fetched into the viewing user's
+  browser through the Forge bridge and parsed there in a Web Worker, and the
+  app's backend function on Atlassian's Forge platform additionally reads at most
+  the first kilobyte of each file in order to classify its format, discarding
+  those bytes within the same invocation without logging them or returning them.
+  We operate no server, database or other destination of our own, and the app
+  stores nothing: no Forge storage, no work-item or entity property, no
+  configuration and no record of any kind. The only write the app makes at all is
+  the attachment a reader creates on the work item being viewed, when that reader
+  clicks Attach. Remote content referenced by an email is blocked when the card is
+  drawn, and the viewing user can choose to load it for that render. Where a file
+  cannot be read or rendered, the app shows a card naming what happened instead of
+  rendering a partial or misleading result.
+</p>
+
+<h2>Access and licensing</h2>
+
+<p>
+  MSG/EML Email Viewer for Jira is licensed through the Atlassian Marketplace
+  under Atlassian's standard marketplace terms for Forge apps. Your use of
+  Atlassian's host product (Jira) remains subject to your separate agreement with
+  Atlassian. Licensing is enforced from the first release: an app licence that is
+  active and an app licence that is in its evaluation period behave identically,
+  and where no active licence is present the app renders no email content, lists
+  no attachments, shows no count or index, and displays a licence-required notice
+  instead.
+</p>
+
+<h2>Restrictions on use</h2>
+
+<p>
+  Except as expressly permitted by these terms or by Atlassian's marketplace terms
+  for Forge apps, you must not: reverse engineer, decompile, or attempt to extract
+  the source code of MSG/EML Email Viewer for Jira; resell, sublicense, rent,
+  lease, or redistribute MSG/EML Email Viewer for Jira outside the Atlassian
+  Marketplace; use MSG/EML Email Viewer for Jira to build a competing product or
+  service; remove or obscure any proprietary notice in MSG/EML Email Viewer for
+  Jira; or use MSG/EML Email Viewer for Jira in a manner that breaches Atlassian's
+  acceptable use policies for the host product.
+</p>
+
+<h2>Intellectual property</h2>
+
+<p>
+  MSG/EML Email Viewer for Jira, including its source code, design, and all
+  related intellectual property, is owned by Cloudscript Pty Ltd and its
+  licensors. These terms grant you a licence to use MSG/EML Email Viewer for Jira
+  as described above; they do not transfer any ownership or intellectual property
+  rights to you.
+</p>
+
+<h2>Data handling</h2>
+
+<p>
+  For details on what data MSG/EML Email Viewer for Jira collects, where it is
+  stored and processed, and how long it is retained, see our
+  <a href="/apps/email-viewer-jira/privacy">Privacy Policy</a>.
+</p>
+
+<h2>Your content and your own compliance</h2>
+
+<p>
+  The email files the app renders are attachments that you and your users placed
+  on your own Jira work items. You decide what is attached, who may see the work
+  item it is attached to, and who may install or use the app on your site. You are
+  responsible for your own compliance obligations in respect of that content,
+  including any privacy, data protection, confidentiality or records obligations
+  that apply to you, and for making any disclosures your own privacy notices
+  require. The app applies no access control of its own and makes no judgement
+  about the content it renders: it displays to each viewer what Jira has already
+  decided that viewer may see. Because we hold no copy of that content and
+  operate no store of our own, a request from an individual to access, correct or
+  erase something held in an email attached to your work items is answered from
+  your Jira, by you, and we have nothing to search, produce or delete in response
+  to one.
+</p>
+
+<p>
+  Promoting a file from an email to the work item creates a second, independent
+  copy of that file in your Jira, and the same responsibilities attach to it. The
+  copy is an ordinary Jira attachment, so it is visible to everyone Jira's
+  attachment permissions allow to see the work item's attachments, which can be a
+  wider group than the people who would have opened the email to find the file
+  inside it. It carries no link back to the email it came from, and removing or
+  restricting the source email does not reach it. Your own retention, access and
+  erasure processes need to treat a promoted file as they treat any other
+  attachment your users create.
+</p>
+
+<h2>Third-party and open-source components</h2>
+
+<p>
+  MSG/EML Email Viewer for Jira is closed source. No source code licence is
+  offered to customers and no source is distributed. The app is built on the
+  Atlassian Forge platform and includes the following third-party runtime
+  components. The Atlassian Forge SDK packages <code>@forge/bridge</code>
+  (browser) and <code>@forge/api</code> and <code>@forge/resolver</code> (the two
+  Forge functions) are provided by Atlassian under Atlassian's developer terms.
+  React and React DOM, used for the app's user interface, are licensed under the
+  MIT Licence. <code>@kenjiuno/msgreader</code>, which parses <code>.msg</code>
+  files, is licensed under the Apache Licence 2.0, and
+  <code>@kenjiuno/decompressrtf</code>, which decompresses the compressed RTF body
+  of a <code>.msg</code> file, is licensed under the BSD 2-Clause Licence.
+  <code>postal-mime</code>, which parses <code>.eml</code> files, is licensed
+  under the MIT No Attribution Licence. DOMPurify, used to sanitise email HTML
+  before it is rendered, is licensed under the Mozilla Public Licence 2.0 or the
+  Apache Licence 2.0 at the recipient's option. <code>iconv-lite</code>
+  (character-encoding conversion), <code>buffer</code> and
+  <code>string_decoder</code> are licensed under the MIT Licence. The rendering
+  core that carries the parsing and sanitisation libraries is Cloudscript's own
+  component, not a third-party one. Build and test tooling is not distributed and
+  is not listed here.
+</p>
+
+<h2>Security measures</h2>
+
+<p>
+  This section sets out the security posture specific to MSG/EML Email Viewer for
+  Jira and supplements the security provisions of the Standard Agreement. As
+  described under "The service" above, the app declares no outbound network access
+  to any host and operates no data store of its own, and its manifest declares
+  neither. Because there is no Cloudscript-operated server, database, cache or log
+  destination in this app's path, there is no separate Cloudscript-operated store
+  or transmission path for this app to secure. Email content travels between your
+  own Jira attachments and the viewing user's browser over Atlassian's own
+  platform, and, where a reader clicks Attach, back to the same work item in the
+  same Jira site as a new attachment. Email HTML is sanitised before it is
+  rendered, remote content is blocked by default and is loaded only when the
+  viewing user chooses to reveal it for that render, parsing runs in a Web Worker
+  under a fifteen-second deadline so that a malformed or hostile file yields an
+  error card rather than an unresponsive page, and a file whose listed size
+  exceeds the 50 MiB cap is declined before any of its bytes are requested.
+</p>
+
+<p>
+  The platform-level and vendor-level practices that apply to the app (Atlassian
+  Forge's own sandboxing and egress controls, the controls on our developer and
+  publishing accounts, and our vulnerability-handling process) are described in
+  the site-wide Security Policy at
+  <a href="https://cloudscript.io/security">https://cloudscript.io/security</a>
+  and are not restated here. Suspected vulnerabilities in this app can be reported
+  to <a href="mailto:security@cloudscript.io">security@cloudscript.io</a>.
+</p>
+
+<h2>Data Processing Addendum</h2>
+
+<p>
+  The <a href="/apps/email-viewer-jira/dpa">Data Processing Addendum</a> for
+  MSG/EML Email Viewer for Jira forms Schedule 1 to these Provider-Specific
+  Terms. It is the Data Protection Addendum identified in these
+  Provider-Specific Terms for the purposes of the Standard Agreement.
+</p>
+
+<p>
+  Our assessed position for this app is that we supply software and are neither a
+  controller nor a processor of personal data within the meaning of the General
+  Data Protection Regulation, and neither a business nor a service provider within
+  the meaning of the California Consumer Privacy Act. The Addendum is published
+  because procurement, vendor-assurance and internal governance processes commonly
+  require a data processing document from every software supplier irrespective of
+  that supplier's role under data protection law, and it is drafted to describe
+  what the app actually does and the commitments we can actually meet. Publishing
+  it is not an acknowledgement, admission or acceptance that we are a processor, a
+  service provider or a controller in respect of the app, and it must not be
+  construed as one. The reasoning is set out in the Addendum.
+</p>
+
+<h2>Support</h2>
+
+<p>Support requests: <a href="mailto:support@cloudscript.io">support@cloudscript.io</a>.</p>
+
+<h2>Changes to these terms</h2>
+
+<p>
+  We may update these terms from time to time. The "Effective" date at the top of
+  this page reflects the date of the most recent revision. Continued use of
+  MSG/EML Email Viewer for Jira after an update takes effect constitutes
+  acceptance of the revised terms.
+</p>
+
+<h2>Termination</h2>
+
+<p>
+  You may stop using MSG/EML Email Viewer for Jira at any time by uninstalling it
+  from your Jira site. Because the app stores nothing of its own, there is no data
+  of ours to delete, return or retain on termination, and no deletion routine or
+  uninstall hook exists or is needed. Uninstalling removes the "Emails" tab and
+  the "Attached emails" sidebar group from your work items. The email files
+  themselves are ordinary Jira attachments that you put there and that remain in
+  your Jira, untouched, exactly as they were before the app was installed. A file
+  that a reader promoted to a work item while the app was installed is likewise an
+  ordinary Jira attachment: it stays where it is, under Jira's own retention and
+  permissions, and uninstalling the app neither removes it nor changes who can see
+  it. Your rights under these terms end when the app is uninstalled or your
+  Marketplace licence ends, whichever happens first.
+</p>
+
+<h2>Disclaimer of warranties</h2>
+
+<p>
+  Except as expressly stated in these terms, MSG/EML Email Viewer for Jira is
+  provided "as is" and "as available," without warranties of any kind, whether
+  express, implied, or statutory, including any implied warranties of
+  merchantability, fitness for a particular purpose, or non-infringement, to the
+  maximum extent permitted by applicable law.
+</p>
+
+<h2>Limitation of liability</h2>
+
+<p>
+  To the maximum extent permitted by applicable law, Cloudscript Pty Ltd will not
+  be liable for any indirect, incidental, special, consequential, or punitive
+  damages, or any loss of profits, revenue, or data, arising out of or in
+  connection with your use of MSG/EML Email Viewer for Jira, whether in contract,
+  tort, or otherwise, even if advised of the possibility of such damages. Nothing
+  in these terms excludes or limits any guarantee, warranty, or other right that
+  cannot lawfully be excluded or limited under the Australian Consumer Law or
+  other applicable law.
+</p>
+
+<h2>Governing law</h2>
+
+<p>
+  These terms are governed by the laws of New South Wales (NSW), Australia, and
+  the courts of New South Wales have exclusive jurisdiction over any action
+  arising out of or relating to them. For the purposes of the Standard Agreement,
+  the Governing Law is the law of New South Wales and the Courts are the courts of
+  New South Wales, in place of the default the Standard Agreement would otherwise
+  apply.
+</p>
+
+<h2>Contact</h2>
+
+<p>
+  Cloudscript Pty Ltd (ABN 14 700 662 362)<br>
+  Support: <a href="mailto:support@cloudscript.io">support@cloudscript.io</a><br>
+  Security: <a href="mailto:security@cloudscript.io">security@cloudscript.io</a>
+</p>
+
+  </div>
+</div>

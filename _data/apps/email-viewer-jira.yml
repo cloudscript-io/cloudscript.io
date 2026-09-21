@@ -1,18 +1,36 @@
 # CloudScript.io app registry entry — MSG/EML Email Viewer for Jira.
 #
-# In development, not submitted: coming-soon card on the home page only.
-# order: 50 continues the established 5-point spacing after the highest slot
-# in use (email-viewer=45); no conflicting slot.
+# Staged by launch-app draft on 2026-09-18 (supersedes the 10 Sep 2026 staging,
+# kept at _launch/archive-2026-09-10/website-staging/). Updates the existing
+# coming-soon entry in the repo (currently has_page: false, description
+# "In development."); the file is replaced, not created.
 #
-# has_page: false — no app page exists yet, so the card renders the name as
-# plain text with no "Learn more" foot. It gains a page (and its legal pages)
-# with its launch-app website phase. Contrast the Confluence sibling, where
-# has_page is omitted because its guide IS its /apps/email-viewer page.
+# order: 50 continues the established 5-point spacing after the highest slot
+# in use (email-viewer=45); no conflicting slot. Unchanged from the repo entry.
+#
+# has_page: omitted deliberately. This app's guide IS its /apps/email-viewer-jira
+# landing page (staged as user-guide.html, placed as
+# apps/email-viewer-jira/index.html by the website phase), matching the
+# email-viewer, radar-renderer and mcp-renderer precedent. The URL is fixed on
+# the code side (App.tsx:71, the licence-required card's guide link), so the
+# registry conforms to the code (_launch/app-facts.md, ledger row
+# "Guide-URL / registry dependency", 17 Sep 2026).
+#
+# product: Jira — the site-level field added to every registry file in the
+# repo (PROJECT_STATUS.md); carried from the existing entry, not proposed here.
+#
+# description: the 202-character text decided by Natasha, 10 Sep 2026
+# (_launch/app-facts.md, Decisions ledger, "Registry description"), confirmed
+# unchanged by the attach/index changes on 18 Sep 2026. The repo entry's
+# "In development." sentence is dropped: the coming-soon status and the card
+# treatment already say so.
 #
 # marketplace_url: null and badges: [] until the listing is actually
 # published; a trust badge is listed only once observed on the live listing.
 #
-# No `documents` block: no privacy/terms/DPA pages exist for this app yet.
+# stores_personal_data and documents: populated 19 Sep 2026 on Natasha's recorded
+# per-document sign-off of privacy, terms and the DPA (app-facts.md, Decisions
+# ledger, "Legal sign-offs"). The three URLs are the URL contract's rows.
 name: MSG/EML Email Viewer for Jira
 slug: email-viewer-jira
 order: 50
@@ -21,7 +39,14 @@ homepage_visible: true
 featured: false
 platform: Forge
 product: Jira
-has_page: false
-description: "The same faithful in-place rendering of .msg and .eml attachments, on Jira issues: subject, sender, recipients, date, body, inline images and attachments, read from your own Jira and parsed in your browser. In development."
+description: "Renders a .msg or .eml file attached to a Jira issue as a faithful email card: subject, sender, recipients, date, body, inline images and attachments. Read from your own Jira and parsed in your browser."
 marketplace_url: null
 badges: []
+stores_personal_data: "No"
+documents:
+  - label: Privacy
+    url: /apps/email-viewer-jira/privacy
+  - label: Terms
+    url: /apps/email-viewer-jira/terms
+  - label: DPA
+    url: /apps/email-viewer-jira/dpa

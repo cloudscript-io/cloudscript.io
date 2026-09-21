@@ -1,0 +1,878 @@
+---
+layout: default
+title: MSG/EML Email Viewer for Jira — Data Processing Addendum
+---
+
+<div class="page wrap">
+  <div class="prose">
+
+<h1>MSG/EML Email Viewer for Jira Data Processing Addendum</h1>
+
+<p><em>Effective 22 September 2026</em></p>
+
+<h2>Status of this document</h2>
+
+<p>
+  This Data Processing Addendum ("this Addendum") is published by Cloudscript Pty
+  Ltd (ABN 14 700 662 362) ("Cloudscript", "we", "us") for customers of MSG/EML
+  Email Viewer for Jira (the "App") whose procurement, vendor-assurance or
+  internal governance processes require a data processing document from every
+  software supplier, irrespective of that supplier's role under data protection
+  law.
+</p>
+
+<p>
+  Cloudscript's assessed position for this App is that it is a supplier of
+  software and is neither a controller nor a processor of personal data within
+  the meaning of Articles 4(7) and 4(8) of the General Data Protection Regulation
+  (EU) 2016/679 ("GDPR"), and is neither a business nor a service provider within
+  the meaning of the California Consumer Privacy Act as amended ("CCPA"). The
+  reasoning is set out in "Roles of the parties" below. This Addendum is provided
+  as a description of what the App actually does and of the commitments
+  Cloudscript can actually meet. It is not an acknowledgement, admission or
+  acceptance that Cloudscript is a processor, a service provider, or a controller
+  in respect of the App, and it must not be construed as one. Where this Addendum
+  uses language drawn from Article 28 of the GDPR, it does so because the
+  procurement processes this document serves are organised around that article,
+  and each such clause records plainly whether it has any operative content on
+  these facts.
+</p>
+
+<p>
+  Nothing in this Addendum limits or varies any right a customer has under the
+  Australian Consumer Law or under any other law that cannot lawfully be excluded.
+</p>
+
+<h2>1. Parties, scope and interpretation</h2>
+
+<p>
+  This Addendum applies between Cloudscript and the organisation that has
+  installed the App into its Atlassian Jira Cloud site (the "Customer"). It
+  supplements the <a href="/apps/email-viewer-jira/terms">Terms of Use</a> and is
+  read with the <a href="/apps/email-viewer-jira/privacy">Privacy Policy</a> for
+  the App. Where a statement of fact in this Addendum differs from a statement of
+  the same fact in either of those documents, the difference is an error and
+  should be reported to
+  <a href="mailto:security@cloudscript.io">security@cloudscript.io</a>; the three
+  documents describe one set of facts and are intended to agree.
+</p>
+
+<p>
+  This Addendum deliberately does not label the Customer as "Controller" or
+  Cloudscript as "Processor". Those labels carry legal consequences that the
+  characterisation set out below does not support, and using them as convenient
+  shorthand would contradict the substance of the document.
+</p>
+
+<p>
+  The Terms of Use for the App are issued as Provider-Specific Terms supplementing
+  the Bonterms Standard End User Agreement, Version 1.0 (the "Standard
+  Agreement"). This Addendum forms Schedule 1 to those Provider-Specific Terms. It
+  takes effect on the date the Customer installs the App or on the effective date
+  stated above, whichever is later, and continues for as long as the App remains
+  installed in the Customer's Jira site.
+</p>
+
+<h2>2. Roles of the parties</h2>
+
+<p>
+  The Customer determines which email files are attached to which Jira work items,
+  who may see those work items and their attachments, whether the App is installed
+  at all, and for what purpose the Customer's organisation keeps that
+  correspondence. The Customer's own users decide, one click at a time, which
+  email is opened and whether a file inside an email is promoted to the work item.
+  Cloudscript determines none of those things and has no independent purpose for
+  any of the data: the App carries no analytics, no telemetry, no usage counter,
+  no crash-reporting endpoint and no destination to which any of the data could be
+  sent. On that basis Cloudscript is not a controller for the App.
+</p>
+
+<p>
+  Cloudscript is also not a processor for the App, because it performs no
+  processing operation on the Customer's behalf. The App is software that the
+  Customer installs into infrastructure the Customer already holds under its own
+  agreement with Atlassian, and that executes in the Customer's users' own
+  browsers and on Atlassian's own Forge platform. Cloudscript operates no server,
+  database, proxy, cache, log destination or analytics endpoint in the App's path,
+  and the App's Forge manifest declares no outbound network access to any host:
+  there is no <code>remotes</code> block and no <code>permissions.external</code>
+  block in it, and the App's own test suite fails the build if either appears.
+  Cloudscript receives no email content, cannot enumerate what a given
+  installation holds, and has no technical route by which it could obtain any of
+  it. Every call the App makes runs as the user viewing the work item; the
+  app-identity path (<code>asApp()</code>) is banned across the whole codebase and
+  the ban is enforced at build time, so there is no context in which the App acts
+  as Cloudscript rather than as the Customer's own user.
+</p>
+
+<p>
+  Three facts qualify that description and are stated here rather than left for a
+  reviewer to discover.
+</p>
+
+<p>
+  First, email bytes do reach Atlassian-hosted Forge compute, in a bounded
+  quantity. Email attachments are read from the Customer's own Jira as the viewing
+  user, parsed in that user's browser and stored nowhere; alongside that path, the
+  App's listing function reads at most the first kilobyte of each candidate
+  attachment on Atlassian-hosted Forge compute, as the viewing user, solely to
+  classify whether the file is a <code>.msg</code> or an <code>.eml</code> file.
+  For an <code>.eml</code> file that first kilobyte will ordinarily include the
+  sender, recipients, subject and date, because those fields sit in the file's
+  header. Those bytes are discarded within the same invocation and are never
+  logged, stored or returned to any other part of the App. The App is therefore
+  not purely a browser-side product, and this Addendum does not describe it as
+  one.
+</p>
+
+<p>
+  Second, the App declares the Forge scope <code>write:attachment:jira</code> and
+  does write. When a reader clicks "Attach to work item" on a file inside a
+  rendered email, or "Attach all N files" for an email, the reader's own browser
+  posts that file to the same work item in the same Jira site, as that reader, and
+  it becomes an ordinary Jira attachment. This is a customer-initiated operation
+  inside the Customer's own Jira tenancy and is never a transfer of anything to
+  Cloudscript. It happens only on the reader's click, never automatically. Jira's
+  own permission to create attachments governs every such request, so a reader who
+  does not hold it is refused by Jira. Cloudscript holds no copy of the resulting
+  attachment and cannot retrieve, enumerate, amend or delete it: the App declares
+  no delete scope and never updates, renames or removes anything in the Customer's
+  Jira.
+</p>
+
+<p>
+  Third, the App's sidebar index displays the display name of the Jira user who
+  attached each email file, exactly as Jira's own listing returns it to that
+  viewer. The value is read live on each listing request, rendered to the viewer
+  and retained nowhere; no account id, email address, avatar, time zone or account
+  type is read from that record, and the display name appears in no log line.
+</p>
+
+<p>
+  Under the CCPA, Cloudscript is neither a business nor a service provider for the
+  App. The statutory thresholds in Civil Code §1798.140(d) were confirmed as not
+  met on 19 September 2026, and Cloudscript does not process consumers' personal
+  information on any business's behalf, because none is disclosed to it. Nothing
+  the App does resembles a sale or a share of personal information: there is no
+  third party in any path, the App has no sub-processor, and the one write it
+  makes moves a file within the Customer's own tenancy rather than to anyone.
+</p>
+
+<h2>3. Subject matter and duration of the processing</h2>
+
+<p>
+  The subject matter is the display, inside the Customer's own Jira work items, of
+  <code>.msg</code> and <code>.eml</code> email files that the Customer's own users
+  have attached to those work items, together with the reader-initiated promotion
+  of a file inside such an email to an attachment on the work item being viewed.
+</p>
+
+<p>
+  Processing of email content occurs only while a work item is being viewed by a
+  user who is permitted to view it. On each opening of the Emails tab the
+  attachment bytes are read fresh from the Customer's own Jira attachment storage,
+  parsed in the viewing user's browser and discarded when the card unmounts or the
+  user navigates away; the first-kilobyte format check described in "Roles of the
+  parties" runs on the same request and its bytes are discarded before that
+  function returns. Opening the "Attached emails" sidebar group calls the same
+  listing function and adds no further read of email bytes; the sidebar itself
+  fetches no attachment content and parses nothing. There is no processing between
+  views, no cache and no record kept between sessions, and Cloudscript retains
+  nothing at any point. Duration is therefore governed entirely by the Customer's
+  own decisions about how long the work item and its attachments exist, and by how
+  long the App remains installed.
+</p>
+
+<h2>4. Nature and purpose of the processing</h2>
+
+<p>
+  The purpose is to make an email file attached to a Jira work item readable in
+  place, so that the file itself remains the record. The operations the App
+  performs are:
+</p>
+
+<ul>
+  <li>
+    listing the attachments of the work item being viewed, through Atlassian's own
+    Jira REST API as the viewing user, in order to select the
+    <code>.msg</code> and <code>.eml</code> rows and to show their filename,
+    attached date and uploader display name in the "Attached emails" sidebar group
+    and in the "Emails" tab;
+  </li>
+  <li>
+    reading at most the first kilobyte of each selected attachment on
+    Atlassian-hosted Forge compute, as the viewing user, to classify the file's
+    format, and discarding those bytes within the same invocation;
+  </li>
+  <li>
+    reading the full bytes of an email file from the Customer's own Jira into the
+    viewing user's browser, through the Forge bridge as that user, when the user
+    opens it;
+  </li>
+  <li>
+    parsing those bytes in a Web Worker in the viewing user's browser and
+    rendering the result as an email card showing the subject, sender, recipients,
+    date, body, inline images and a list of the email's own attachments;
+  </li>
+  <li>
+    sanitising the email's HTML before it is drawn, and blocking remote content
+    referenced by the email unless the viewing user chooses to load it for that
+    view;
+  </li>
+  <li>
+    on request, downloading a listed attachment of the email to the viewing user's
+    own device, in the browser, byte for byte as it was received; and
+  </li>
+  <li>
+    on the reader's click of "Attach to work item" or "Attach all N files",
+    creating the chosen file as an ordinary Jira attachment on the work item being
+    viewed, posted from that reader's browser as that reader, under the Forge
+    scope <code>write:attachment:jira</code>.
+  </li>
+</ul>
+
+<p>
+  The App declares exactly eleven Forge scopes and no others: the nine reads Jira
+  requires together for a single work-item read
+  (<code>read:issue:jira</code>, <code>read:issue-meta:jira</code>,
+  <code>read:issue-security-level:jira</code>, <code>read:issue.vote:jira</code>,
+  <code>read:issue.changelog:jira</code>, <code>read:avatar:jira</code>,
+  <code>read:status:jira</code>, <code>read:user:jira</code> and
+  <code>read:field-configuration:jira</code>), <code>read:attachment:jira</code>
+  for the format check and the attachment reads, and
+  <code>write:attachment:jira</code> for the attach action alone. The App's test
+  suite pins that list exactly and asserts that no delete scope is declared, so
+  adding a scope fails the build rather than passing unnoticed. The App declares
+  no <code>remotes</code> block, no external fetch permission and no storage
+  declaration, and the shipped source contains no direct network call of any kind.
+</p>
+
+<h2>5. Categories of personal data and of data subjects</h2>
+
+<p>
+  The App imposes no restriction on what an email may contain, so the categories
+  below describe what an email file can carry rather than a set Cloudscript
+  selects or limits.
+</p>
+
+<ul>
+  <li>
+    <strong>Email header data:</strong> sender name and address, recipient names
+    and addresses (including copied and blind-copied recipients where the file
+    records them), date and time, and subject line.
+  </li>
+  <li>
+    <strong>Email body content:</strong> free text and HTML, including whatever
+    personal data the correspondents chose to write, and inline images.
+  </li>
+  <li>
+    <strong>Attachment data:</strong> the file names, sizes and bytes of the
+    email's own attachments, including any nested or embedded message, which the
+    App lists and can download but never opens or renders in place, and the bytes
+    of any file a reader promotes to the work item.
+  </li>
+  <li>
+    <strong>Attachment listing data:</strong> for each <code>.msg</code> and
+    <code>.eml</code> attachment on the work item, its Jira attachment identifier,
+    filename, size, media type, the instant it was attached and the display name
+    of the Jira user who attached it, all read live from Jira's own listing and
+    written nowhere.
+  </li>
+</ul>
+
+<p>
+  A filename can itself be disclosive, and the App displays filenames in both of
+  its surfaces. Special category data within the meaning of Article 9 of the GDPR
+  may be present in any of the categories above, because organisations attach
+  correspondence about human resources matters, health, incidents and legal
+  disputes to Jira work items. The App applies no classification, redaction or
+  filtering, and this Addendum does not suggest otherwise.
+</p>
+
+<p>
+  Data subjects are the senders, the recipients and any other individual referred
+  to in an email file that the Customer's own users attach to a Jira work item,
+  together with those users themselves and the Jira users whose display names
+  appear in the attachment listing.
+</p>
+
+<h2>6. Instructions</h2>
+
+<p>
+  <strong>Structurally satisfied. No instruction channel exists or is needed.</strong>
+  The App has no configuration of any kind, in Jira or anywhere else, by which
+  Cloudscript could give it an instruction, no channel by which Cloudscript could
+  receive one from the Customer, and no behaviour that responds to anything other
+  than the actions of the Customer's own users inside the Customer's own Jira
+  site. Every listing, every render, every download and every attach happens
+  because a user of the Customer's site opened a work item or clicked something,
+  under that user's own Jira permissions. Cloudscript cannot cause the App to
+  process anything, and cannot cause it to stop, other than by publishing a new
+  version of the App through the Atlassian Marketplace, which the Customer is free
+  to decline or to uninstall.
+</p>
+
+<p>
+  A commitment to process only on the Customer's documented instructions would
+  therefore describe a relationship that does not exist. The equivalent factual
+  assurance is this: the App processes only what the Customer's own users point it
+  at, and Cloudscript has no means of directing it otherwise.
+</p>
+
+<h2>7. Confidentiality of personnel</h2>
+
+<p>
+  <strong>Structurally satisfied as to the Customer's content. No Cloudscript
+  person can read it.</strong> No person at Cloudscript can read an email rendered
+  by the App, enumerate the email files held in a Customer's site, retrieve a
+  Forge function invocation payload, or obtain any email content, filename,
+  attachment or display name described in this Addendum by any technical route.
+  There is no support tooling, no impersonation facility, no administrative
+  console and no data export path, because there is no Cloudscript-operated system
+  holding any of it.
+</p>
+
+<p>
+  One narrow stream is stated precisely rather than swept into that statement. The
+  App writes a single structured diagnostic line when it computes the sidebar
+  count, into Atlassian's own Forge logging. Access to those logs is a per-site
+  administrator control in the Customer's own Atlassian admin console (Connected
+  apps, then the App, then Details, then "Logs access"), it is enabled by default,
+  and where it is enabled it gives the App's vendor up to 60 days of that App's
+  logs for that site. The Customer's administrator can turn it off. The line
+  itself carries a small set of booleans about the licence signal, the
+  platform-supplied work item identifier, the listing status, a count and, where an
+  error was caught, the error's class name. It carries no email content, no
+  filename, no display name, no account identifier and no error message. A
+  Cloudscript person with log access for a site can therefore see that a listing
+  ran and how it ended, and nothing about who or what it concerned beyond an
+  identifier that is meaningful only to someone who can already read that work item
+  in the Customer's own Jira.
+</p>
+
+<p>
+  The controls that apply to Cloudscript's developer and publishing accounts, which
+  are the accounts from which a new version of the App is built and shipped and
+  from which such logs would be read, are described in the site-wide Security
+  Policy at
+  <a href="https://cloudscript.io/security">https://cloudscript.io/security</a>
+  and summarised in Annex 2.
+</p>
+
+<h2>8. Sub-processors</h2>
+
+<p>
+  <strong>The list of sub-processors is empty, and this section explains why
+  rather than leaving that as a bare assertion.</strong>
+</p>
+
+<p>
+  Cloudscript engages no third party to process personal data in connection with
+  the App. There is no hosting provider, no cloud account, no database, no
+  content delivery network, no analytics service, no error-reporting service, no
+  logging service and no support platform in the App's data path, because
+  Cloudscript operates no infrastructure that this App uses. The App's Forge
+  manifest declares no outbound destination of any kind, so there is no host whose
+  operator could be named.
+</p>
+
+<p>
+  Atlassian is not Cloudscript's sub-processor for the App, and naming it as one
+  would misdescribe the arrangement. In a conventional sub-processing chain a
+  vendor engages its own hosting provider, pays that provider, and stands behind
+  it contractually. Here the Customer contracts with Atlassian directly, chose
+  Atlassian before it chose the App, and would continue to hold the same email
+  files in the same Jira site if the App were uninstalled today. Cloudscript
+  engages nobody, pays nobody for the hosting of any of this data, and holds no
+  contractual lever over Atlassian in respect of it. Atlassian's role here is that
+  of the Customer's own existing platform provider, governed by the Customer's own
+  agreement with Atlassian, not by anything Cloudscript has put in place. The
+  Forge compute on which the format check runs, and the Forge logging described in
+  section 7, are both part of that platform.
+</p>
+
+<p>
+  If Cloudscript ever introduces a destination outside the Atlassian platform for
+  this App, that change would require an addition to the App's Forge manifest and
+  the release of a new App version. Cloudscript will update this Addendum to name
+  the recipient and its role before any such version is released.
+</p>
+
+<h2>9. Data location and residency</h2>
+
+<p>
+  Cloudscript holds no data in any location, so it has no processing location to
+  disclose and no residency option to offer, support or vary. The email files, the
+  attachment listing they appear in and any file promoted to a work item all
+  reside in the Customer's own Jira site, and their location follows the
+  Customer's existing data-residency arrangement with Atlassian rather than
+  anything Cloudscript provides.
+</p>
+
+<p>
+  What can be stated precisely about the route is this: email attachments are read
+  from the Customer's own Jira as the viewing user, parsed in that user's browser
+  and stored nowhere, with at most the first kilobyte of each candidate attachment
+  read on Atlassian-hosted Forge compute for the format check described in section
+  2 and discarded within that invocation. Where a reader clicks Attach, the file
+  travels from that browser back to the same work item in the same Jira site as a
+  new attachment. No hop on either route is Cloudscript's. This Addendum makes no
+  claim that the App runs wholly in the browser, that email content is untouched
+  by any server, that email content stays within the browser, or that the App
+  makes no write to the Customer's Jira, because each of those statements would
+  be false.
+</p>
+
+<p>
+  The data-residency position recorded for the App is that residency is not
+  applicable, because the App does not store End-User Data. The App creates no
+  store, no work-item or entity property, no configuration and no record of its
+  own, so there is no app data whose location a residency control could set, and
+  Cloudscript accordingly has none to configure, support or vary on the Customer's
+  behalf. The execution region of Forge function invocations is Atlassian's to
+  determine and is not something Cloudscript selects or can undertake to the
+  Customer.
+</p>
+
+<h2>10. International transfers</h2>
+
+<p>
+  Cloudscript does not receive, host or transfer personal data in any country in
+  connection with the App, so it effects no restricted transfer out of the
+  European Economic Area, the United Kingdom or any other jurisdiction. Where the
+  Customer's Jira site sits, from where the Customer's users read it, and in which
+  region Atlassian runs the Forge compute the format check executes on, are
+  arrangements between the Customer and Atlassian. The promotion of a file to a
+  work item moves that file within the Customer's own tenancy and is not a
+  transfer to Cloudscript or to anyone else.
+</p>
+
+<p>
+  This position is recorded as contestable rather than presented as settled. A
+  reviewer who took the view that the first-kilobyte format check on Forge
+  compute, or the Forge log access described in section 7, amounts to a transfer to
+  Cloudscript would find no Standard Contractual Clauses in place as a fallback,
+  because none have been entered into. Cloudscript's position is that no transfer
+  occurs and that no transfer mechanism is therefore engaged. A customer whose own
+  assessment differs should raise it at
+  <a href="mailto:security@cloudscript.io">security@cloudscript.io</a> before
+  installing the App.
+</p>
+
+<h2>11. Security measures</h2>
+
+<p>
+  Cloudscript operates no store and no transmission path of its own for this App,
+  so the security measures that exist are measures in the App's own code and in
+  the way it is built and published, rather than measures protecting a
+  Cloudscript-held copy of the Customer's data. They are set out in Annex 2. The
+  encryption, access control, resilience and physical security of the systems the
+  data actually sits on are Atlassian's, under the Customer's own agreement with
+  Atlassian, and Cloudscript makes no representation about them.
+</p>
+
+<p>
+  Cloudscript holds no third-party security certification for the App, has
+  completed no Consensus Assessments Initiative Questionnaire, and this Addendum
+  claims neither. It also claims no Atlassian trust badge or programme
+  designation. What is offered in place of a certification is the information
+  route in section 15, under which Cloudscript answers a security questionnaire or
+  vendor-assessment form and points to the site-wide Security Policy.
+</p>
+
+<h2>12. Personal data breach</h2>
+
+<p>
+  <strong>Largely inapplicable as an obligation on Cloudscript, with a real
+  commitment in its place.</strong> A notification obligation of the shape Article
+  28(3)(f) contemplates assumes the supplier holds data that could be breached and
+  has visibility that could generate a notification. Cloudscript holds none of the
+  Customer's email content, attachment listings or promoted files, and has no
+  telemetry or monitoring of any Customer's installation, so it could not detect a
+  breach of that data. The one stream it can reach is the diagnostic log line
+  described in section 7, which carries no email content, filename or display name.
+  A promise to notify the Customer of a breach of the Customer's data within any
+  fixed period would be a promise Cloudscript has no mechanism to keep.
+</p>
+
+<p>
+  What Cloudscript does commit to is this. Where Cloudscript becomes aware of a
+  personal data breach affecting data it does hold in connection with the App, it
+  will notify the affected customer without undue delay after becoming aware of
+  it, with the information it has at that time and further information as it
+  becomes available. No fixed hourly service level is offered, because Cloudscript
+  has two directors and no staff, and a service level that presumes a staffed
+  operations function would not be one it could meet. Suspected vulnerabilities in
+  the App can be reported to
+  <a href="mailto:security@cloudscript.io">security@cloudscript.io</a>, and are
+  handled through the disclosure and remediation process described in the
+  site-wide Security Policy at
+  <a href="https://cloudscript.io/security">https://cloudscript.io/security</a>.
+  Where Cloudscript becomes aware of a vulnerability in the App that could have
+  exposed Customer data, it will publish a fix and describe the issue in the App's
+  release notes.
+</p>
+
+<p>
+  A breach of the Customer's Jira site, its attachments or its user accounts is a
+  matter between the Customer and Atlassian, and the Customer's own notification
+  obligations under the GDPR, the Notifiable Data Breaches scheme under the
+  Privacy Act 1988 (Cth), or any other applicable regime are unaffected by this
+  Addendum. Cloudscript's own obligations under the Notifiable Data Breaches
+  scheme, where they apply to it, reach the correspondence and business records it
+  actually holds, which for this App means support and privacy correspondence and
+  nothing else.
+</p>
+
+<h2>13. Assistance with data subject requests</h2>
+
+<p>
+  <strong>Structurally satisfied. Cloudscript holds nothing to search, and the
+  Customer already holds everything.</strong> Cloudscript cannot locate a data
+  subject's personal data in connection with the App, because it holds none. The
+  Customer, by contrast, can locate every byte of it, in its own Jira site, using
+  its own search and administration tools, without Cloudscript's involvement and
+  without the App being installed. An assistance commitment would add nothing the
+  Customer does not already have and could not be performed.
+</p>
+
+<p>
+  A request to access, correct, delete or export the personal data inside an email
+  file rendered by the App, or inside a file promoted to a work item, should
+  therefore be directed to the organisation that operates the Jira site, which
+  holds that content. Cloudscript will answer questions from a customer about how
+  the App handles data, and about what it does and does not touch, at
+  <a href="mailto:security@cloudscript.io">security@cloudscript.io</a>. The only
+  personal data Cloudscript itself holds in connection with the App is the
+  correspondence a customer sends to that address or to
+  <a href="mailto:support@cloudscript.io">support@cloudscript.io</a>, which is
+  covered by the <a href="/apps/email-viewer-jira/privacy">Privacy Policy</a>.
+</p>
+
+<p>
+  The same applies to a data protection impact assessment or a prior consultation
+  with a supervisory authority. Cloudscript holds no data to contribute and has no
+  visibility of any Customer's installation, so it cannot supply processing
+  records, log extracts or incident histories for one. What it will supply, on
+  request to
+  <a href="mailto:security@cloudscript.io">security@cloudscript.io</a>, is a
+  description of what the App does, the scopes it declares, the statements in this
+  Addendum and written answers to an assessment form, which is the material an
+  assessment of this App would otherwise seek from a supplier. Sections 11 and 15
+  describe the same route from the security and audit sides.
+</p>
+
+<h2>14. Deletion and return of data</h2>
+
+<p>
+  <strong>Structurally satisfied. There is nothing for Cloudscript to delete or to
+  return.</strong> Cloudscript holds no copy of any email file, any rendered
+  email, any attachment listing or any other Customer data, at any point, so no
+  deletion or return obligation can attach to it on expiry or termination. The
+  App's manifest declares no Forge storage entitlement and its source contains no
+  call to any Forge storage API, a position asserted by the App's own automated
+  test suite on every build, which fails if a storage import appears anywhere in
+  the repository.
+</p>
+
+<p>
+  The one durable thing the App can bring into existence is a file a reader
+  promotes to a work item, and it belongs to the Customer and stays with the
+  Customer. It is an ordinary Jira attachment from the moment it is created,
+  visible to whoever Jira's attachment permissions allow to see that work item's
+  attachments, carrying no link back to the email it came from, and outliving the
+  source email attachment if that attachment is removed. It is unaffected by
+  whether the App is installed.
+</p>
+
+<p>
+  Neither that file nor anything else is subject to a retention or deletion period
+  set by the App, because the App sets none. It declares no Forge storage module
+  and implements no uninstall lifecycle hook, so there is no app-operated store
+  and no app-side step for a deletion or return obligation to act on, at uninstall
+  or at any other time. The Customer's own Jira attachment lifecycle governs
+  instead, and the App neither controls nor varies it. No deletion-or-return
+  obligation can therefore attach to Cloudscript in respect of any of it, and none
+  is promised in this Addendum. The diagnostic log line described in section 7
+  expires on Atlassian's own retention for Forge logs, which the Customer's
+  administrator can also cut off by turning off log access for the site.
+</p>
+
+<h2>15. Audit and information</h2>
+
+<p>
+  Cloudscript operates no system that processes Customer personal data, so there
+  is no facility, data centre, network or administrative environment for a
+  customer to inspect. An audit right of the conventional shape would point at
+  nothing, and stating one without qualification would suggest an infrastructure
+  that does not exist. What can be examined is the App itself and the statements
+  made about it in this Addendum, and the route to that is information first.
+</p>
+
+<p>
+  What Cloudscript will provide, on request to
+  <a href="mailto:support@cloudscript.io">support@cloudscript.io</a>, is
+  information sufficient for a customer to verify the statements in this Addendum
+  for itself:
+</p>
+
+<ul>
+  <li>
+    the eleven Forge scopes the App declares, which the Customer's own Jira
+    administrator can also read on the App's installation and consent screens;
+  </li>
+  <li>
+    confirmation that the App's manifest declares no outbound network destination,
+    which a customer can corroborate independently by capturing the network
+    activity of a work item carrying an email attachment; and
+  </li>
+  <li>
+    written answers to a security questionnaire or vendor-assessment form, subject
+    to Cloudscript's capacity as a small vendor, together with the site-wide
+    Security Policy at
+    <a href="https://cloudscript.io/security">https://cloudscript.io/security</a>.
+  </li>
+</ul>
+
+<p>
+  Where that information does not answer a customer's reasonable concern,
+  Cloudscript will contribute to an audit or inspection conducted by the Customer
+  or an auditor it mandates, on reasonable written notice, no more than once a
+  year unless a personal data breach affecting the Customer or a documented
+  compliance failure gives cause for another, and subject to confidentiality. The
+  audit reaches what there is to examine: the App's manifest and declared scopes,
+  and the statements made in this Addendum. It does not reach a facility, data
+  centre, network or administrative environment, because Cloudscript operates none
+  for the App.
+</p>
+
+<p>
+  The Customer bears the full costs of any audit or inspection, including the
+  annual one: its own costs, its auditor's costs, and Cloudscript's reasonable
+  costs of contributing, at a reasonable rate agreed in writing before the audit
+  begins. The one exception is this: where the audit follows a personal data
+  breach caused by Cloudscript, or finds material non-compliance by Cloudscript
+  with this Addendum, Cloudscript bears its own costs of contributing.
+</p>
+
+<p>
+  This provision is offered on the same basis as the rest of this Addendum, which
+  is a commercial election rather than an admission. It is not an acknowledgement
+  that Cloudscript is a processor, and it grants no right to inspect
+  infrastructure that does not exist.
+</p>
+
+<h2>16. Liability and governing law</h2>
+
+<p>
+  Liability under this Addendum is subject to the limitations and exclusions in
+  the <a href="/apps/email-viewer-jira/terms">Terms of Use</a>. This Addendum
+  creates no separate or additional liability. Liability in connection with this
+  Addendum is governed by the limitation provisions of the Standard Agreement and
+  of the Provider-Specific Terms that supplement it, which are those Terms of Use,
+  including the Standard Agreement's Enhanced Claims provisions where those
+  provisions apply to a claim.
+</p>
+
+<p>
+  This Addendum is governed by the laws of New South Wales (NSW), Australia,
+  following the governing-law position stated in the Terms of Use, and the courts
+  of New South Wales have exclusive jurisdiction over any action arising out of or
+  relating to it.
+</p>
+
+<h2>17. Changes to this Addendum</h2>
+
+<p>
+  Cloudscript may update this Addendum from time to time, and the "Effective" date
+  at the top of this page records the date of the most recent revision. Where a
+  change to the App would alter a statement of fact in this Addendum, in
+  particular the addition of any destination outside the Atlassian platform or of
+  any store the App operates, this Addendum is updated before the App version
+  making that change is released, as section 8 records. A customer that wants to
+  be told of such a change can ask to be notified at
+  <a href="mailto:security@cloudscript.io">security@cloudscript.io</a>.
+</p>
+
+<h2>Annex 1: Description of the processing</h2>
+
+<table>
+  <tr>
+    <th>Item</th>
+    <th>Position for MSG/EML Email Viewer for Jira</th>
+  </tr>
+  <tr>
+    <td>Subject matter</td>
+    <td>Display of <code>.msg</code> and <code>.eml</code> files attached to the Customer's own Jira work items, and reader-initiated promotion of a file inside such an email to an attachment on the work item being viewed.</td>
+  </tr>
+  <tr>
+    <td>Duration</td>
+    <td>Per view, for the duration of a view. No processing between views. Governed by the Customer's own work item and attachment lifecycle.</td>
+  </tr>
+  <tr>
+    <td>Nature and purpose</td>
+    <td>List, classify by reading at most the first kilobyte on Atlassian-hosted Forge compute, read full bytes into the viewer's browser, parse, sanitise, render, download on request, and create a promoted file as an ordinary Jira attachment on the reader's click. See section 4.</td>
+  </tr>
+  <tr>
+    <td>Categories of personal data</td>
+    <td>Email header data, body content, attachment data, and the attachment listing data including the uploader's display name. Special category data may be present. See section 5.</td>
+  </tr>
+  <tr>
+    <td>Categories of data subjects</td>
+    <td>Senders, recipients and other individuals named in an attached email file, and the Customer's own Jira users.</td>
+  </tr>
+  <tr>
+    <td>Data held by Cloudscript</td>
+    <td>None, at any point, other than support and privacy correspondence sent to Cloudscript directly. The Forge diagnostic log line described in section 7 carries no email content, filename or display name.</td>
+  </tr>
+  <tr>
+    <td>Sub-processors</td>
+    <td>None. See section 8 for why the list is empty and why Atlassian is not one.</td>
+  </tr>
+  <tr>
+    <td>Processing locations</td>
+    <td>The Customer's own Jira site, Atlassian-hosted Forge compute for the first-kilobyte format check, and the viewing user's own browser. No Cloudscript location exists. See section 9.</td>
+  </tr>
+  <tr>
+    <td>Transfers</td>
+    <td>None effected by Cloudscript. The promotion of a file is a customer-initiated operation inside the Customer's own tenancy, not a transfer. No Standard Contractual Clauses are in place, because none are engaged. See section 10.</td>
+  </tr>
+  <tr>
+    <td>Deletion on termination</td>
+    <td>Nothing held, so nothing to delete or return. A promoted file is the Customer's own Jira attachment and follows Jira's own lifecycle, not one the App imposes. See section 14.</td>
+  </tr>
+</table>
+
+<h2>Annex 2: Technical and organisational measures</h2>
+
+<p>
+  The measures below are the measures that actually exist. Each is a property of
+  the App's code, its manifest, or the way it is built and published. Cloudscript
+  makes no representation about the security of Atlassian's platform or of the
+  Customer's Jira site, both of which sit outside its control and are governed by
+  the Customer's own agreement with Atlassian.
+</p>
+
+<h3>Architecture</h3>
+
+<ul>
+  <li>
+    <strong>No Cloudscript-operated store or destination.</strong> The App's Forge
+    manifest declares no storage entitlement and no outbound network destination,
+    and the shipped source contains no storage call and no direct network call.
+    The App's own test suite fails the build if a storage import or an egress
+    declaration appears, and a recorded network capture of the App's frames across
+    listing, fetching, rendering and downloading a hostile fixture set found no
+    request to any non-Atlassian host.
+  </li>
+  <li>
+    <strong>Least privilege on scopes.</strong> The App declares exactly eleven
+    Forge scopes, ten reads and the single write
+    <code>write:attachment:jira</code>, and declares no delete scope. A test in the
+    App's own suite pins that allowlist exactly, so adding a scope fails the build
+    rather than passing unnoticed.
+  </li>
+  <li>
+    <strong>Permission inheritance as the security boundary.</strong> Every call
+    travels the acting user's own Jira permissions, and the app-identity path is
+    banned across the codebase with the ban enforced at build time. What a given
+    viewer can see is decided by Jira rather than by the App, which adds no access
+    control of its own and bypasses none. A viewer who may not see an attachment
+    receives an empty listing and no count, indistinguishable from a work item with
+    no email attachments.
+  </li>
+  <li>
+    <strong>Bounded server-side read.</strong> The format check on Forge compute
+    reads at most one kilobyte per candidate attachment, as the viewing user,
+    discards those bytes within the invocation, and neither logs them nor returns
+    them to the browser.
+  </li>
+</ul>
+
+<h3>Handling of untrusted content</h3>
+
+<ul>
+  <li>
+    <strong>Sanitisation before render.</strong> Email HTML is sanitised before it
+    is drawn into the page.
+  </li>
+  <li>
+    <strong>Remote content blocked by default.</strong> Content an email references
+    from a remote host is blocked when the card is drawn. The viewing user can
+    choose to load it for that view.
+  </li>
+  <li>
+    <strong>Parse containment.</strong> Parsing runs in a Web Worker under a
+    fifteen-second deadline, so a malformed or hostile file yields an error card
+    rather than an unresponsive page.
+  </li>
+  <li>
+    <strong>Size bound before retrieval.</strong> A 50 MiB (52,428,800 byte) cap is
+    applied from the attachment listing's own metadata before any bytes are
+    retrieved.
+  </li>
+  <li>
+    <strong>Attachments are never opened.</strong> The email's own attachments,
+    including any nested or embedded message, are listed and can be downloaded to
+    the user's device or promoted to the work item on the reader's click, and are
+    never rendered, executed or recursed into.
+  </li>
+  <li>
+    <strong>Honest degradation.</strong> Where a file cannot be read or rendered,
+    the App shows a card naming what happened rather than rendering a partial or
+    misleading result. Where the attach action is refused for want of a scope, the
+    App reports it to the reader as the App's own permissions problem rather than
+    as a fault in the reader's session.
+  </li>
+</ul>
+
+<h3>Vendor and account controls</h3>
+
+<ul>
+  <li>
+    <strong>Vulnerability reporting and handling.</strong> Reports to
+    <a href="mailto:security@cloudscript.io">security@cloudscript.io</a>, handled
+    per the site-wide Security Policy at
+    <a href="https://cloudscript.io/security">https://cloudscript.io/security</a>.
+  </li>
+  <li>
+    <strong>Release process.</strong> Each release is deployed to a staging site
+    and exercised by an automated end-to-end suite before it is promoted to
+    production, and the App's dependencies are audited before release.
+  </li>
+  <li>
+    <strong>Account security.</strong> The accounts used to develop and publish the
+    App, being the Atlassian developer and Marketplace account and the
+    source-control repository from which the App is built and shipped, are
+    protected by two-step verification, and access to them is limited to the two
+    people who operate Cloudscript. This is the account-control position stated in
+    the site-wide Security Policy at
+    <a href="https://cloudscript.io/security">https://cloudscript.io/security</a>,
+    which governs if the two ever diverge.
+  </li>
+  <li>
+    <strong>Forge log access.</strong> Access to the App's Forge logs for a site is
+    a control the Customer's own Jira administrator holds, in the Atlassian admin
+    console, and can withdraw. See section 7 for what those logs contain.
+  </li>
+</ul>
+
+<h2>Contact</h2>
+
+<p>
+  Cloudscript Pty Ltd (ABN 14 700 662 362)<br>
+  Privacy and security: <a href="mailto:security@cloudscript.io">security@cloudscript.io</a><br>
+  General support: <a href="mailto:support@cloudscript.io">support@cloudscript.io</a><br>
+  App page: <a href="https://cloudscript.io/apps/email-viewer-jira">https://cloudscript.io/apps/email-viewer-jira</a>
+</p>
+
+<p>
+  This Addendum is published at
+  <a href="https://cloudscript.io/apps/email-viewer-jira/dpa">https://cloudscript.io/apps/email-viewer-jira/dpa</a>.
+  It is read with the
+  <a href="/apps/email-viewer-jira/terms">Terms of Use</a> and the
+  <a href="/apps/email-viewer-jira/privacy">Privacy Policy</a>.
+</p>
+
+  </div>
+</div>

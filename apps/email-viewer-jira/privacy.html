@@ -1,0 +1,286 @@
+---
+layout: default
+title: MSG/EML Email Viewer for Jira — Privacy
+---
+
+<div class="page wrap">
+  <div class="prose">
+
+<h1>MSG/EML Email Viewer for Jira Privacy Policy</h1>
+
+<p><em>Effective 22 September 2026</em></p>
+
+<h2>Who we are</h2>
+
+<p>
+  MSG/EML Email Viewer for Jira is provided by Cloudscript Pty Ltd (ABN 14
+  700 662 362) ("Cloudscript", "we", "us"). For questions about this
+  policy, or a request under "Your rights" below, contact us at
+  <a href="mailto:security@cloudscript.io">security@cloudscript.io</a>.
+  General product support is handled separately at
+  <a href="mailto:support@cloudscript.io">support@cloudscript.io</a>.
+</p>
+
+<h2>What data MSG/EML Email Viewer for Jira collects</h2>
+
+<p>
+  To do this, the app asks an installing administrator to approve eleven
+  Jira permissions, all read permissions but one. Nine of them cover a
+  single underlying request, reading a Jira issue's attachment list: the
+  admin sees these as "View issues", "View issue meta", "View issue
+  security levels", "View issue votes", "View issue changelogs", "View
+  system and custom avatars", "View statuses", "View users" and "Read
+  field configurations". Jira requires all nine together for that one
+  request, and the app uses none of them beyond it. A tenth permission,
+  "View issue attachments", lets the app read attachment content: at most
+  the first kilobyte of a candidate file, to work out whether it is a
+  <code>.msg</code> or an <code>.eml</code> file, and the full file when
+  you open it. The eleventh and only write permission, "Create and update
+  issue attachments", is used solely when you click "Attach to work item"
+  or "Attach all N files": it lets the app post the file you chose to the
+  work item you are viewing, as you. The app holds no permission to
+  update, rename or delete an attachment, and never uses this permission
+  for anything other than that one action.
+</p>
+
+<p>
+  Using those permissions, the app reads and moves four kinds of data, all
+  from your own Jira site and only as the person viewing the issue.
+  First, attachment metadata for <code>.msg</code> and <code>.eml</code>
+  files on a Jira issue: the attachment's id, filename, size, MIME type,
+  the date it was attached, and the display name Jira's own listing
+  returns for whoever uploaded it, exactly as Jira gives it (no account
+  id, email address, avatar or other identifying field is read from that
+  uploader record). This metadata is read live each time the Emails tab
+  is opened, each time the "Attached emails" sidebar group is opened, and
+  each time its count is shown, and none of it is written to any log: the
+  uploader's display name appears in the sidebar index shown to you and
+  nowhere else.
+</p>
+
+<p>
+  Second, when you open an email attachment, the app fetches the full
+  attachment bytes from your Jira site into your browser, where they are
+  parsed and rendered as an email card (subject, sender, recipients,
+  date, body, inline images and any further attachments). Wherever this
+  paragraph and the one before it together describe where an email
+  file's bytes go: the app's backend function also reads at most the
+  first kilobyte of each candidate attachment on Atlassian-hosted Forge
+  compute, as the viewing user, solely to classify whether the file is a
+  <code>.msg</code> or an <code>.eml</code> file. For an <code>.eml</code>
+  file, that first kilobyte typically includes the sender, recipients,
+  subject and date, because those fields sit in the file's header. Those
+  bytes are discarded within the same invocation and are never logged,
+  stored or returned to any other part of the app; the full file itself
+  reaches only your browser, where it is parsed in a background worker
+  and discarded when you close the card or navigate away.
+</p>
+
+<p>
+  Third, when you click "Attach to work item" on a file inside a rendered
+  email, or "Attach all N files" for an email, your browser posts that
+  file to the same work item you are currently viewing, in the same Jira
+  site, as an ordinary Jira attachment, as you. This never happens
+  automatically: it happens only on that click. From that point the
+  promoted file is governed by Jira's own attachment permissions and
+  retention, not by anything this app controls, and a click by a reader
+  who lacks Jira's own permission to create attachments is refused by
+  Jira with its own 403 response.
+</p>
+
+<p>
+  Fourth, the app reads your Jira licence details (whether the licence is
+  active or a trial) on each invocation, so it can show or withhold
+  content according to your licence status. This is read, not stored,
+  and is not shown to you beyond the resulting licensed or
+  licence-required state.
+</p>
+
+<p>
+  In Jira Service Management, the app is available to agents and other
+  internal users only. A customer using the customer portal sees none of
+  it: the portal shows a request's description and public comments only,
+  never the Attachments panel or any part of the Activity section the
+  Emails tab sits in, so a portal customer never sees an email attachment
+  through the app, whether or not one exists on the work item. A file an
+  agent promotes with "Attach to work item" is likewise not shown to a
+  portal customer (observed 11 and 18 September 2026); sharing it with a
+  customer means the agent attaches it to a public reply, as for any
+  other file.
+</p>
+
+<p>
+  The app collects no account identifiers, no usage telemetry and no logs
+  containing filenames, email content or display names. The one
+  structured log line the app writes (for the sidebar count) carries only
+  booleans, the issue id, a status, a small number and, on a caught
+  error, the error's class name.
+</p>
+
+<p>
+  Atlassian's Forge platform lets your site administrator share an app's
+  logs with its vendor for up to 60 days. That sharing is enabled by
+  default and can be turned off at any time in your Atlassian
+  administration console, under the app's entry in Connected apps.
+  Because the only line this app writes carries the fields listed above,
+  and never email content, a filename or a display name, the stream
+  Cloudscript can retrieve contains no personal data beyond the issue id,
+  which is meaningful only to someone who can already read that issue.
+</p>
+
+<h2>Where data is stored and processed</h2>
+
+<p>
+  MSG/EML Email Viewer for Jira operates no database, server or other
+  store of its own, and its manifest declares no Forge storage of any
+  kind. Attachment metadata and licence details are read live on each
+  invocation and are not written anywhere. Full attachment bytes are
+  fetched into your browser and parsed there in a background worker; they
+  are discarded when you close the email card or navigate away. The
+  first-kilobyte format check described above runs on Atlassian-hosted
+  Forge compute as part of the same request, and those bytes are
+  discarded before the function returns. A file promoted with "Attach to
+  work item" is written by your own browser into your Jira site's own
+  attachment storage on the work item you are viewing, exactly like a
+  file dragged onto the issue; the app itself keeps no copy of it and
+  writes it nowhere the app operates. Cloudscript operates no server,
+  proxy, database, log sink or analytics endpoint anywhere in this path.
+</p>
+
+<h2>Egress destinations and sub-processors</h2>
+
+<p>
+  The app's manifest declares no egress destination of any kind: no
+  <code>remotes</code> block and no <code>permissions.external</code>
+  block. Every request the app makes, including the attachment-create
+  request described above, goes to Jira's own REST API, on your own Jira
+  site, as you, using Atlassian's <code>@forge/api</code> and the Forge
+  bridge's request path. The app uses no third-party sub-processor: no
+  data leaves Atlassian's platform to any Cloudscript-operated or other
+  external system at any point. Zero egress from the app's frames was
+  independently confirmed by a network capture taken against the released
+  build on 18 September 2026.
+</p>
+
+<h2>Retention</h2>
+
+<p>
+  The app retains nothing of its own. Attachment metadata, attachment
+  bytes and licence details are all read fresh on each use and discarded
+  once that use ends; there is no cache, no history and no record kept
+  between sessions. The one durable thing this app can create, a file
+  promoted with "Attach to work item", is retained under your Jira site's
+  own attachment retention, independent of whether this app remains
+  installed.
+</p>
+
+<h2>Data residency</h2>
+
+<p>
+  MSG/EML Email Viewer for Jira does not store End-User Data, so no
+  residency setting applies to it. The app operates no store, no server
+  and no external destination of any kind, and its manifest declares
+  none. Its one write permission serves a single action: when you click
+  "Attach to work item", your browser posts a file from a rendered email
+  to the same work item in the same Jira site as an ordinary Jira
+  attachment, as you; the app itself writes nothing of its own and keeps
+  nothing. Email attachments are read from your own Jira issue as you,
+  over Atlassian's own APIs; the bytes are then handled either in your
+  browser or, for the brief first-kilobyte format check described above,
+  on Atlassian-hosted Forge compute. The app creates no store, no issue
+  or page property, no configuration and no record of its own, so there
+  is no app data whose location a residency control could set. The residency
+  position Cloudscript records for this app on the Atlassian Marketplace is
+  accordingly that residency is not applicable, because the app does not
+  store End-User Data.
+</p>
+
+<h2>Uninstall, revocation and deletion</h2>
+
+<p>
+  Because the app stores nothing of its own, there is nothing of its own
+  to delete on uninstall, revocation, or at any other time. Removing the
+  app or revoking its access simply stops it from reading Jira issue data
+  and from creating attachments; no separate deletion request is needed
+  and no residual copy of any data remains with Cloudscript. A file
+  previously promoted with "Attach to work item" is, by that point, an
+  ordinary Jira attachment on the work item, and follows your Jira site's
+  own attachment lifecycle regardless of whether the app stays installed.
+</p>
+
+<h2>Access, correction and complaints</h2>
+
+<p>
+  This app holds no email content or attachment metadata of its own
+  outside your Jira site (see "Where data is stored and processed"
+  above), so any personal data Cloudscript could hold in connection with
+  this app in its own right as a business is limited to correspondence
+  you send us directly, for example a support or privacy query. If you
+  believe we hold personal data about you in that correspondence, or you
+  wish to access or correct it, contact us at
+  <a href="mailto:security@cloudscript.io">security@cloudscript.io</a> and
+  we will respond within a reasonable period. Complaints about how we
+  handle personal data can be made to the same address; if you are not
+  satisfied with our response, you may complain to the Office of the
+  Australian Information Commissioner (oaic.gov.au), or to your local data
+  protection authority if you are outside Australia. If a data breach
+  involving personal information we hold in that correspondence is likely
+  to result in serious harm, we will notify affected individuals and the
+  Office of the Australian Information Commissioner in accordance with
+  the Notifiable Data Breaches scheme under the Privacy Act 1988 (Cth).
+</p>
+
+<p>
+  Personal data that appears within an email the app renders (sender and
+  recipient names and addresses, and any personal data in the body or
+  attachments) is held only inside your own Jira site, under your own
+  Jira site's access controls. Any request to access, correct or delete
+  that content, or any complaint about it, should be directed to the
+  organisation that operates your Jira site, since it controls that
+  content and Cloudscript holds no copy of it to act on.
+</p>
+
+<h2>Your rights</h2>
+
+<p>
+  Cloudscript is neither a controller nor a processor of email content
+  under the GDPR, and neither a business nor a service provider under the
+  CCPA, for the reasons explained in the app's
+  <a href="/apps/email-viewer-jira/dpa">Data Processing Addendum</a>, which
+  forms Schedule 1 to the app's
+  <a href="/apps/email-viewer-jira/terms">End User Terms</a>.
+  We publish that Addendum for enterprise procurement purposes; publishing
+  it does not make Cloudscript a processor or change the characterisation
+  stated here.
+</p>
+
+<p>
+  A rights request about the personal data within an email the app
+  renders, or about the uploader's display name shown in the sidebar
+  index, whether made by a data subject in the EEA or UK under the GDPR,
+  by a California consumer under the CCPA, or under any other privacy law,
+  should be directed to the organisation that operates your Jira site,
+  since that organisation controls the content and Cloudscript holds no
+  copy of it to act on. Depending on your arrangements with Atlassian, some
+  requests may also need to be directed to Atlassian.
+</p>
+
+<p>
+  Cloudscript answers requests about the personal data it holds in its own
+  right as a business: your correspondence with us, and any Marketplace
+  transaction record Atlassian discloses to us as the seller. Contact
+  <a href="mailto:security@cloudscript.io">security@cloudscript.io</a> for
+  those requests; see "Access, correction and complaints" above for how we
+  handle them.
+</p>
+
+<h2>Contact</h2>
+
+<p>
+  Cloudscript Pty Ltd (ABN 14 700 662 362)<br>
+  Privacy and security: <a href="mailto:security@cloudscript.io">security@cloudscript.io</a><br>
+  General support: <a href="mailto:support@cloudscript.io">support@cloudscript.io</a>
+</p>
+
+  </div>
+</div>
