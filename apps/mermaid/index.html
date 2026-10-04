@@ -20,20 +20,37 @@ description: "CloudScript Mermaid Diagrams for Confluence — render Mermaid dia
     </p>
 
     <h2>Adding a diagram</h2>
-    <p>Edit a Confluence page, insert the <strong>Mermaid Diagram</strong> macro (type <code>/Mermaid</code> in the editor, or choose it from the macro list), then open the macro's configuration panel and enter your Mermaid code. Choose a theme, decide whether to show the diagram source beneath the diagram, then save the macro and publish the page. The diagram is rendered when the page is viewed.</p>
-    <p>To show several diagrams on one page, add a separate Mermaid Diagram macro for each one; each macro holds and renders its own diagram independently.</p>
+    <p>Edit a Confluence page, insert the <strong>Mermaid Diagram</strong> macro (type <code>/Mermaid</code> in the editor, or choose it from the macro list), then open the macro's configuration panel and enter your Mermaid code. The settings underneath the code let you give the diagram a title and choose its theme, look and layout. You can also choose which Mermaid version draws the diagram and whether the diagram source is shown beneath it. Save the macro and publish the page, and the diagram is rendered when the page is viewed.</p>
+    <p>To show several diagrams on one page, add a separate Mermaid Diagram macro for each one. Each macro holds and renders its own diagram independently, with its own settings and its own Mermaid version.</p>
 
     <h2>Configuration options</h2>
-    <p>The macro's configuration panel exposes three settings. The first is the <strong>diagram source</strong>, a text box where you paste or write your Mermaid code (for example <code>graph TD</code> followed by your nodes and edges). The second is the <strong>theme</strong>, chosen from <code>Default</code>, <code>Forest</code>, <code>Dark</code>, and <code>Neutral</code>, which controls the diagram's colours. The third is <strong>Show source below diagram</strong>, a checkbox that, when ticked, prints the original Mermaid code in a panel underneath the rendered diagram (useful for documentation pages where readers may want to copy the source).</p>
+    <p>The macro's configuration panel has the diagram source at the top and the diagram's settings underneath it.</p>
+    <p>The <strong>diagram source</strong> is a text box where you paste or write your Mermaid code (for example <code>graph TD</code> followed by your nodes and edges).</p>
+    <p><strong>Title</strong>, <strong>Theme</strong>, <strong>Look</strong> and <strong>Layout</strong> are a visual editor for the diagram's front matter, which is the block of YAML settings between two <code>---</code> lines at the top of a Mermaid diagram. Changing one of these controls writes the setting into the front matter in the source box, and editing the front matter by hand updates the controls, so the two always agree. Any other front matter settings or comments you have written yourself are left untouched.</p>
+    <ul>
+      <li><strong>Title</strong> adds a heading above the diagram. Leave it empty for no title.</li>
+      <li><strong>Theme</strong> controls the diagram's colours. The options are <code>Automatic</code>, <code>Default</code>, <code>Neutral</code>, <code>Dark</code>, <code>Forest</code>, <code>Neo</code>, <code>Neo dark</code>, <code>Redux</code>, <code>Redux dark</code>, <code>Redux colour</code>, <code>Redux dark colour</code> and <code>Custom colours</code>.</li>
+      <li><strong>Look</strong> controls the drawing style. The options are <code>Automatic</code>, <code>Classic</code>, <code>Hand-drawn</code> and <code>Neo</code>.</li>
+      <li><strong>Layout</strong> controls how nodes are arranged. The options are <code>Automatic</code> and <code>ELK</code>.</li>
+    </ul>
+    <p><code>Automatic</code> means the setting is left out of the front matter, so Mermaid chooses whatever suits the diagram type. This matters most for Mermaid 12, where diagram types such as flowcharts and swimlanes bring their own theme and look.</p>
+    <p>Choosing the <code>Custom colours</code> theme reveals four colour settings (Fill, Border, Text and Lines), each with a colour picker and a box for a hex code. These apply only to this theme.</p>
+    <p>Every theme and look is available with both Mermaid 11 and Mermaid 12.</p>
+    <p><strong>Version</strong> chooses the Mermaid version that draws this diagram, either <code>Mermaid 12 (latest)</code> or <code>Mermaid 11</code>. See <a href="#mermaid-versions">Supported Mermaid versions</a> below.</p>
+    <p><strong>Show source below diagram</strong> is a checkbox that, when ticked, prints the original Mermaid code in a panel underneath the rendered diagram. This is useful for documentation pages where readers may want to copy the source.</p>
 
-    <h2>Supported Mermaid version</h2>
-    <p>The app renders with Mermaid version 11 (11.15.0 at the time of writing). Diagram syntax therefore follows the Mermaid v11 specification; the Mermaid documentation at <a href="https://mermaid.js.org/">mermaid.js.org</a> is the authoritative reference for syntax, and any diagram type or syntax feature available in Mermaid v11 is available here.</p>
+    <h2 id="mermaid-versions">Supported Mermaid versions</h2>
+    <p>The app includes two versions of Mermaid: Mermaid 12 (12.1.0 at the time of writing) and Mermaid 11 (11.15.0). The version is chosen separately for each macro using the <strong>Version</strong> setting in its configuration panel.</p>
+    <p>New diagrams use Mermaid 12. Diagrams created before version 2.9 stay on Mermaid 11, so they look exactly as they did before the update. To move an existing diagram to Mermaid 12, open its configuration panel, change Version to <code>Mermaid 12 (latest)</code> and save. You can change it back in the same way if you prefer the earlier rendering.</p>
+    <p>A page only loads the Mermaid versions its diagrams use, so a page whose diagrams are all on one version does not download the other.</p>
+    <p>Diagram syntax follows the specification for the version you have chosen. The Mermaid documentation at <a href="https://mermaid.js.org/">mermaid.js.org</a> is the authoritative reference for syntax.</p>
 
     <h2>Supported diagram types</h2>
-    <p>Because the app passes your code straight to the Mermaid rendering engine, it supports the full range of diagram types provided by Mermaid v11, which includes flowcharts, sequence diagrams, class diagrams, state diagrams, entity-relationship (ER) diagrams, Gantt charts, pie charts, Git graphs, user-journey diagrams, mindmaps, and timelines, among others. If a diagram type is valid in Mermaid v11, it will render in the macro.</p>
+    <p>Because the app passes your code straight to the Mermaid rendering engine, it supports the full range of diagram types provided by the Mermaid version chosen for the macro. This includes flowcharts, sequence diagrams, class diagrams, state diagrams, entity-relationship (ER) diagrams, Gantt charts, pie charts, Git graphs, user-journey diagrams, mindmaps and timelines, among others. If a diagram type is valid in that version of Mermaid, it will render in the macro.</p>
+    <p>Some diagram types are only available in Mermaid 12. Swimlane diagrams (<code>swimlane-beta</code>) are one example. If a diagram type from the current Mermaid documentation shows a "Diagram error" in an older macro, check that the macro's Version is set to Mermaid 12.</p>
 
     <h2>Layout engines (ELK)</h2>
-    <p>In addition to Mermaid's default layout, the app supports the <strong>ELK</strong> layout engine for flowcharts and other node-based diagrams, which often produces tidier routing and spacing on larger, more complex diagrams. To use it, set the layout in the diagram's frontmatter, for example:</p>
+    <p>In addition to Mermaid's default layout, the app supports the <strong>ELK</strong> layout engine for flowcharts and other node-based diagrams, which often produces tidier routing and spacing on larger, more complex diagrams. To use it, set Layout to <code>ELK</code> in the configuration panel. This adds the setting to the diagram's front matter, which you can also write by hand:</p>
     <pre><code>---
 config:
   layout: elk
@@ -41,15 +58,20 @@ config:
 flowchart TD
   A --&gt; B --&gt; C
   A --&gt; C</code></pre>
+    <p>ELK is available with both Mermaid 11 and Mermaid 12. However, swimlane diagrams only draw their lanes when Layout is set to <code>Automatic</code>, and the configuration panel shows a reminder if a swimlane diagram has another layout selected.</p>
 
     <h2>Exporting your page</h2>
-    <p>Diagrams are included when you use Confluence's built-in <strong>Export to PDF</strong>, so a page exported to PDF shows each diagram as it appears on the page, with no extra steps. <strong>Export to Word</strong> is coming soon and is not available in the initial release.</p>
+    <p>Diagrams are included when you use Confluence's built-in <strong>Export to PDF</strong>, so a page exported to PDF shows each diagram as it appears on the page, with no extra steps. <strong>Export to Word</strong> is not yet available.</p>
 
     <h2>Coming from the previous (Connect) version</h2>
     <p>If you used the earlier version of the app, diagrams you created previously continue to work; the macro reads the diagram code stored by the older version, so existing pages keep rendering without you needing to re-enter their source.</p>
 
     <h2>Troubleshooting</h2>
-    <p>If a macro shows the message "No diagram yet", the macro has no source code saved, so open its configuration and add your Mermaid code. If a macro shows a "Diagram error" message, the Mermaid code contains a syntax error; check the code against the Mermaid documentation, and the error text shown will indicate where the problem is. For anything else, see the <a href="/support">Support</a> page.</p>
+    <p>If a macro shows the message "No diagram yet", the macro has no source code saved, so open its configuration and add your Mermaid code.</p>
+    <p>If a macro shows a "Diagram error" message, the Mermaid code contains a syntax error or uses a feature that the macro's Mermaid version does not support. Check the code against the Mermaid documentation, using the error text shown to find where the problem is, and check that Version is set to the Mermaid version the syntax belongs to.</p>
+    <p>If the Title, Theme, Look and Layout settings are greyed out, the front matter at the top of the diagram contains a YAML error. The configuration panel shows the error, and the settings become available again as soon as the front matter is corrected in the source box.</p>
+    <p>If a swimlane diagram renders without its lanes, set Layout to <code>Automatic</code>.</p>
+    <p>For anything else, see the <a href="/support">Support</a> page.</p>
 
     {% include release-history.html app="mermaid" %}
 
