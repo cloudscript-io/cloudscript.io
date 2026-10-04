@@ -6,6 +6,11 @@ description: "CloudScript Mermaid Diagrams for Confluence — render Mermaid dia
 
 <div class="page wrap">
   <div class="prose">
+    <style>
+      .prose figure.shot { margin: 1.6rem 0; }
+      .prose figure.shot img { width: 100%; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #FFFFFF; }
+      .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
+    </style>
     <h1>CloudScript Mermaid Diagrams for Confluence</h1>
     <div class="trust-badges">
       <a class="trust-badge" href="/trust#badges">
@@ -25,6 +30,10 @@ description: "CloudScript Mermaid Diagrams for Confluence — render Mermaid dia
 
     <h2>Configuration options</h2>
     <p>The macro's configuration panel has the diagram source at the top and the diagram's settings underneath it.</p>
+    <figure class="shot">
+      <img src="/apps/mermaid/share-editor-redux-colour.png" alt="The Mermaid diagram configuration panel beside its result: flowchart source with front matter setting the theme, look and layout, the Title, Theme, Look, Layout and Version controls set to Redux colour, Neo, ELK and Mermaid 12, and the rendered order-processing flowchart." width="1840" height="900" loading="lazy">
+      <figcaption>The configuration panel and the diagram it produces. The Theme, Look and Layout controls match the front matter at the top of the source.</figcaption>
+    </figure>
     <p>The <strong>diagram source</strong> is a text box where you paste or write your Mermaid code (for example <code>graph TD</code> followed by your nodes and edges).</p>
     <p><strong>Title</strong>, <strong>Theme</strong>, <strong>Look</strong> and <strong>Layout</strong> are a visual editor for the diagram's front matter, which is the block of YAML settings between two <code>---</code> lines at the top of a Mermaid diagram. Changing one of these controls writes the setting into the front matter in the source box, and editing the front matter by hand updates the controls, so the two always agree. Any other front matter settings or comments you have written yourself are left untouched.</p>
     <ul>
@@ -42,6 +51,10 @@ description: "CloudScript Mermaid Diagrams for Confluence — render Mermaid dia
     <h2 id="mermaid-versions">Supported Mermaid versions</h2>
     <p>The app includes two versions of Mermaid: Mermaid 12 (12.1.0 at the time of writing) and Mermaid 11 (11.15.0). The version is chosen separately for each macro using the <strong>Version</strong> setting in its configuration panel.</p>
     <p>New diagrams use Mermaid 12. Diagrams created before version 2.9 stay on Mermaid 11, so they look exactly as they did before the update. To move an existing diagram to Mermaid 12, open its configuration panel, change Version to <code>Mermaid 12 (latest)</code> and save. You can change it back in the same way if you prefer the earlier rendering.</p>
+    <figure class="shot">
+      <img src="/apps/mermaid/guide-mermaid-11-and-12.png" alt="A Confluence page with the same release pipeline flowchart drawn twice: by Mermaid 11 with purple filled nodes and thin connectors, and by Mermaid 12 with white outlined nodes and heavier, squared connectors." width="1840" height="900" loading="lazy">
+      <figcaption>The same flowchart drawn by Mermaid 11 with the Classic look and by Mermaid 12 with the Neo look.</figcaption>
+    </figure>
     <p>A page only loads the Mermaid versions its diagrams use, so a page whose diagrams are all on one version does not download the other.</p>
     <p>Diagram syntax follows the specification for the version you have chosen. The Mermaid documentation at <a href="https://mermaid.js.org/">mermaid.js.org</a> is the authoritative reference for syntax.</p>
 
