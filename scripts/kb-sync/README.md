@@ -7,8 +7,9 @@ customer questions from it. The website stays the single source of truth: a guid
 edited here, pushed to `main`, and the GitHub Actions workflow `.github/workflows/kb-sync.yml`
 updates the matching Confluence page. Nobody edits the Confluence pages by hand.
 
-The design is recorded in `openspec/changes/sync-guides-to-confluence-kb/` (proposal, design
-decisions D1 to D11, the `kb-sync` spec and the task list). This file is the operator's view.
+The design is recorded in `openspec/changes/archive/2026-10-06-sync-guides-to-confluence-kb/`
+(proposal, design decisions D1 to D11, the task list and the run report), and the `kb-sync` spec
+in `openspec/specs/kb-sync/spec.md`. This file is the operator's view.
 
 ## The one-way rule
 
@@ -118,6 +119,11 @@ One-off setup, all by hand:
    `environment: confluence`. Create `CONFLUENCE_BASE_URL`, `CONFLUENCE_API_TOKEN` and
    `KB_SPACE_KEY` there and leave `CONFLUENCE_USER_EMAIL` **unset**: an unset secret reaches the
    script as an empty string, which selects Bearer.
+
+As set up on 6 Oct 2026: the service account is named `kb-sync`, the secrets
+`CONFLUENCE_BASE_URL`, `CONFLUENCE_API_TOKEN` and `KB_SPACE_KEY` exist in the Environment and
+`CONFLUENCE_USER_EMAIL` does not, and the first live runs and the help centre check are written
+up in the run report in the archived change directory.
 
 Two calls use v1 endpoints that the scoped token may refuse: the CQL search (optional; a refusal
 falls back to the property index and is logged, not an error) and the page move (used for

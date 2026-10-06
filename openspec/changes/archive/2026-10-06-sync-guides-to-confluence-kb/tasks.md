@@ -124,7 +124,14 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
   Verified 2026-10-06: see `run-report.md` (first live run 37404772062 green with seven pages
   created; second run seven unchanged; one-word edit `09e6074` moved exactly one page to
   version 2).
-- [ ] 5.3 Natasha (now Confluence product admin, natasha@cloudscript.io): `CUSKB` is already linked as the knowledge base, so no linking step remains. Remaining steps: set the "All logged-in users" knowledge base permission toggle for the space (leave "Anyone" off); run the one-organisation customer test (signed in as a customer who belongs to exactly one organisation, search for one article from the help centre and open it); put the virtual service agent question (one question whose answer is in a guide); record the results of all three in `run-report.md`. Update `PROJECT_STATUS.md` and `README.md` with the sync description and the one-off setup facts (space key, service account name, group name, Environment and secret names, never their values). Commit and push.
+- [x] 5.3 Natasha (now Confluence product admin, natasha@cloudscript.io): `CUSKB` is already linked as the knowledge base, so no linking step remains. Remaining steps: set the "All logged-in users" knowledge base permission toggle for the space (leave "Anyone" off); run the one-organisation customer test (signed in as a customer who belongs to exactly one organisation, search for one article from the help centre and open it); put the virtual service agent question (one question whose answer is in a guide); record the results of all three in `run-report.md`. Update `PROJECT_STATUS.md` and `README.md` with the sync description and the one-off setup facts (space key, service account name, group name, Environment and secret names, never their values). Commit and push.
+
+  Verified 2026-10-06: see `run-report.md`, "5.3 help centre and virtual agent results"
+  (knowledge base permission set, "All logged-in users" on and "Anyone" off; help centre test
+  as a customer with no product access passed, articles searchable and readable with images
+  and the credit line). The virtual service agent is turned off and out of scope for this
+  change, so the agent question was not put. The setup facts are in
+  `scripts/kb-sync/README.md` and `PROJECT_STATUS.md`.
 
 ## Handover for 5.1 (rewritten 2026-10-06, after 4.2)
 

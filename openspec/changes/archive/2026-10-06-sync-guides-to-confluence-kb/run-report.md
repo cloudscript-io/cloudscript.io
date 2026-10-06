@@ -1,7 +1,6 @@
 # sync-guides-to-confluence-kb — run report
 
-Task 5.2 is in progress. This file records what has been verified so far; the empty sections
-below are filled in as each step is done.
+Tasks 5.2 and 5.3 are recorded here: what was verified, by whom and when.
 
 ## First live run
 
@@ -70,3 +69,22 @@ The `CUSKB` home page content was written by Natasha on 6 Oct 2026: an overview,
 seven guides by page id, and help and security contact guidance. The sync never touches it.
 
 ## 5.3 help centre and virtual agent results
+
+- **Knowledge base permissions** (Jira settings → Products → Knowledge base permissions):
+  "All logged-in users" on, "Anyone" off (Natasha, 6 Oct 2026, after adding
+  natasha@cloudscript.io to the Confluence product-admin group).
+- **Help centre test as a customer with no product access** (natasha+jsmtest@roumanoff.com,
+  admitted via a test organisation, 6 Oct 2026): landing page visible; KB articles searchable
+  and readable; images render; the article view shows title, breadcrumb and body only (no
+  author, so the service account's display name is internal-only); the generated-from credit
+  line appears at the end of each article.
+- **Footer.** Restyled as a credit line in task 4.4 (rule + muted text); verified live in the
+  help centre after run 37419026438 (all seven pages updated, message `kb-sync 0f6d77d`).
+- **Confluence site footer** changed 6 Oct 2026 (Confluence settings → Header and footer) to
+  "© 2026 Cloudscript Pty Ltd. Questions about an app? Raise a support request." with the link
+  to the help centre home; applies to every Confluence page on the site, not only the KB. The
+  year is hard-coded and needs a hand edit each January.
+- **Virtual service agent:** turned off and out of scope for this change (Natasha, 6 Oct 2026).
+- **Customer access on the Support Site experience:** still limited to added organisations.
+- **Test customer natasha+jsmtest@roumanoff.com and its test organisation:** retained for
+  future testing.
