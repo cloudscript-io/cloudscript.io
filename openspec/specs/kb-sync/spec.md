@@ -1,7 +1,8 @@
 # kb-sync Specification
 
 ## Purpose
-TBD - created by archiving change sync-guides-to-confluence-kb. Update Purpose after archive.
+Mirror the user guides published on cloudscript.io into the Confluence knowledge-base space CUSKB so the Jira Service Management help centre serves the same content as the website, with the website as the single source of truth.
+
 ## Requirements
 ### Requirement: Live registry entries select the guides to sync
 

@@ -72,9 +72,10 @@ seven guides by page id, and help and security contact guidance. The sync never 
 
 - **Knowledge base permissions** (Jira settings → Products → Knowledge base permissions):
   "All logged-in users" on, "Anyone" off (Natasha, 6 Oct 2026, after adding
-  natasha@cloudscript.io to the Confluence product-admin group).
-- **Help centre test as a customer with no product access** (natasha+jsmtest@roumanoff.com,
-  admitted via a test organisation, 6 Oct 2026): landing page visible; KB articles searchable
+  Natasha's Cloudscript admin account to the Confluence product-admin group).
+- **Help centre test as a customer with no product access** (a plus-addressed test account on
+  a Cloudscript-controlled mailbox, admitted via a test organisation, 6 Oct 2026): landing page
+  visible; KB articles searchable
   and readable; images render; the article view shows title, breadcrumb and body only (no
   author, so the service account's display name is internal-only); the generated-from credit
   line appears at the end of each article.
@@ -86,5 +87,5 @@ seven guides by page id, and help and security contact guidance. The sync never 
   year is hard-coded and needs a hand edit each January.
 - **Virtual service agent:** turned off and out of scope for this change (Natasha, 6 Oct 2026).
 - **Customer access on the Support Site experience:** still limited to added organisations.
-- **Test customer natasha+jsmtest@roumanoff.com and its test organisation:** retained for
-  future testing.
+- **Test customer (a plus-addressed test account on a Cloudscript-controlled mailbox) and its
+  test organisation:** retained for future testing.

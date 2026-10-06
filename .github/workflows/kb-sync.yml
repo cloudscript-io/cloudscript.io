@@ -1,6 +1,6 @@
 # kb-sync: mirror the user guides on cloudscript.io into the Customers KB knowledge base
-# space in Confluence. See scripts/kb-sync/README.md and the OpenSpec change
-# openspec/changes/sync-guides-to-confluence-kb/ (design D8 to D11).
+# space in Confluence. See scripts/kb-sync/README.md and the archived OpenSpec change
+# openspec/changes/archive/2026-10-06-sync-guides-to-confluence-kb/ (design D8 to D11).
 #
 # Independent of GitHub Pages: Pages keeps building the site natively, and this workflow only
 # reads the repository and talks to Confluence. A push to main that changes a guide, a registry
