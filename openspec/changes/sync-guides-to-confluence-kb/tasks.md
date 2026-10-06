@@ -102,6 +102,20 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
   URL is refused the same way. Before this change an absolute `next` was fetched as given,
   with the Authorization header.
 
+- [x] 4.4 `convert.mjs`: render the footer as a credit line, `<hr />` then the footer text in `<p><span style="color: rgb(107,119,140);">…</span></p>`, as a footer-specific emission (`footerBlock`), not by widening the D4 attribute whitelist; the footer wording is unchanged. Goldens regenerated. Commit.
+  Verified 2026-10-06: 78 tests green under Node 22.22.3 and 24.14.0, and
+  `node scripts/kb-sync/sync.mjs --dry-run` exits 0. New in `tests/kb-sync/convert.test.mjs`:
+  for every live fixture the body ends with the rule and one paragraph whose only styling is
+  that colour span, every footer link keeps its `href`, the footer's text equals the plain
+  footer's (the rule adds no text, so the no-text-lost invariant holds unchanged), and the
+  guide proper contains no `style`, `span` or `hr`; a `style`, `span` or `hr` in guide HTML is
+  still stripped; the attribute whitelist test passes untouched. The goldens test now checks
+  the D4 element whitelist over the guide proper and the footer block separately. Goldens
+  regenerated with `tests/kb-sync/update-goldens.mjs` and the diff reviewed by eye: in all
+  seven, only the footer block changed (one line became two). `buildFooter` also returns the
+  footer content without its `<p>` wrapper (`inner`) for the converter to dress. Every content
+  hash changes, so the next live run updates all seven pages by one version.
+
 ## 5. One-off setup and live verification (Natasha; automation stops at each gate until she confirms)
 
 - [ ] 5.1 Natasha: the space `CUSKB` "Customers KB" exists and is already linked to the CSM Customers experience, so nothing is created there (add to its description that the guide pages are generated from cloudscript.io and manual edits to them are overwritten). Create the access group `kb-sync-access` and the service account, give it Confluence product access through that group only and space permissions (view, add page, edit page) on `CUSKB` only; audit the default permissions; mint the scoped API token (`read:page:confluence`, `write:page:confluence`, `read:content.property:confluence`, `write:content.property:confluence`, `read:space:confluence`, 365-day expiry); run the two negative checks; create the GitHub Environment `confluence` and its secrets (all in "Handover for 5.1" below). Then run `workflow_dispatch` with `dry_run=true` and confirm seven `create` intentions and zero errors in the job summary. Record the token scopes actually granted (if the scoped token lacks a needed scope, note the fallback per design Risks).

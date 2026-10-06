@@ -37,4 +37,5 @@
 <h2>About Typst</h2>
 <p>Cloudscript Typst Renderer is an independent integration and is not affiliated with, or endorsed by, Typst. Learn more about the language at <a href="https://typst.app/">typst.app</a>.</p>
 <p>The app bundles the typst.ts / reflexo-typst WebAssembly toolchain and Typst's default fonts under their respective open-source licences.</p>
-<p>This article is generated from the user guide at <a href="https://cloudscript.io/apps/typst-renderer/">https://cloudscript.io/apps/typst-renderer/</a> and is updated automatically. Terms, privacy and data-processing documents for this app: <a href="https://cloudscript.io/apps/typst-renderer/privacy">Privacy</a>, <a href="https://cloudscript.io/apps/typst-renderer/terms">Terms</a>.</p>
+<hr />
+<p><span style="color: rgb(107,119,140);">This article is generated from the user guide at <a href="https://cloudscript.io/apps/typst-renderer/">https://cloudscript.io/apps/typst-renderer/</a> and is updated automatically. Terms, privacy and data-processing documents for this app: <a href="https://cloudscript.io/apps/typst-renderer/privacy">Privacy</a>, <a href="https://cloudscript.io/apps/typst-renderer/terms">Terms</a>.</span></p>

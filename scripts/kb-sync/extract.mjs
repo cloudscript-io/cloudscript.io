@@ -143,19 +143,19 @@ export function extractGuide(source, { slug = "" } = {}) {
 
 /**
  * The fixed footer appended to every synced page: the guide's absolute URL and a link to each
- * document in the registry's `documents` list. Returns the storage-format XML and its plain
- * text (for the no-text-lost invariant).
+ * document in the registry's `documents` list. Returns the storage-format XML as a plain
+ * paragraph, the same content without the `<p>` wrapper (`inner`, which the converter dresses
+ * as the credit line) and its plain text (for the no-text-lost invariant).
  */
 export function buildFooter(app, { siteBase = SITE_BASE } = {}) {
   const base = guideUrl(siteBase, app.slug);
   const documents = (app.documents ?? []).map((d) => ({ label: d.label, url: absoluteUrl(d.url, base) }));
-  let xml = `<p>This article is generated from the user guide at <a href="${escapeAttr(base)}">${escapeText(base)}</a> and is updated automatically.`;
+  let inner = `This article is generated from the user guide at <a href="${escapeAttr(base)}">${escapeText(base)}</a> and is updated automatically.`;
   let text = `This article is generated from the user guide at ${base} and is updated automatically.`;
   if (documents.length > 0) {
     const links = documents.map((d) => `<a href="${escapeAttr(d.url)}">${escapeText(d.label)}</a>`).join(", ");
-    xml += ` Terms, privacy and data-processing documents for this app: ${links}.`;
+    inner += ` Terms, privacy and data-processing documents for this app: ${links}.`;
     text += ` Terms, privacy and data-processing documents for this app: ${documents.map((d) => d.label).join(", ")}.`;
   }
-  xml += "</p>";
-  return { xml, text };
+  return { xml: `<p>${inner}</p>`, inner, text };
 }

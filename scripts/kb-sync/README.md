@@ -26,7 +26,8 @@ synced page ends with a footer that links to the dated legal pages on the websit
   the title), the `.trust-badges` block and every `<style>`, `<script>` and `<noscript>`; keep
   everything from the first remaining element (the lede) up to but excluding the `<h2>Legal</h2>`
   heading; append a fixed footer naming the guide's URL and linking the app's legal documents from
-  the registry. Jekyll `{% ... %}` tags in the source (the release-history include) are removed
+  the registry. The footer is emitted as a credit line: a rule, then its text in a muted grey
+  (the one `style` the converter ever emits, and never taken from guide HTML). Jekyll `{% ... %}` tags in the source (the release-history include) are removed
   before extraction: they are build instructions, not guide text.
 - Page Sharing is the one guide without a `div.prose` wrapper (its page is a bespoke section
   layout). For a page with no `div.prose` the extractor uses the whole page fragment as the root

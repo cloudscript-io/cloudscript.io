@@ -8,7 +8,7 @@ import path from "node:path";
 import { LIVE_SLUGS, fixtureHtml, fixturesDir, goldenDir } from "./helpers.mjs";
 import { loadRegistry } from "../../scripts/kb-sync/registry.mjs";
 import { buildFooter, extractGuide } from "../../scripts/kb-sync/extract.mjs";
-import { ConvertError, convertGuide, convertNodes, hashContent } from "../../scripts/kb-sync/convert.mjs";
+import { ConvertError, FOOTER_COLOUR, convertGuide, convertNodes, footerBlock, hashContent } from "../../scripts/kb-sync/convert.mjs";
 import { XmlError, assertWellFormed, parseXmlFragment, xmlTextOf } from "../../scripts/kb-sync/xml.mjs";
 import { parseFragment } from "../../scripts/kb-sync/node_modules/parse5/dist/index.js";
 
@@ -232,6 +232,44 @@ test("goldens: every live guide converts to exactly its frozen storage-format do
   }
 });
 
+// --- Footer credit line ----------------------------------------------------------------------
+
+/** Split a converted body at the footer rule: the guide proper, and the footer block. */
+function splitFooter(body) {
+  const at = body.lastIndexOf("\n<hr />\n");
+  assert.notEqual(at, -1, "the footer rule is present");
+  return { guide: body.slice(0, at), footer: body.slice(at + 1) };
+}
+
+test("footer: emitted as a rule then one paragraph whose only styling is the muted colour span", () => {
+  const typst = buildFooter(bySlug["typst-renderer"]);
+  assert.equal(FOOTER_COLOUR, "rgb(107,119,140)");
+  assert.equal(
+    footerBlock(typst),
+    '<hr />\n<p><span style="color: rgb(107,119,140);">This article is generated from the user guide at <a href="https://cloudscript.io/apps/typst-renderer/">https://cloudscript.io/apps/typst-renderer/</a> and is updated automatically. ' +
+      'Terms, privacy and data-processing documents for this app: <a href="https://cloudscript.io/apps/typst-renderer/privacy">Privacy</a>, <a href="https://cloudscript.io/apps/typst-renderer/terms">Terms</a>.</span></p>',
+  );
+  for (const slug of LIVE_SLUGS) {
+    const app = bySlug[slug];
+    const built = buildFooter(app);
+    const { body } = convertGuide(fixtureHtml(slug), app);
+    const { guide, footer } = splitFooter(body);
+    assert.equal(footer, footerBlock(built), `${slug}: the body ends with the footer block`);
+    assert.equal(footer, `<hr />\n<p><span style="color: rgb(107,119,140);">${built.inner}</span></p>`);
+    assert.deepEqual(footer.match(/ style="[^"]*"/g), [' style="color: rgb(107,119,140);"'], `${slug}: one style attribute, the colour`);
+    assert.equal((footer.match(/<span/g) ?? []).length, 1);
+    assert.ok(!/ (class|id)=/.test(footer));
+    assert.equal(xmlTextOf(parseXmlFragment(footer)), xmlTextOf(parseXmlFragment(built.xml)), `${slug}: the wording is unchanged and the rule adds no text`);
+    assert.equal((footer.match(/<a href="/g) ?? []).length, 1 + (app.documents ?? []).length, `${slug}: every link keeps its href`);
+    assert.ok(!/ style=|<span|<hr/.test(guide), `${slug}: ordinary guide content has no style, span or rule`);
+  }
+});
+
+test("footer: styling in guide HTML is still stripped; the exception is the converter's own footer only", () => {
+  const out = convertSnippet('<hr><p style="color: rgb(107,119,140);"><span style="color: rgb(107,119,140);" class="muted">x</span></p><hr />');
+  assert.equal(out, "<p>x</p>");
+});
+
 test("goldens: only whitelisted storage-format elements appear, all references absolute", () => {
   const allowed = new Set([
     "p", "h2", "h3", "h4", "ul", "ol", "li", "table", "thead", "tbody", "tr", "th", "td",
@@ -247,8 +285,11 @@ test("goldens: only whitelisted storage-format elements appear, all references a
         n.children.forEach(walk);
       }
     };
-    parseXmlFragment(golden).forEach(walk);
+    parseXmlFragment(splitFooter(golden).guide).forEach(walk);
     for (const name of names) assert.ok(allowed.has(name), `${slug}: <${name}> is in the D4 whitelist`);
+    names.clear();
+    parseXmlFragment(splitFooter(golden).footer).forEach(walk);
+    assert.deepEqual([...names].sort(), ["a", "hr", "p", "span"], `${slug}: the footer block is a rule, a paragraph, one span and links`);
     for (const m of golden.matchAll(/(?:href|ri:value)="([^"]*)"/g)) {
       assert.match(m[1], /^https?:\/\//, `${slug}: ${m[1]} is absolute`);
     }
@@ -292,5 +333,5 @@ test("goldens: page-specific spot checks", () => {
       '<ac:image ac:align="center"><ri:url ri:value="https://cloudscript.io/apps/email-viewer/guide-hero.png"/></ac:image>\n<p><em>A .eml attachment rendered in place',
     ),
   );
-  assert.ok(email.endsWith('<a href="https://cloudscript.io/apps/email-viewer/dpa">DPA</a>.</p>\n'));
+  assert.ok(email.endsWith('<a href="https://cloudscript.io/apps/email-viewer/dpa">DPA</a>.</span></p>\n'));
 });

@@ -10,6 +10,10 @@
 // converter checks that invariant itself, then checks the result is well-formed XML, and refuses
 // the page otherwise. Attributes other than `href`, `src`, `colspan` and `rowspan` are removed.
 // Every `href` and `src` is resolved against `https://cloudscript.io/apps/<slug>/`.
+//
+// One exception, emitted by the converter itself and never taken from guide HTML: the footer is
+// a credit line, a rule followed by its text in a muted colour (`footerBlock`). Ordinary guide
+// content still carries no `style`, `span` or `hr`.
 import { createHash } from "node:crypto";
 import {
   SITE_BASE,
@@ -295,6 +299,17 @@ export function convertNodes(nodes, ctx) {
   return out.join("\n");
 }
 
+/** The muted grey of the footer credit line; the only colour the converter ever emits. */
+export const FOOTER_COLOUR = "rgb(107,119,140)";
+
+/**
+ * The footer as a credit line: a rule, then the footer text in one muted-colour span. The
+ * wording and links are `buildFooter`'s, untouched; the rule adds no text.
+ */
+export function footerBlock(footer) {
+  return `<hr />\n<p><span style="color: ${FOOTER_COLOUR};">${footer.inner}</span></p>`;
+}
+
 /** Design D5: the content hash that decides whether a page needs a new version. */
 export function hashContent(body, title) {
   return createHash("sha256").update(`${body}\n${title}`, "utf8").digest("hex");
@@ -315,7 +330,7 @@ export function convertGuide(source, app, { siteBase = SITE_BASE } = {}) {
   const base = guideUrl(siteBase, app.slug);
   const extracted = extractGuide(source, { slug: app.slug });
   const footer = buildFooter(app, { siteBase });
-  const body = `${convertNodes(extracted.nodes, { base })}\n${footer.xml}`;
+  const body = `${convertNodes(extracted.nodes, { base })}\n${footerBlock(footer)}`;
   let parsed;
   try {
     parsed = parseXmlFragment(body);
