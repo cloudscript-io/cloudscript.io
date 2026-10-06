@@ -71,7 +71,9 @@ appended to the job summary in Actions).
 The script reads credentials from `process.env` only, never from a file, and redacts the
 `Authorization` header value (Bearer or Basic) and the raw token from every log line and error
 message. At startup it prints one line naming the auth mode and the base URL host and path,
-never the credential.
+never the credential. A pagination link in a response is followed only if it is a relative path
+or an absolute URL on the base URL's own origin; any other is refused before a request is made,
+so the `Authorization` header is never sent to another host.
 
 | Variable                | Meaning                                                                 |
 | ----------------------- | ----------------------------------------------------------------------- |

@@ -161,6 +161,61 @@ test("listPages follows _links.next and returns summaries", async () => {
   assert.equal(calls[1].url.search, "?cursor=c2&limit=250");
 });
 
+test("pagination: a same-origin absolute next link is followed, on the site URL and on the gateway", async () => {
+  for (const base of [BASE, GATEWAY]) {
+    const prefix = new URL(base).pathname.replace(/\/$/, "");
+    const { fetch, calls } = fakeFetch([
+      {
+        method: "GET",
+        path: `${prefix}/wiki/api/v2/spaces/101/pages`,
+        respond: ({ url }) =>
+          url.searchParams.get("cursor") === "c2"
+            ? { body: { results: [PAGE(2, "Two")] } }
+            : { body: { results: [PAGE(1, "One")], _links: { next: `${base}/wiki/api/v2/spaces/101/pages?cursor=c2` } } },
+      },
+    ]);
+    const c = new ConfluenceClient({ baseUrl: base, token: TOKEN, fetch });
+    assert.deepEqual((await c.listPages("101")).map((p) => p.id), ["1", "2"]);
+    assert.equal(calls.length, 2);
+    assert.equal(calls[1].url.href, `${base}/wiki/api/v2/spaces/101/pages?cursor=c2`);
+    assert.equal(calls[1].headers.Authorization, BEARER);
+  }
+});
+
+test("pagination: a next link on any other origin is refused; no request is sent and the header never leaves", async () => {
+  const foreign = [
+    ["https://evil.example/wiki/api/v2/spaces/101/pages?cursor=c2", "https://evil.example"],
+    ["//evil.example/wiki/api/v2/spaces/101/pages?cursor=c2", "https://evil.example"],
+    ["http://cloudscript.atlassian.net/wiki/api/v2/spaces/101/pages?cursor=c2", "http://cloudscript.atlassian.net"],
+    ["https://cloudscript.atlassian.net:8443/wiki/api/v2/spaces/101/pages?cursor=c2", "https://cloudscript.atlassian.net:8443"],
+    [`https://user:${TOKEN}@evil.example/x?token=${TOKEN}`, "https://evil.example"],
+    ["data:text/plain,next", "data:"],
+  ];
+  for (const [next, origin] of foreign) {
+    const { fetch, calls } = fakeFetch([{ method: "GET", path: "/wiki/api/v2/spaces/101/pages", respond: { body: { results: [PAGE(1, "One")], _links: { next } } } }]);
+    const c = new ConfluenceClient({ baseUrl: BASE, token: TOKEN, fetch });
+    let error;
+    try {
+      await c.listPages("101");
+    } catch (err) {
+      error = err;
+    }
+    assert.ok(error instanceof ConfluenceError, next);
+    assert.equal(error.status, 0);
+    assert.equal(error.path, origin, "the offending origin only, never the full URL");
+    for (const text of [error.message, error.body, error.stack, JSON.stringify(error)]) {
+      assert.ok(!text.includes("cursor=c2") && !text.includes("/wiki/api/v2/spaces/101/pages?"), "no path or query of the foreign URL");
+      assert.ok(!text.includes(TOKEN));
+    }
+    assert.equal(calls.length, 1, "only the first page was requested");
+    assert.equal(calls[0].url.origin, BASE);
+    assert.ok(calls.every((call) => call.url.origin === BASE), "the Authorization header was never sent to another origin");
+  }
+  const { fetch, calls } = fakeFetch([{ method: "GET", path: "/wiki/api/v2/spaces/101/pages", respond: { body: { results: [], _links: { next: "wiki/api/v2/elsewhere" } } } }]);
+  await assert.rejects(new ConfluenceClient({ baseUrl: BASE, token: TOKEN, fetch }).listPages("101"), (err) => err instanceof ConfluenceError && err.status === 0 && /neither a path nor a URL/.test(err.message));
+  assert.equal(calls.length, 1);
+});
+
 test("getPage asks for the storage body; createPage and updatePage send the v2 payloads", async () => {
   const { client: c, calls } = client([
     { method: "GET", path: "/wiki/api/v2/pages/7", respond: { body: PAGE(7, "Seven", { body: { storage: { value: "<p>x</p>", representation: "storage" } } }) } },

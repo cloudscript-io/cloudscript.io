@@ -91,6 +91,17 @@ One commit per task. Gate for every commit: `node --test tests/kb-sync/` green a
   default space key and the in-memory stand-in were renamed to `CUSKB` with the rest. No
   request has been sent to Atlassian.
 
+- [x] 4.3 `confluence.mjs`: follow a pagination link only on the base origin. A `_links.next` value is accepted if it is a relative path or an absolute URL whose origin equals the base URL's origin; anything else fails that request with a `ConfluenceError` (status 0, path = the offending origin only) and no request is sent. Commit.
+  Verified 2026-10-06: 76 tests green under Node 22.22.3 and 24.14.0, and
+  `node scripts/kb-sync/sync.mjs --dry-run` exits 0. New in `tests/kb-sync/confluence.test.mjs`:
+  a same-origin absolute `next` is followed on the site URL and on the gateway (the relative
+  form was already covered); a `next` on another host, a protocol-relative one, the same host
+  over `http` or on another port, one with credentials in it and a non-http scheme are each
+  refused with exactly one fetch call (the first page), none to another origin, and an error
+  that carries the origin but no path, query or token. A value that is neither a path nor a
+  URL is refused the same way. Before this change an absolute `next` was fetched as given,
+  with the Authorization header.
+
 ## 5. One-off setup and live verification (Natasha; automation stops at each gate until she confirms)
 
 - [ ] 5.1 Natasha: the space `CUSKB` "Customers KB" exists and is already linked to the CSM Customers experience, so nothing is created there (add to its description that the guide pages are generated from cloudscript.io and manual edits to them are overwritten). Create the access group `kb-sync-access` and the service account, give it Confluence product access through that group only and space permissions (view, add page, edit page) on `CUSKB` only; audit the default permissions; mint the scoped API token (`read:page:confluence`, `write:page:confluence`, `read:content.property:confluence`, `write:content.property:confluence`, `read:space:confluence`, 365-day expiry); run the two negative checks; create the GitHub Environment `confluence` and its secrets (all in "Handover for 5.1" below). Then run `workflow_dispatch` with `dry_run=true` and confirm seven `create` intentions and zero errors in the job summary. Record the token scopes actually granted (if the scoped token lacks a needed scope, note the fallback per design Risks).

@@ -152,6 +152,32 @@ export class ConfluenceClient {
     }
   }
 
+  /**
+   * A `_links.next` value is followed only on the base origin: a relative path, or an absolute
+   * URL whose origin is the base URL's. Anything else would carry the Authorization header to
+   * another host, so it is refused before any request, naming the offending origin only.
+   */
+  #nextLink(next) {
+    if (next == null || next === "") return null;
+    const link = String(next);
+    if (!/^([a-z][a-z0-9+.-]*:|\/\/)/i.test(link)) {
+      if (link.startsWith("/")) return link;
+      throw new ConfluenceError({ status: 0, method: "GET", path: "(pagination link)", body: "the pagination link is neither a path nor a URL; not followed" });
+    }
+    const base = new URL(this.#baseUrl).origin;
+    let url;
+    try {
+      url = new URL(link, base);
+    } catch {
+      throw new ConfluenceError({ status: 0, method: "GET", path: "(pagination link)", body: "the pagination link is not a valid URL; not followed" });
+    }
+    if (url.origin !== base) {
+      const origin = url.origin === "null" ? url.protocol : url.origin;
+      throw new ConfluenceError({ status: 0, method: "GET", path: this.redact(origin), body: `the pagination link points outside ${base}; not followed` });
+    }
+    return url.href;
+  }
+
   async #paginate(path, query) {
     const results = [];
     let next = path;
@@ -159,7 +185,7 @@ export class ConfluenceClient {
     for (let guard = 0; next && guard < 100; guard += 1) {
       const data = await this.#request("GET", next, { query: nextQuery });
       results.push(...(data?.results ?? []));
-      next = data?._links?.next ?? null;
+      next = this.#nextLink(data?._links?.next);
       nextQuery = undefined;
     }
     return results;
