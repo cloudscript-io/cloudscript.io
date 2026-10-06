@@ -43,5 +43,8 @@
 - Storage format is more permissive than the v2 API validates; an unexpected element could 400. Mitigated by the whitelist in D4 and a fixture per app so every live guide is exercised in tests before it is ever synced.
 - The virtual agent quotes text; a badly worded guide sentence becomes a badly worded answer. That is already true of the website and is a content-quality matter, not a sync matter.
 - Scoped API tokens are newer than classic tokens; if a required scope is unavailable at setup time the fallback is a classic token at the site URL with Basic auth on an equally restricted account (D8), recorded in the run report.
-- Anyone with write access to `main` can alter the workflow to read the Environment's secrets. Mitigated by a repository ruleset requiring code-owner review on `.github/workflows/**` and `scripts/kb-sync/**`, and by the credential's reach (one space, page and property scopes only) and its expiry.
+- Anyone with write access to `main` can alter the workflow to read the Environment's secrets.
+  Accepted (Natasha, 6 Oct 2026): no path ruleset or code-owner review on `main`. Mitigation
+  relies on the credential's one-space reach, scoped token, 365-day expiry and ten-minute
+  revocation.
 - The scoped token expires after 365 days and every run then fails with a 401 until it is replaced; the failure is loud (D9) and renewal is a one-secret change in the Environment.

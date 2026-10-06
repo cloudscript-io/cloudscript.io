@@ -47,6 +47,26 @@ Satisfied by the run's read-back of every write together with the golden tests.
 
 ## One-word edit: expected one page at version 2
 
+- GitHub Actions run 37404772062, commit `09e6074` (`apps/mcp-renderer/index.html`,
+  "contained" → "contains"), 2026-10-06, triggered by push. All steps green.
+- Page 3201433602 (`mcp-renderer`) is now at version 2 with version message `kb-sync 09e6074`;
+  the other six pages are unchanged at version 1 (verified by reading the space through the
+  Confluence API, 6 Oct 2026).
+
 ## Token scopes granted and any v1 endpoint refusals
+
+- Scopes granted exactly as designed: `read:page:confluence`, `write:page:confluence`,
+  `read:content.property:confluence`, `write:content.property:confluence`,
+  `read:space:confluence`.
+- The first live run's log shows no "CQL lookup unavailable" line, so the v1 search endpoint
+  accepted the scoped token.
+- The page-move endpoint was not exercised (all seven pages were created in registry order and
+  nothing has been archived), so its behaviour under a scoped token remains unverified.
+- The token expires 6 Oct 2027; rotation is tracked in the Operations Obligations Register.
+
+## Space home page
+
+The `CUSKB` home page content was written by Natasha on 6 Oct 2026: an overview, links to the
+seven guides by page id, and help and security contact guidance. The sync never touches it.
 
 ## 5.3 help centre and virtual agent results
