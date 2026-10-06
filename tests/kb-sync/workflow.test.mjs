@@ -84,6 +84,12 @@ test("hardening: concurrency group, actions pinned by full commit SHA, Node 22, 
   assert.match(text, /run: node scripts\/kb-sync\/sync\.mjs\s*$/m);
 });
 
+test("the sync job runs in the GitHub Environment `confluence`, where the secrets live", () => {
+  const job = block("  sync:");
+  assert.ok(job.includes("environment: confluence"));
+  assert.deepEqual(lines.filter((l) => /^\s*environment:/.test(l)), ["    environment: confluence"], "one environment, at job level");
+});
+
 test("secrets reach the script as the four environment variables, and dispatch maps dry_run to KB_SYNC_DRY_RUN", () => {
   const env = block("        env:");
   for (const name of ["CONFLUENCE_BASE_URL", "CONFLUENCE_USER_EMAIL", "CONFLUENCE_API_TOKEN", "KB_SPACE_KEY"]) {

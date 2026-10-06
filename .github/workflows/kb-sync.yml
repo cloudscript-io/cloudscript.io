@@ -1,12 +1,13 @@
-# kb-sync: mirror the user guides on cloudscript.io into the Cloudscript Help knowledge base
+# kb-sync: mirror the user guides on cloudscript.io into the Customers KB knowledge base
 # space in Confluence. See scripts/kb-sync/README.md and the OpenSpec change
 # openspec/changes/sync-guides-to-confluence-kb/ (design D8 to D11).
 #
 # Independent of GitHub Pages: Pages keeps building the site natively, and this workflow only
 # reads the repository and talks to Confluence. A push to main that changes a guide, a registry
 # file or the sync itself runs a live sync. Manual dispatch defaults to a dry run that prints the
-# intended writes and writes nothing. The four secrets are created by hand (task 5.1); until they
-# exist a live run is refused and the job fails, on purpose, rather than pretending to succeed.
+# intended writes and writes nothing. The secrets live in the GitHub Environment `confluence`
+# (restricted to main) and are created by hand (task 5.1); until they exist a live run is refused
+# and the job fails, on purpose, rather than pretending to succeed.
 name: kb-sync
 
 on:
@@ -38,6 +39,7 @@ jobs:
   sync:
     name: Sync guides to Confluence
     runs-on: ubuntu-latest
+    environment: confluence
     timeout-minutes: 10
     steps:
       - name: Check out
@@ -61,7 +63,9 @@ jobs:
       - name: Run the sync tests
         run: node --test tests/kb-sync/*.test.mjs
 
-      # Secrets reach the script as environment variables and nowhere else. A manual dispatch
+      # Secrets reach the script as environment variables and nowhere else. An unset
+      # CONFLUENCE_USER_EMAIL secret arrives as an empty string, which selects Bearer auth (the
+      # scoped service-account token of design D8); set, it selects Basic. A manual dispatch
       # with dry_run ticked (the default) sets KB_SYNC_DRY_RUN=1; a push runs live. The script
       # appends its per-page result table to the job summary itself.
       - name: Sync
