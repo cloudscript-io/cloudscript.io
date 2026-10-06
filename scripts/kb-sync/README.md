@@ -1,9 +1,9 @@
 # kb-sync: mirror the user guides into the Confluence knowledge base
 
 `scripts/kb-sync` copies the user guide of every live app on cloudscript.io into one page each
-in the `Cloudscript Help` Confluence space (key `CSHELP`). That space is the knowledge base of
-the Jira Service Management help centre for project CUS, and the JSM virtual service agent
-answers customer questions from it. The website stays the single source of truth: a guide is
+in the `Customers KB` Confluence space (key `CUSKB`). That space already exists and is linked to
+the CSM Customers experience as its knowledge base, and the virtual service agent answers
+customer questions from it. The website stays the single source of truth: a guide is
 edited here, pushed to `main`, and the GitHub Actions workflow `.github/workflows/kb-sync.yml`
 updates the matching Confluence page. Nobody edits the Confluence pages by hand.
 
@@ -69,20 +69,66 @@ appended to the job summary in Actions).
 ## Environment variables
 
 The script reads credentials from `process.env` only, never from a file, and redacts the
-`Authorization` header from every log line and error message.
+`Authorization` header value (Bearer or Basic) and the raw token from every log line and error
+message. At startup it prints one line naming the auth mode and the base URL host and path,
+never the credential.
 
 | Variable                | Meaning                                                                 |
 | ----------------------- | ----------------------------------------------------------------------- |
-| `CONFLUENCE_BASE_URL`   | `https://cloudscript.atlassian.net`                                     |
-| `CONFLUENCE_USER_EMAIL` | The dedicated service account's email address                           |
-| `CONFLUENCE_API_TOKEN`  | Its API token, scoped to page, content-property and space read/write   |
-| `KB_SPACE_KEY`          | `CSHELP`                                                                |
+| `CONFLUENCE_BASE_URL`   | `https://api.atlassian.com/ex/confluence/<cloudId>` (the path is kept)  |
+| `CONFLUENCE_API_TOKEN`  | The service account's scoped API token                                  |
+| `KB_SPACE_KEY`          | `CUSKB`                                                                 |
+| `CONFLUENCE_USER_EMAIL` | Optional. Unset or blank: `Bearer <token>`. Set: Basic `email:token`    |
 | `KB_SYNC_DRY_RUN`       | `1` performs reads only and prints every intended write                 |
 | `GITHUB_SHA`            | Set by Actions; named in the version message and the page property      |
 | `KB_SYNC_VERBOSE`       | `1` prints every request (method and path only) to stderr; `--verbose` too |
 
-In GitHub Actions the four credentials are repository secrets with the same names. Nothing in
-this repository holds a value for any of them.
+The first three are required for a live run; with none of the four set, only a dry run works
+(see below). Nothing in this repository holds a value for any of them.
+
+## Credentials
+
+The sync runs as an Atlassian **service account** with a **scoped API token**, through the
+Atlassian platform gateway (design D8). Atlassian accepts scoped tokens only at the gateway,
+`https://api.atlassian.com/ex/confluence/<cloudId>/...`, never at the site URL, and a
+service-account token authenticates with `Authorization: Bearer <token>`, not Basic.
+
+One-off setup, all by hand:
+
+1. **Access group.** In Atlassian Administration create the group `kb-sync-access` and give it
+   Confluence product access. No space permission scheme may reference this group, and the
+   service account belongs to no other group, so grants made to default groups (for example
+   `confluence-users`) never apply to it.
+2. **Service account.** Atlassian Administration, Directory, Service accounts: create the
+   account and give it Confluence product access **only through `kb-sync-access`**.
+3. **Space permissions.** On the space named by `KB_SPACE_KEY` only: view, add page, edit page,
+   granted to the service account itself. Nothing on any other space; no delete permission (the
+   sync never deletes).
+4. **Token.** Create a scoped API token for the service account with exactly
+   `read:page:confluence`, `write:page:confluence`, `read:content.property:confluence`,
+   `write:content.property:confluence` and `read:space:confluence`, expiring after 365 days.
+   Put the renewal date in a calendar: an expired token fails every run with a 401.
+5. **Cloud ID.** Read `cloudId` from `https://cloudscript.atlassian.net/_edge/tenant_info`; then
+   `CONFLUENCE_BASE_URL=https://api.atlassian.com/ex/confluence/<cloudId>`.
+6. **GitHub Environment.** The secrets live in the GitHub Environment `confluence`, whose
+   deployment branches are restricted to `main`; the workflow's `sync` job declares
+   `environment: confluence`. Create `CONFLUENCE_BASE_URL`, `CONFLUENCE_API_TOKEN` and
+   `KB_SPACE_KEY` there and leave `CONFLUENCE_USER_EMAIL` **unset**: an unset secret reaches the
+   script as an empty string, which selects Bearer.
+
+Two calls use v1 endpoints that the scoped token may refuse: the CQL search (optional; a refusal
+falls back to the property index and is logged, not an error) and the page move (used for
+out-of-order creates, archive and un-archive; a refusal fails that one page loudly).
+
+### Fallback: classic token at the site URL
+
+If a scope the sync needs turns out to be unavailable, the older path still works and is
+selected purely by the environment: a classic (unscoped) API token on an equally restricted
+account, `CONFLUENCE_BASE_URL=https://cloudscript.atlassian.net`, and `CONFLUENCE_USER_EMAIL`
+set to that account's email address, which makes the script send Basic `email:token`. A classic
+token is not accepted at the gateway and carries every permission its account has, so the
+account's group and space restrictions above are then the only limit. Record in the run report
+which path is in use.
 
 ## Dry run
 
