@@ -48,19 +48,19 @@ From the page's `div.prose`, the sync SHALL drop the `<h1>`, the `.trust-badges`
 
 ### Requirement: Conversion produces valid Confluence storage format with absolute references
 
-The sync SHALL convert the kept HTML to Confluence storage format using only the element mapping in design D4, SHALL rewrite every relative `href` and `src` to an absolute `https://www.cloudscript.io` URL, SHALL express images as `ac:image` with `ri:url`, SHALL express `pre > code` as the `code` macro, SHALL unwrap unknown elements to their children rather than dropping them, and SHALL validate the result as well-formed XML before any write.
+The sync SHALL convert the kept HTML to Confluence storage format using only the element mapping in design D4, SHALL rewrite every relative `href` and `src` to an absolute `https://cloudscript.io` URL, SHALL express images as `ac:image` with `ri:url`, SHALL express `pre > code` as the `code` macro, SHALL unwrap unknown elements to their children rather than dropping them, and SHALL validate the result as well-formed XML before any write.
 
 #### Scenario: relative links become absolute
 
 - **GIVEN** a guide containing `<a href="/apps/typst-renderer/privacy">`
 - **WHEN** the body is converted
-- **THEN** the output contains `href="https://www.cloudscript.io/apps/typst-renderer/privacy"`
+- **THEN** the output contains `href="https://cloudscript.io/apps/typst-renderer/privacy"`
 
 #### Scenario: a screenshot figure becomes an external image with its caption
 
 - **GIVEN** a guide containing `<figure class="shot"><img src="render-maths.png"><figcaption>Maths rendered on the page</figcaption></figure>` under `apps/typst-renderer/`
 - **WHEN** the body is converted
-- **THEN** the output contains `<ac:image ac:align="center"><ri:url ri:value="https://www.cloudscript.io/apps/typst-renderer/render-maths.png"/></ac:image>` followed by a paragraph containing `Maths rendered on the page`
+- **THEN** the output contains `<ac:image ac:align="center"><ri:url ri:value="https://cloudscript.io/apps/typst-renderer/render-maths.png"/></ac:image>` followed by a paragraph containing `Maths rendered on the page`
 
 #### Scenario: malformed output never reaches Confluence
 
@@ -114,13 +114,25 @@ The workflow SHALL run on push to `main` when paths under `apps/**/index.html`, 
 
 ### Requirement: Credentials are least-privilege and never exposed
 
-The sync SHALL read `CONFLUENCE_BASE_URL`, `CONFLUENCE_USER_EMAIL`, `CONFLUENCE_API_TOKEN` and `KB_SPACE_KEY` from environment variables only; SHALL be documented and set up to run as a dedicated service account with space permissions only on the knowledge base space and a scoped API token limited to page, content-property and space read/write; and SHALL redact the `Authorization` header from every log line and error message. The workflow SHALL declare `permissions: contents: read`, pin actions by commit SHA, and use a concurrency group.
+The sync SHALL read `CONFLUENCE_BASE_URL`, `CONFLUENCE_API_TOKEN`, `KB_SPACE_KEY` and the optional `CONFLUENCE_USER_EMAIL` from environment variables only; SHALL keep the path of `CONFLUENCE_BASE_URL` (so the Atlassian gateway form `https://api.atlassian.com/ex/confluence/<cloudId>` works as well as a site URL) and SHALL require `https`; SHALL send `Authorization: Bearer <token>` when `CONFLUENCE_USER_EMAIL` is unset or blank and Basic `email:token` when it is set; SHALL be documented and set up to run as a dedicated service account with space permissions only on the knowledge base space and a scoped API token limited to page, content-property and space read/write; and SHALL redact the `Authorization` header value and the token from every log line and error message. The workflow SHALL declare `permissions: contents: read`, run the sync job in the GitHub Environment `confluence`, pin actions by commit SHA, and use a concurrency group.
 
 #### Scenario: an API error is logged without the token
 
 - **GIVEN** a Confluence request that fails with a 4xx response
 - **WHEN** the error is reported
-- **THEN** the output contains the status, the request path and the response body, and contains neither the token nor the Basic-auth header value
+- **THEN** the output contains the status, the request path and the response body, and contains neither the token nor the `Authorization` header value, whether Bearer or Basic
+
+#### Scenario: a scoped token goes through the gateway as Bearer
+
+- **GIVEN** `CONFLUENCE_BASE_URL` is `https://api.atlassian.com/ex/confluence/<cloudId>` and `CONFLUENCE_USER_EMAIL` is unset or blank
+- **WHEN** the sync sends a request
+- **THEN** the request URL is `https://api.atlassian.com/ex/confluence/<cloudId>/wiki/...` and its `Authorization` header is `Bearer <token>`
+
+#### Scenario: a classic token at the site URL still works
+
+- **GIVEN** `CONFLUENCE_BASE_URL` is `https://cloudscript.atlassian.net` and `CONFLUENCE_USER_EMAIL` is set
+- **WHEN** the sync sends a request
+- **THEN** the request URL is `https://cloudscript.atlassian.net/wiki/...` and its `Authorization` header is Basic `email:token`
 
 #### Scenario: the workflow cannot write to the repository
 
