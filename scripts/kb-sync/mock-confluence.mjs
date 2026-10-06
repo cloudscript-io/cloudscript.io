@@ -19,10 +19,10 @@ export class MockConfluence {
   /** `{ op, pageId, error }`: throw `error` when that operation targets that page. */
   failOn = null;
 
-  constructor({ spaceKey = "CSHELP", spaceId = "1", homepageId = "2" } = {}) {
-    this.#space = { id: String(spaceId), key: spaceKey, name: "Cloudscript Help", homepageId: String(homepageId) };
+  constructor({ spaceKey = "CUSKB", spaceId = "1", homepageId = "2" } = {}) {
+    this.#space = { id: String(spaceId), key: spaceKey, name: "Customers KB", homepageId: String(homepageId) };
     this.#pages.set(this.#space.homepageId, {
-      id: this.#space.homepageId, title: "Cloudscript Help", status: "current", parentId: null, spaceId: this.#space.id, version: { number: 1, message: "" }, body: "<p>Home</p>",
+      id: this.#space.homepageId, title: "Customers KB", status: "current", parentId: null, spaceId: this.#space.id, version: { number: 1, message: "" }, body: "<p>Home</p>",
     });
   }
 

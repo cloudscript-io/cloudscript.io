@@ -22,7 +22,7 @@ const MESSAGE = "kb-sync 0123456";
 const converted = Object.fromEntries(LIVE_SLUGS.map((slug) => [slug, convertGuide(fixtureHtml(slug), bySlug[slug])]));
 
 function run(client, overrides = {}) {
-  return runSync({ client, spaceKey: "CSHELP", commit: COMMIT, registry, readSource: fixtureHtml, now: () => NOW, ...overrides });
+  return runSync({ client, spaceKey: "CUSKB", commit: COMMIT, registry, readSource: fixtureHtml, now: () => NOW, ...overrides });
 }
 
 function seedSynced(mock, slug, { title = bySlug[slug].name, contentHash = converted[slug].contentHash, body = converted[slug].body, parentId, extra = {} } = {}) {
@@ -344,7 +344,7 @@ test("formatTable and formatMarkdown lay out every result and name failures", ()
 });
 
 test("main: half-configured credentials fail loudly before anything runs", async () => {
-  await assert.rejects(main(["--dry-run"], { CONFLUENCE_BASE_URL: "https://cloudscript.atlassian.net" }), /incomplete: missing CONFLUENCE_USER_EMAIL/);
+  await assert.rejects(main(["--dry-run"], { CONFLUENCE_BASE_URL: "https://cloudscript.atlassian.net" }), /incomplete: missing CONFLUENCE_API_TOKEN, KB_SPACE_KEY/);
 });
 
 test("command line: the offline dry run exits 0 with seven create intentions; a live run without credentials is refused", () => {

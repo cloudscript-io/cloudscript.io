@@ -4,8 +4,13 @@
 // its body and version, the `cloudscript-kb` content property, page creation and update, the
 // v1 move endpoint (v2 has no move), a CQL lookup by property, and the `Archived guides` parent
 // created on demand. Credentials come from the environment only (`credentialsFromEnv`), the
-// Basic header is built once and never returned, and every error path passes through
+// Authorization header is built once and never returned, and every error path passes through
 // `redact()` so neither the token nor the header value can reach a log (design D8).
+//
+// Two ways in (design D8). A scoped service-account token is only accepted at the platform
+// gateway, `https://api.atlassian.com/ex/confluence/{cloudId}`, and is sent as `Bearer <token>`;
+// a classic token goes to the site URL as Basic `email:token`. The base URL therefore keeps its
+// path, and the presence of `CONFLUENCE_USER_EMAIL` selects Basic.
 //
 // Two things here are deliberately defensive, because nothing can be tried live before task 5:
 // the CQL property lookup is the design's letter, but Confluence indexes content properties for
@@ -15,7 +20,8 @@
 
 export const PROPERTY_KEY = "cloudscript-kb";
 export const ARCHIVE_PARENT_TITLE = "Archived guides";
-const REQUIRED_ENV = ["CONFLUENCE_BASE_URL", "CONFLUENCE_USER_EMAIL", "CONFLUENCE_API_TOKEN", "KB_SPACE_KEY"];
+const REQUIRED_ENV = ["CONFLUENCE_BASE_URL", "CONFLUENCE_API_TOKEN", "KB_SPACE_KEY"];
+const OPTIONAL_ENV = ["CONFLUENCE_USER_EMAIL"];
 const PAGE_LIMIT = 250;
 
 export class ConfluenceError extends Error {
@@ -31,13 +37,16 @@ export class ConfluenceError extends Error {
 }
 
 /**
- * Read the four settings from the environment. Returns null when none of them is set (the
- * offline dry-run mode), throws when only some are, so a half-configured workflow fails loudly.
+ * Read the settings from the environment. Returns null when none of them is set (the offline
+ * dry-run mode), throws when only some of the three required ones are, so a half-configured
+ * workflow fails loudly. `CONFLUENCE_USER_EMAIL` is optional: set, it selects Basic auth; unset
+ * or blank (an unset GitHub secret arrives as an empty string), `email` is null and the client
+ * sends Bearer.
  */
 export function credentialsFromEnv(env = process.env) {
-  const present = REQUIRED_ENV.filter((name) => typeof env[name] === "string" && env[name].trim() !== "");
-  if (present.length === 0) return null;
-  const missing = REQUIRED_ENV.filter((name) => !present.includes(name));
+  const isSet = (name) => typeof env[name] === "string" && env[name].trim() !== "";
+  if (![...REQUIRED_ENV, ...OPTIONAL_ENV].some(isSet)) return null;
+  const missing = REQUIRED_ENV.filter((name) => !isSet(name));
   if (missing.length > 0) {
     throw new Error(`Confluence credentials are incomplete: missing ${missing.join(", ")}`);
   }
@@ -49,8 +58,8 @@ export function credentialsFromEnv(env = process.env) {
   }
   if (baseUrl.protocol !== "https:") throw new Error("CONFLUENCE_BASE_URL must use https");
   return {
-    baseUrl: baseUrl.origin,
-    email: env.CONFLUENCE_USER_EMAIL.trim(),
+    baseUrl: `${baseUrl.origin}${baseUrl.pathname.replace(/\/+$/, "")}`,
+    email: isSet("CONFLUENCE_USER_EMAIL") ? env.CONFLUENCE_USER_EMAIL.trim() : null,
     token: env.CONFLUENCE_API_TOKEN.trim(),
     spaceKey: env.KB_SPACE_KEY.trim(),
   };
@@ -71,16 +80,19 @@ function pageSummary(page) {
 
 export class ConfluenceClient {
   #baseUrl;
+  #basePath;
   #token;
   #auth;
   #fetch;
   #log;
 
   constructor({ baseUrl, email, token, fetch = globalThis.fetch, log = () => {} }) {
-    if (!baseUrl || !email || !token) throw new Error("ConfluenceClient needs baseUrl, email and token");
+    if (!baseUrl || !token) throw new Error("ConfluenceClient needs baseUrl and token");
     this.#baseUrl = String(baseUrl).replace(/\/+$/, "");
+    this.#basePath = new URL(this.#baseUrl).pathname.replace(/\/+$/, "");
     this.#token = token;
-    this.#auth = `Basic ${Buffer.from(`${email}:${token}`, "utf8").toString("base64")}`;
+    const basic = typeof email === "string" && email.trim() !== "";
+    this.#auth = basic ? `Basic ${Buffer.from(`${email.trim()}:${token}`, "utf8").toString("base64")}` : `Bearer ${token}`;
     this.#fetch = fetch;
     this.#log = log;
   }
@@ -89,17 +101,24 @@ export class ConfluenceClient {
     return this.#baseUrl;
   }
 
-  /** Replace the token and the Basic header value wherever they appear in a string. */
+  /** `Basic` (an email was given) or `Bearer`; the scheme name only, safe to log. */
+  get authMode() {
+    return this.#auth.slice(0, this.#auth.indexOf(" "));
+  }
+
+  /** Replace the token and the Authorization header value (Basic or Bearer) wherever they appear in a string. */
   redact(text) {
     let out = String(text);
-    for (const secret of [this.#auth, this.#auth.slice("Basic ".length), this.#token]) {
+    for (const secret of [this.#auth, this.#auth.slice(this.#auth.indexOf(" ") + 1), this.#token]) {
       if (secret) out = out.split(secret).join("[REDACTED]");
     }
     return out;
   }
 
   async #request(method, path, { query, body } = {}) {
-    const url = new URL(/^https?:\/\//.test(path) ? path : `${this.#baseUrl}${path}`);
+    // A pagination link may come back with the gateway prefix already on it; never double it.
+    const prefixed = this.#basePath !== "" && path.startsWith(`${this.#basePath}/`);
+    const url = new URL(/^https?:\/\//.test(path) ? path : prefixed ? `${new URL(this.#baseUrl).origin}${path}` : `${this.#baseUrl}${path}`);
     if (query) {
       for (const [key, value] of Object.entries(query)) {
         if (value != null) url.searchParams.set(key, String(value));
@@ -107,7 +126,9 @@ export class ConfluenceClient {
     }
     const headers = { Accept: "application/json", Authorization: this.#auth };
     if (body !== undefined) headers["Content-Type"] = "application/json";
-    const where = `${url.pathname}${url.search}`;
+    // Logs and errors name the path below the base, so they read the same on either base URL.
+    const below = this.#basePath !== "" && url.pathname.startsWith(`${this.#basePath}/`) ? url.pathname.slice(this.#basePath.length) : url.pathname;
+    const where = `${below}${url.search}`;
     this.#log(`${method} ${where}`);
     let response;
     try {

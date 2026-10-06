@@ -4,7 +4,8 @@
 //
 //   node scripts/kb-sync/sync.mjs --dry-run     reads only, prints every intended write
 //   KB_SYNC_DRY_RUN=1 node scripts/kb-sync/sync.mjs   the same, as the workflow sets it
-//   node scripts/kb-sync/sync.mjs               live run; needs the four environment variables
+//   node scripts/kb-sync/sync.mjs               live run; needs the three environment variables
+//                                               (plus CONFLUENCE_USER_EMAIL for Basic auth)
 //
 // With no credentials in the environment a dry run uses an empty in-memory space, so it needs
 // no network and doubles as the commit gate. A live run without credentials is refused. Pages
@@ -23,7 +24,7 @@ import { ConfluenceClient, credentialsFromEnv } from "./confluence.mjs";
 import { MockConfluence } from "./mock-confluence.mjs";
 
 export const ARCHIVED_PREFIX = "[Archived] ";
-export const DEFAULT_SPACE_KEY = "CSHELP";
+export const DEFAULT_SPACE_KEY = "CUSKB";
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(here, "..", "..");
 
@@ -268,13 +269,14 @@ export async function main(argv = process.argv.slice(2), env = process.env) {
   if (credentials) {
     client = new ConfluenceClient({ ...credentials, log });
     spaceKey = credentials.spaceKey;
-    console.log(`${dryRun ? "Dry run" : "Live run"} against ${credentials.baseUrl} space ${spaceKey} as ${credentials.email} (commit ${shortCommit(commit)})`);
+    const base = new URL(client.baseUrl);
+    console.log(`${dryRun ? "Dry run" : "Live run"} with ${client.authMode} auth against ${base.host}${base.pathname} space ${spaceKey} (commit ${shortCommit(commit)})`);
   } else if (dryRun) {
     client = new MockConfluence({ spaceKey: DEFAULT_SPACE_KEY });
     spaceKey = DEFAULT_SPACE_KEY;
     console.log(`Dry run with no Confluence credentials in the environment: using an empty in-memory space ${spaceKey}, nothing is read from or written to Confluence (commit ${shortCommit(commit)})`);
   } else {
-    console.error("Refusing a live run: CONFLUENCE_BASE_URL, CONFLUENCE_USER_EMAIL, CONFLUENCE_API_TOKEN and KB_SPACE_KEY are not set. Use --dry-run to run without them.");
+    console.error("Refusing a live run: CONFLUENCE_BASE_URL, CONFLUENCE_API_TOKEN and KB_SPACE_KEY are not set (CONFLUENCE_USER_EMAIL is optional: set it for Basic auth, leave it unset for Bearer). Use --dry-run to run without them.");
     return 2;
   }
 

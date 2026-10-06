@@ -9,13 +9,18 @@ import {
   PROPERTY_KEY,
   credentialsFromEnv,
 } from "../../scripts/kb-sync/confluence.mjs";
+import { main } from "../../scripts/kb-sync/sync.mjs";
 
-// The production host and the service account name proposed in design D8; the token is invented.
+// The production site host, and the gateway form of design D8 with an invented cloud id; the
+// email (classic-token fallback only) and the token are invented too.
 const BASE = "https://cloudscript.atlassian.net";
-const EMAIL = "support-sync@cloudscript.io";
+const GATEWAY = "https://api.atlassian.com/ex/confluence/00000000-0000-4000-8000-000000000000";
+const GATEWAY_PATH = new URL(GATEWAY).pathname;
+const EMAIL = "kb-sync@example.com";
 const TOKEN = "ATATT3xFfGF0invented-token-value-9f8e7d6c";
 const BASIC = `Basic ${Buffer.from(`${EMAIL}:${TOKEN}`).toString("base64")}`;
 const BASIC_VALUE = BASIC.slice("Basic ".length);
+const BEARER = `Bearer ${TOKEN}`;
 
 function reply(status, body) {
   const text = typeof body === "string" ? body : JSON.stringify(body);
@@ -49,23 +54,88 @@ const PAGE = (id, title, extra = {}) => ({ id, title, status: "current", spaceId
 test("credentialsFromEnv: none set means offline mode; a partial set is an error naming the gaps", () => {
   assert.equal(credentialsFromEnv({}), null);
   assert.equal(credentialsFromEnv({ PATH: "/usr/bin", CONFLUENCE_BASE_URL: "  " }), null);
-  assert.throws(() => credentialsFromEnv({ CONFLUENCE_BASE_URL: BASE }), /missing CONFLUENCE_USER_EMAIL, CONFLUENCE_API_TOKEN, KB_SPACE_KEY/);
-  const creds = credentialsFromEnv({ CONFLUENCE_BASE_URL: `${BASE}/ `, CONFLUENCE_USER_EMAIL: ` ${EMAIL}`, CONFLUENCE_API_TOKEN: TOKEN, KB_SPACE_KEY: "CSHELP " });
-  assert.deepEqual(creds, { baseUrl: BASE, email: EMAIL, token: TOKEN, spaceKey: "CSHELP" });
-  assert.throws(() => credentialsFromEnv({ CONFLUENCE_BASE_URL: "http://cloudscript.atlassian.net", CONFLUENCE_USER_EMAIL: EMAIL, CONFLUENCE_API_TOKEN: TOKEN, KB_SPACE_KEY: "CSHELP" }), /https/);
-  assert.throws(() => credentialsFromEnv({ CONFLUENCE_BASE_URL: "not a url", CONFLUENCE_USER_EMAIL: EMAIL, CONFLUENCE_API_TOKEN: TOKEN, KB_SPACE_KEY: "CSHELP" }), /valid URL/);
+  assert.throws(() => credentialsFromEnv({ CONFLUENCE_BASE_URL: BASE }), /missing CONFLUENCE_API_TOKEN, KB_SPACE_KEY$/);
+  assert.throws(() => credentialsFromEnv({ CONFLUENCE_USER_EMAIL: EMAIL }), /missing CONFLUENCE_BASE_URL, CONFLUENCE_API_TOKEN, KB_SPACE_KEY$/);
+  const creds = credentialsFromEnv({ CONFLUENCE_BASE_URL: `${BASE}/ `, CONFLUENCE_USER_EMAIL: ` ${EMAIL}`, CONFLUENCE_API_TOKEN: TOKEN, KB_SPACE_KEY: "CUSKB " });
+  assert.deepEqual(creds, { baseUrl: BASE, email: EMAIL, token: TOKEN, spaceKey: "CUSKB" });
+  assert.throws(() => credentialsFromEnv({ CONFLUENCE_BASE_URL: "http://cloudscript.atlassian.net", CONFLUENCE_USER_EMAIL: EMAIL, CONFLUENCE_API_TOKEN: TOKEN, KB_SPACE_KEY: "CUSKB" }), /https/);
+  assert.throws(() => credentialsFromEnv({ CONFLUENCE_BASE_URL: "not a url", CONFLUENCE_USER_EMAIL: EMAIL, CONFLUENCE_API_TOKEN: TOKEN, KB_SPACE_KEY: "CUSKB" }), /valid URL/);
+});
+
+test("credentialsFromEnv: the base URL keeps its path and loses trailing slashes; a site origin is unchanged", () => {
+  const withBase = (value) => credentialsFromEnv({ CONFLUENCE_BASE_URL: value, CONFLUENCE_API_TOKEN: TOKEN, KB_SPACE_KEY: "CUSKB" }).baseUrl;
+  assert.equal(withBase(GATEWAY), GATEWAY);
+  assert.equal(withBase(`${GATEWAY}/`), GATEWAY);
+  assert.equal(withBase(` ${GATEWAY}// `), GATEWAY);
+  assert.equal(withBase(BASE), BASE);
+  assert.equal(withBase(`${BASE}/`), BASE);
+  assert.throws(() => withBase(GATEWAY.replace("https:", "http:")), /https/);
+});
+
+test("credentialsFromEnv: the email is optional; absent or whitespace yields null", () => {
+  const required = { CONFLUENCE_BASE_URL: GATEWAY, CONFLUENCE_API_TOKEN: TOKEN, KB_SPACE_KEY: "CUSKB" };
+  const expected = { baseUrl: GATEWAY, email: null, token: TOKEN, spaceKey: "CUSKB" };
+  assert.deepEqual(credentialsFromEnv(required), expected);
+  assert.deepEqual(credentialsFromEnv({ ...required, CONFLUENCE_USER_EMAIL: "" }), expected, "an unset GitHub secret arrives as an empty string");
+  assert.deepEqual(credentialsFromEnv({ ...required, CONFLUENCE_USER_EMAIL: "  \t" }), expected);
+  assert.equal(credentialsFromEnv({ ...required, CONFLUENCE_USER_EMAIL: EMAIL }).email, EMAIL);
+});
+
+// --- Base URL and auth mode ----------------------------------------------------------------
+
+const SPACE_ROUTE = (prefix = "") => ({ method: "GET", path: `${prefix}/wiki/api/v2/spaces`, respond: { body: { results: [{ id: 101, key: "CUSKB", name: "Customers KB", homepageId: 202 }] } } });
+
+test("a gateway base URL: requests go below its path, and logs and errors name the path below the base", async () => {
+  const lines = [];
+  const { fetch, calls } = fakeFetch([
+    SPACE_ROUTE(GATEWAY_PATH),
+    {
+      method: "GET",
+      path: `${GATEWAY_PATH}/wiki/api/v2/spaces/101/pages`,
+      respond: ({ url }) =>
+        url.searchParams.get("cursor") === "c3"
+          ? { body: { results: [PAGE(3, "Three")] } }
+          : url.searchParams.get("cursor") === "c2"
+            ? { body: { results: [PAGE(2, "Two")], _links: { next: `${GATEWAY_PATH}/wiki/api/v2/spaces/101/pages?cursor=c3` } } }
+            : { body: { results: [PAGE(1, "One")], _links: { next: "/wiki/api/v2/spaces/101/pages?cursor=c2" } } },
+    },
+  ]);
+  const c = new ConfluenceClient({ baseUrl: `${GATEWAY}/`, token: TOKEN, fetch, log: (line) => lines.push(line) });
+  assert.equal(c.baseUrl, GATEWAY);
+  await c.getSpace("CUSKB");
+  assert.equal(calls[0].url.href, `${GATEWAY}/wiki/api/v2/spaces?keys=CUSKB&limit=1`);
+  assert.deepEqual((await c.listPages("101")).map((p) => p.id), ["1", "2", "3"], "a next link with or without the gateway prefix is followed once, not doubled");
+  for (const call of calls) assert.ok(call.url.href.startsWith(`${GATEWAY}/wiki/`), call.url.href);
+  assert.deepEqual(lines, [
+    "GET /wiki/api/v2/spaces?keys=CUSKB&limit=1",
+    "GET /wiki/api/v2/spaces/101/pages?limit=250&status=current",
+    "GET /wiki/api/v2/spaces/101/pages?cursor=c2",
+    "GET /wiki/api/v2/spaces/101/pages?cursor=c3",
+  ]);
+  await assert.rejects(c.getPage("9"), (err) => err instanceof ConfluenceError && err.status === 404 && err.path === "/wiki/api/v2/pages/9?body-format=storage");
+});
+
+test("auth mode: Basic when an email is present, Bearer when it is absent or whitespace", async () => {
+  for (const [email, header, mode] of [[EMAIL, BASIC, "Basic"], [undefined, BEARER, "Bearer"], [null, BEARER, "Bearer"], ["", BEARER, "Bearer"], ["   ", BEARER, "Bearer"]]) {
+    const { fetch, calls } = fakeFetch([SPACE_ROUTE()]);
+    const c = new ConfluenceClient({ baseUrl: BASE, email, token: TOKEN, fetch });
+    await c.getSpace("CUSKB");
+    assert.equal(calls[0].headers.Authorization, header, `email ${JSON.stringify(email)}`);
+    assert.equal(c.authMode, mode);
+  }
+  assert.throws(() => new ConfluenceClient({ baseUrl: BASE, email: EMAIL }), /needs baseUrl and token/);
 });
 
 // --- Request shapes ------------------------------------------------------------------------
 
 test("getSpace sends Basic auth and JSON accept, and normalises ids to strings", async () => {
   const { client: c, calls } = client([
-    { method: "GET", path: "/wiki/api/v2/spaces", respond: { body: { results: [{ id: 101, key: "CSHELP", name: "Cloudscript Help", homepageId: 202 }] } } },
+    { method: "GET", path: "/wiki/api/v2/spaces", respond: { body: { results: [{ id: 101, key: "CUSKB", name: "Customers KB", homepageId: 202 }] } } },
   ]);
-  const space = await c.getSpace("CSHELP");
-  assert.deepEqual(space, { id: "101", key: "CSHELP", name: "Cloudscript Help", homepageId: "202" });
+  const space = await c.getSpace("CUSKB");
+  assert.deepEqual(space, { id: "101", key: "CUSKB", name: "Customers KB", homepageId: "202" });
   assert.equal(calls.length, 1);
-  assert.equal(calls[0].url.search, "?keys=CSHELP&limit=1");
+  assert.equal(calls[0].url.search, "?keys=CUSKB&limit=1");
   assert.equal(calls[0].headers.Authorization, BASIC);
   assert.equal(calls[0].headers.Accept, "application/json");
   assert.equal(calls[0].headers["Content-Type"], undefined, "no body, no content type");
@@ -143,21 +213,21 @@ test("searchPageIdBySlug: the D2 CQL, one hit returns the id, none or an unavail
   let status = 200;
   let results = [{ content: { id: 7 } }];
   const { client: c, calls } = client([{ method: "GET", path: "/wiki/rest/api/search", respond: () => ({ status, body: status === 200 ? { results } : { message: "bad cql" } }) }]);
-  assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), "7");
-  assert.equal(calls[0].url.searchParams.get("cql"), `space = "CSHELP" and type = page and content.property[${PROPERTY_KEY}].slug = "typst-renderer"`);
+  assert.equal(await c.searchPageIdBySlug("CUSKB", "typst-renderer"), "7");
+  assert.equal(calls[0].url.searchParams.get("cql"), `space = "CUSKB" and type = page and content.property[${PROPERTY_KEY}].slug = "typst-renderer"`);
   assert.equal(calls[0].url.searchParams.get("limit"), "5");
   results = [];
-  assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), null);
+  assert.equal(await c.searchPageIdBySlug("CUSKB", "typst-renderer"), null);
   results = [{ content: { id: 7 } }, { content: { id: 8 } }];
-  assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), null, "an ambiguous result is not trusted");
+  assert.equal(await c.searchPageIdBySlug("CUSKB", "typst-renderer"), null, "an ambiguous result is not trusted");
   status = 400;
-  assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), null, "an unavailable search falls back to the index");
+  assert.equal(await c.searchPageIdBySlug("CUSKB", "typst-renderer"), null, "an unavailable search falls back to the index");
   status = 403;
-  assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), null, "a scope refusal on the optional v1 search falls back to the index");
+  assert.equal(await c.searchPageIdBySlug("CUSKB", "typst-renderer"), null, "a scope refusal on the optional v1 search falls back to the index");
   status = 401;
-  assert.equal(await c.searchPageIdBySlug("CSHELP", "typst-renderer"), null, "a bad credential surfaces on the index reads that follow, not here");
+  assert.equal(await c.searchPageIdBySlug("CUSKB", "typst-renderer"), null, "a bad credential surfaces on the index reads that follow, not here");
   status = 503;
-  await assert.rejects(c.searchPageIdBySlug("CSHELP", "typst-renderer"), (err) => err instanceof ConfluenceError && err.status === 503, "a server failure is never swallowed");
+  await assert.rejects(c.searchPageIdBySlug("CUSKB", "typst-renderer"), (err) => err instanceof ConfluenceError && err.status === 503, "a server failure is never swallowed");
 });
 
 test("indexSyncedPages maps slug to page and property, ignores unmarked pages, refuses duplicates", async () => {
@@ -217,21 +287,96 @@ test("scenario: an API error is logged without the token (status, path and body 
   assert.equal(calls[0].headers.Authorization, BASIC, "the header itself was sent");
 });
 
+test("scenario: a 400 whose body echoes the Bearer header is redacted in message, body, stack and JSON", async () => {
+  const echo = `Server says: header was ${BEARER} token ${TOKEN} and that is all`;
+  const { fetch, calls } = fakeFetch([{ method: "PUT", path: `${GATEWAY_PATH}/wiki/api/v2/pages/7`, respond: { status: 400, body: { message: echo } } }]);
+  const c = new ConfluenceClient({ baseUrl: GATEWAY, token: TOKEN, fetch });
+  let error;
+  try {
+    await c.updatePage({ id: "7", title: "T", body: "<p/>", versionNumber: 2, message: "m" });
+  } catch (err) {
+    error = err;
+  }
+  assert.ok(error instanceof ConfluenceError);
+  assert.equal(error.status, 400);
+  assert.equal(error.path, "/wiki/api/v2/pages/7");
+  for (const text of [error.message, error.body, String(error), error.stack, JSON.stringify(error)]) {
+    assert.ok(text.includes("Server says"), "response body present");
+    assert.ok(!text.includes(TOKEN), "token absent");
+    assert.ok(!text.includes("Bearer"), "the whole Bearer header value is replaced, scheme included");
+    assert.ok(text.includes("[REDACTED]"));
+  }
+  assert.equal(calls[0].headers.Authorization, BEARER, "the header itself was sent");
+  assert.equal(c.redact(`x ${TOKEN} y ${BEARER}`), "x [REDACTED] y [REDACTED]");
+});
+
 test("a transport failure and a non-JSON reply are reported as ConfluenceError, redacted", async () => {
   const boom = new ConfluenceClient({ baseUrl: BASE, email: EMAIL, token: TOKEN, fetch: async () => { throw new Error(`socket closed while sending ${TOKEN}`); } });
-  await assert.rejects(boom.getSpace("CSHELP"), (err) => err instanceof ConfluenceError && err.status === 0 && !err.message.includes(TOKEN) && err.message.includes("[REDACTED]"));
+  await assert.rejects(boom.getSpace("CUSKB"), (err) => err instanceof ConfluenceError && err.status === 0 && !err.message.includes(TOKEN) && err.message.includes("[REDACTED]"));
   const html = new ConfluenceClient({ baseUrl: BASE, email: EMAIL, token: TOKEN, fetch: async () => reply(200, "<html>login</html>") });
-  await assert.rejects(html.getSpace("CSHELP"), /not JSON/);
+  await assert.rejects(html.getSpace("CUSKB"), /not JSON/);
   const empty = new ConfluenceClient({ baseUrl: BASE, email: EMAIL, token: TOKEN, fetch: async () => reply(204, "") });
   await empty.movePage("1", "append", "2");
 });
 
 test("the log callback sees method and path only, never the header", async () => {
   const lines = [];
-  const { client: c } = client([{ method: "GET", path: "/wiki/api/v2/spaces", respond: { body: { results: [{ id: 1, key: "CSHELP", homepageId: 2 }] } } }], (line) => lines.push(line));
-  await c.getSpace("CSHELP");
-  assert.deepEqual(lines, ["GET /wiki/api/v2/spaces?keys=CSHELP&limit=1"]);
+  const { client: c } = client([{ method: "GET", path: "/wiki/api/v2/spaces", respond: { body: { results: [{ id: 1, key: "CUSKB", homepageId: 2 }] } } }], (line) => lines.push(line));
+  await c.getSpace("CUSKB");
+  assert.deepEqual(lines, ["GET /wiki/api/v2/spaces?keys=CUSKB&limit=1"]);
   assert.ok(!JSON.stringify(lines).includes(TOKEN));
   assert.equal(c.redact(`x ${TOKEN} y ${BASIC}`), "x [REDACTED] y [REDACTED]");
   assert.equal(c.baseUrl, BASE);
+});
+
+// --- The sync CLI's view of the same settings ------------------------------------------------
+
+/** Run `main` with console and fetch captured; nothing leaves the process. */
+async function runMain(argv, env, routes = []) {
+  const out = [];
+  const err = [];
+  const { fetch, calls } = fakeFetch(routes);
+  const saved = { log: console.log, error: console.error, fetch: globalThis.fetch };
+  console.log = (...args) => out.push(args.join(" "));
+  console.error = (...args) => err.push(args.join(" "));
+  globalThis.fetch = fetch;
+  try {
+    const code = await main(argv, env);
+    return { code, out: out.join("\n"), err: err.join("\n"), calls };
+  } finally {
+    console.log = saved.log;
+    console.error = saved.error;
+    globalThis.fetch = saved.fetch;
+  }
+}
+
+test("sync CLI: a live run with nothing set is refused naming only the three required variables", async () => {
+  for (const env of [{}, { CONFLUENCE_BASE_URL: "", CONFLUENCE_USER_EMAIL: "", CONFLUENCE_API_TOKEN: "", KB_SPACE_KEY: "" }]) {
+    const { code, err, calls } = await runMain([], env);
+    assert.equal(code, 2);
+    assert.match(err, /^Refusing a live run: CONFLUENCE_BASE_URL, CONFLUENCE_API_TOKEN and KB_SPACE_KEY are not set \(CONFLUENCE_USER_EMAIL is optional/);
+    assert.equal(calls.length, 0);
+  }
+  await assert.rejects(runMain([], { CONFLUENCE_BASE_URL: GATEWAY, CONFLUENCE_API_TOKEN: TOKEN }), /incomplete: missing KB_SPACE_KEY$/);
+});
+
+test("sync CLI: the email may be absent; the startup line names the auth mode, host and path, never the credential", async () => {
+  const routes = [
+    SPACE_ROUTE(GATEWAY_PATH),
+    { method: "GET", path: `${GATEWAY_PATH}/wiki/api/v2/spaces/101/pages`, respond: { body: { results: [] } } },
+    { method: "GET", path: `${GATEWAY_PATH}/wiki/rest/api/search`, respond: { body: { results: [] } } },
+  ];
+  const env = { CONFLUENCE_BASE_URL: `${GATEWAY}/`, CONFLUENCE_USER_EMAIL: "", CONFLUENCE_API_TOKEN: TOKEN, KB_SPACE_KEY: "CUSKB", KB_SYNC_COMMIT: "0123456789abcdef" };
+  const bearer = await runMain(["--dry-run"], env, routes);
+  assert.equal(bearer.code, 0, bearer.err);
+  assert.equal(bearer.out.split("\n")[0], `Dry run with Bearer auth against api.atlassian.com${GATEWAY_PATH} space CUSKB (commit 0123456)`);
+  assert.ok(bearer.calls.length > 0 && bearer.calls.every((call) => call.headers.Authorization === BEARER && call.method === "GET"));
+  assert.ok(!`${bearer.out}\n${bearer.err}`.includes(TOKEN));
+
+  const siteRoutes = [SPACE_ROUTE(), { ...routes[1], path: "/wiki/api/v2/spaces/101/pages" }, { ...routes[2], path: "/wiki/rest/api/search" }];
+  const basic = await runMain(["--dry-run"], { ...env, CONFLUENCE_BASE_URL: BASE, CONFLUENCE_USER_EMAIL: EMAIL }, siteRoutes);
+  assert.equal(basic.code, 0, basic.err);
+  assert.equal(basic.out.split("\n")[0], "Dry run with Basic auth against cloudscript.atlassian.net/ space CUSKB (commit 0123456)");
+  assert.ok(basic.calls.every((call) => call.headers.Authorization === BASIC));
+  for (const secret of [TOKEN, BASIC_VALUE, EMAIL]) assert.ok(!`${basic.out}\n${basic.err}`.includes(secret));
 });
