@@ -40,6 +40,11 @@ Satisfied by the run's read-back of every write together with the golden tests.
 
 ## Second run (no guide change): expected seven unchanged
 
+- GitHub Actions run 37404409097, commit `b32e95d`, 2026-10-06 about 13:27 AEDT, triggered by
+  the push of task 4.3 and this run report. All steps green.
+- All seven pages remain at version 1, verified by reading the space through the Confluence
+  API. Expected result met.
+
 ## One-word edit: expected one page at version 2
 
 ## Token scopes granted and any v1 endpoint refusals
