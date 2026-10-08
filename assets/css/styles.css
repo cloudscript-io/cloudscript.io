@@ -344,6 +344,9 @@ footer.site-footer { background: var(--ink); color: #C8D2E0; padding: 48px 0 30p
   padding: 6px 14px; border-radius: 999px; margin-bottom: 22px;
 }
 .prose { max-width: 720px; }
+/* A lede inside an article fills the column like the paragraphs under it; the 600px cap on
+   .lede is for the short line under a hero headline. */
+.prose .lede { max-width: none; }
 .prose h1 { font-size: 38px; margin: 0 0 16px; }
 .prose h2 { font-size: 22px; margin: 32px 0 10px; }
 .prose h3 { font-size: 17px; margin: 22px 0 8px; font-weight: 600; color: var(--ink); }
