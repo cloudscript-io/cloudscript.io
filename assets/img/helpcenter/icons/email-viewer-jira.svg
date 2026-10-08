@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="MSG/EML Email Viewer for Confluence">
+  <title>MSG/EML Email Viewer for Confluence</title>
+  <rect x="0" y="0" width="96" height="96" fill="#EAF1FB"/>
+  <rect x="13.33" y="20" width="58" height="47" rx="6" fill="#fff" stroke="#2E6FE0" stroke-width="3"/>
+  <path d="M14.5 23 L42.33 45.5 L70.2 23" fill="none" stroke="#2E6FE0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="70.67" cy="64" r="12" fill="#2E6FE0"/>
+  <path d="M70.67 70 V59 M66.17 63 L70.67 58.5 L75.17 63" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

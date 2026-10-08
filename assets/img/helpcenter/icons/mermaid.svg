@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="CloudScript Mermaid Diagrams for Confluence">
+  <title>CloudScript Mermaid Diagrams for Confluence</title>
+  <rect x="0" y="0" width="96" height="96" fill="#EAF1FB"/>
+  <path d="M48 39 V49" fill="none" stroke="#5AA0F0" stroke-width="3" stroke-linecap="round"/>
+  <path d="M48 49 H32 V57" fill="none" stroke="#5AA0F0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M48 49 H64 V57" fill="none" stroke="#5AA0F0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="38" y="26" width="20" height="13" rx="4" fill="#fff" stroke="#2E6FE0" stroke-width="3"/>
+  <rect x="22" y="57" width="20" height="13" rx="4" fill="#fff" stroke="#2E6FE0" stroke-width="3"/>
+  <rect x="54" y="57" width="20" height="13" rx="4" fill="#fff" stroke="#2E6FE0" stroke-width="3"/>
+</svg>

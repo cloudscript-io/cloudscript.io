@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="144" viewBox="0 0 96 96" role="img" aria-label="Tech Adoption Radar for Confluence">
+  <title>Tech Adoption Radar for Confluence</title>
+  <rect x="0" y="0" width="96" height="96" fill="#EAF1FB"/>
+  <circle cx="48" cy="48" r="30" fill="#fff" stroke="#2E6FE0" stroke-width="3"/>
+  <circle cx="48" cy="48" r="18" fill="none" stroke="#5AA0F0" stroke-width="2.5"/>
+  <path d="M18 48 H78" stroke="#5AA0F0" stroke-width="2.5"/>
+  <path d="M48 18 V78" stroke="#5AA0F0" stroke-width="2.5"/>
+  <circle cx="33" cy="33" r="3.2" fill="#2E6FE0"/>
+  <circle cx="64" cy="37" r="3.2" fill="#2E6FE0"/>
+  <circle cx="41" cy="58" r="3.2" fill="#2E6FE0"/>
+  <circle cx="58" cy="61" r="3.2" fill="#fff" stroke="#2E6FE0" stroke-width="2.5"/>
+</svg>

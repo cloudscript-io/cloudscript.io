@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Page Sharing for Confluence">
+  <title>Page Sharing for Confluence</title>
+  <rect x="0" y="0" width="96" height="96" fill="#EAF1FB"/>
+  <path d="M12,30 H32 L40,38 V70 H12 Z" fill="#fff" stroke="#2E6FE0" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M32,30 L32,38 L40,38" fill="none" stroke="#2E6FE0" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <line x1="17" y1="46" x2="33" y2="46" stroke="#5AA0F0" stroke-width="2.6" stroke-linecap="round"/>
+  <line x1="17" y1="52" x2="33" y2="52" stroke="#5AA0F0" stroke-width="2.6" stroke-linecap="round"/>
+  <line x1="17" y1="58" x2="27" y2="58" stroke="#5AA0F0" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M63,22 H74 L79,27 V42 H63 Z" fill="#fff" stroke="#5AA0F0" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="3 2"/>
+  <path d="M74,22 L74,27 L79,27" fill="none" stroke="#5AA0F0" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M63,52 H74 L79,57 V72 H63 Z" fill="#fff" stroke="#5AA0F0" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="3 2"/>
+  <path d="M74,52 L74,57 L79,57" fill="none" stroke="#5AA0F0" stroke-width="2.2" stroke-linejoin="round"/>
+  <line x1="45" y1="49" x2="62" y2="32" stroke="#5AA0F0" stroke-width="3" stroke-linecap="round"/>
+  <line x1="45" y1="49" x2="62" y2="62" stroke="#5AA0F0" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="45" cy="49" r="3.4" fill="#2E6FE0"/>
+</svg>
