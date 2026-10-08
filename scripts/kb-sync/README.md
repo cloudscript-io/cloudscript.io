@@ -175,8 +175,14 @@ same environment variables but the workflow is the intended path.
 
 ## Tests
 
-`tests/kb-sync/` holds one fixture per live app (a copy of `apps/<slug>/index.html` and of its
-registry file), a frozen storage-format golden per app, and `node --test` suites for the
+`tests/kb-sync/` holds a frozen behavioural corpus and the `node --test` suites that run against
+it. The corpus is seven guides, each a copy of `apps/<slug>/index.html` and of its registry file
+as they stood when it was taken, with a frozen storage-format golden per guide, plus one registry
+file with no guide (`fixtures/email-viewer-jira.yml`), kept `coming-soon` deliberately as the
+corpus's only entry that is not live. The corpus is independent of the live registry: an app
+going live, a new app or a guide edit does not touch the fixtures or the goldens, which freeze
+the extraction and conversion behaviour, not the live guide text. The suites cover the
 extraction boundary, the conversion rules, the REST client (mocked `fetch`, including the
-redaction check) and the orchestration (mocked client). The goldens freeze the conversion
-behaviour, not the live guide text: a guide edit does not touch them.
+redaction check) and the orchestration (mocked client). Only the command-line test in
+`sync.test.mjs` reads `_data/apps/`: it runs the offline dry run against the real registry and
+derives its expectations from it, so it needs no edit when an app's status changes.

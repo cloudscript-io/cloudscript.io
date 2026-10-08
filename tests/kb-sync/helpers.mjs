@@ -9,7 +9,7 @@ export const fixturesDir = path.join(here, "fixtures");
 export const goldenDir = path.join(here, "golden");
 export const scriptsDir = path.join(repoRoot, "scripts", "kb-sync");
 
-/** The seven live apps, in registry order. */
+/** The live apps in the fixture registry, in registry order. */
 export const LIVE_SLUGS = [
   "mermaid",
   "page-sharing",

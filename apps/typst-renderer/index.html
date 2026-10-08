@@ -13,11 +13,7 @@ image: /apps/typst-renderer/render-maths.png
       .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
     </style>
     <h1>Cloudscript Typst Renderer</h1>
-    <div class="trust-badges">
-      <a class="trust-badge" href="/trust#badges">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M2 12l10 5 10-5"/><path d="M2 16l10 5 10-5"/></svg>Runs on Atlassian
-      </a>
-    </div>
+    {% include trust-badges.html app="typst-renderer" %}
 
     <p class="lede">Cloudscript Typst Renderer is a Confluence Cloud app, built on Atlassian Forge, that renders <a href="https://typst.app" target="_blank" rel="noopener">Typst</a> source and the mathematics Typst is known for directly on a Confluence page. You paste Typst source into the macro's configuration, and the document is compiled and drawn in the reader's browser when the page is viewed. Because the page holds the source, each view renders it afresh, so an edit to the source is what the next viewer sees.</p>
 

@@ -8,7 +8,7 @@ import { mkdtempSync, readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { LIVE_SLUGS, fixtureHtml, fixturesDir, repoRoot, scriptsDir } from "./helpers.mjs";
-import { loadRegistry } from "../../scripts/kb-sync/registry.mjs";
+import { loadRegistry, selectApps } from "../../scripts/kb-sync/registry.mjs";
 import { ConvertError, convertGuide, hashContent } from "../../scripts/kb-sync/convert.mjs";
 import { ARCHIVE_PARENT_TITLE, ConfluenceError } from "../../scripts/kb-sync/confluence.mjs";
 import { MockConfluence } from "../../scripts/kb-sync/mock-confluence.mjs";
@@ -347,19 +347,26 @@ test("main: half-configured credentials fail loudly before anything runs", async
   await assert.rejects(main(["--dry-run"], { CONFLUENCE_BASE_URL: "https://cloudscript.atlassian.net" }), /incomplete: missing CONFLUENCE_API_TOKEN, KB_SPACE_KEY/);
 });
 
-test("command line: the offline dry run exits 0 with seven create intentions; a live run without credentials is refused", () => {
+// The one test that reads the real registry (_data/apps/) instead of the fixture corpus. Its
+// expectations are derived from that registry with the sync's own selection, so an app going
+// live, or a new entry of any other status, needs no edit here.
+test("command line: the offline dry run exits 0 with a create intention for every live registry entry and skips the rest; a live run without credentials is refused", () => {
   const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => !k.startsWith("CONFLUENCE_") && !k.startsWith("KB_") && k !== "GITHUB_STEP_SUMMARY" && k !== "GITHUB_SHA"));
   const summary = path.join(mkdtempSync(path.join(os.tmpdir(), "kb-sync-")), "summary.md");
   const script = path.join(scriptsDir, "sync.mjs");
+  const { live: selected, others } = selectApps(loadRegistry(path.join(repoRoot, "_data", "apps")));
+  const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  assert.ok(selected.length >= 1, "the registry selects at least one live app");
 
   const dry = spawnSync(process.execPath, [script, "--dry-run"], { cwd: repoRoot, env: { ...env, GITHUB_STEP_SUMMARY: summary }, encoding: "utf8" });
   assert.equal(dry.status, 0, dry.stderr);
   assert.match(dry.stdout, /Dry run with no Confluence credentials/);
-  assert.equal((dry.stdout.match(/^  create {4}/gm) ?? []).length, 7, "seven create intentions printed");
-  assert.match(dry.stdout, /^email-viewer-jira +skipped .*status: coming-soon$/m);
+  assert.equal((dry.stdout.match(/^  create {4}/gm) ?? []).length, selected.length, "one create intention printed per live registry entry");
+  for (const app of selected) assert.match(dry.stdout, new RegExp(`^${app.slug} +create `, "m"));
+  for (const app of others) assert.match(dry.stdout, new RegExp(`^${app.slug} +skipped .*status: ${escapeRegExp(app.status)}$`, "m"));
   const md = readFileSync(summary, "utf8");
   assert.match(md, /^### kb-sync dry run/m);
-  for (const slug of LIVE_SLUGS) assert.match(md, new RegExp(`^\\| ${slug} \\| create \\|`, "m"));
+  for (const app of selected) assert.match(md, new RegExp(`^\\| ${app.slug} \\| create \\|`, "m"));
 
   const viaEnv = spawnSync(process.execPath, [script], { cwd: repoRoot, env: { ...env, KB_SYNC_DRY_RUN: "1" }, encoding: "utf8" });
   assert.equal(viaEnv.status, 0, viaEnv.stderr);

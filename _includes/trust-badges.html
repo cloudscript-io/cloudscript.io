@@ -1,0 +1,23 @@
+{%- comment -%}
+  Marketplace trust badges for one app, drawn from its registry entry. Usage on an app page,
+  directly under the <h1> and at its indentation:
+    {% include trust-badges.html app="radar-renderer" %}
+  Renders the .trust-badges block with one badge per recognised entry in the app's `badges`
+  list in _data/apps/<slug>.yml, and nothing at all when that list is empty or missing, so
+  the registry is the one place a badge is recorded (and it is listed there only once
+  observed on the live Marketplace listing). The hyphenated tag delimiters strip the
+  whitespace around the block: the page's own indent and line break around the include tag
+  supply it, which keeps the output identical to the block once written by hand on each page.
+{%- endcomment -%}
+{%- assign app_badges = site.data.apps[include.app].badges -%}
+{%- if app_badges and app_badges.size > 0 -%}
+<div class="trust-badges">
+      {%- for badge in app_badges -%}
+      {%- if badge == "runs-on-atlassian" %}
+      <a class="trust-badge" href="/trust#badges">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M2 12l10 5 10-5"/><path d="M2 16l10 5 10-5"/></svg>Runs on Atlassian
+      </a>
+      {%- endif -%}
+      {%- endfor %}
+    </div>
+{%- endif -%}

@@ -13,11 +13,7 @@ image: /apps/email-viewer/guide-hero.png
       .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
     </style>
     <h1>MSG/EML Email Viewer for Confluence</h1>
-    <div class="trust-badges">
-      <a class="trust-badge" href="/trust#badges">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M2 12l10 5 10-5"/><path d="M2 16l10 5 10-5"/></svg>Runs on Atlassian
-      </a>
-    </div>
+    {% include trust-badges.html app="email-viewer" %}
 
     <p class="lede">MSG/EML Email Viewer for Confluence is a Confluence Cloud app, built on Atlassian Forge, that renders a <code>.msg</code> or <code>.eml</code> file attached to a page as a readable email card: subject, sender, recipients, date, body, inline images, and the message's own attachments listed with a download for each. Nothing about the message is copied into the page. The macro's stored configuration holds the attachment's id, its filename and an optional label, and the file itself is read and parsed again on every view, so the card shows what the attached file says now.</p>
 

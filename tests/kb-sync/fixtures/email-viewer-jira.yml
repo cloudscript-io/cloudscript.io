@@ -1,18 +1,16 @@
-# CloudScript.io app registry entry — MSG/EML Email Viewer for Jira.
+# kb-sync test fixture — MSG/EML Email Viewer for Jira, frozen as a coming-soon
+# registry entry.
 #
-# In development, not submitted: coming-soon card on the home page only.
-# order: 50 continues the established 5-point spacing after the highest slot
-# in use (email-viewer=45); no conflicting slot.
+# Kept coming-soon DELIBERATELY. This is the fixture corpus's only entry that
+# is not `status: live`: the case the tests use to prove that such an entry is
+# skipped. It is not a mirror of _data/apps/email-viewer-jira.yml and must NOT
+# be flipped to live when the app launches, or afterwards. The fixtures are a
+# frozen behavioural corpus, independent of the live registry (see
+# scripts/kb-sync/README.md, "Tests").
 #
-# has_page: false — no app page exists yet, so the card renders the name as
-# plain text with no "Learn more" foot. It gains a page (and its legal pages)
-# with its launch-app website phase. Contrast the Confluence sibling, where
-# has_page is omitted because its guide IS its /apps/email-viewer page.
-#
-# marketplace_url: null and badges: [] until the listing is actually
-# published; a trust badge is listed only once observed on the live listing.
-#
-# No `documents` block: no privacy/terms/DPA pages exist for this app yet.
+# The fields are the registry entry as it stood before the app had a page:
+# has_page: false, marketplace_url: null, badges: [] and no `documents` block.
+# That is also why there is no email-viewer-jira.html fixture and no golden.
 name: MSG/EML Email Viewer for Jira
 slug: email-viewer-jira
 order: 50
