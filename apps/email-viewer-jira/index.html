@@ -13,6 +13,7 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
       .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
     </style>
     <h1>MSG/EML Email Viewer for Jira</h1>
+    {% include trust-badges.html app="email-viewer-jira" %}
 
     <p class="lede">MSG/EML Email Viewer for Jira is a Jira Cloud app, built on Atlassian Forge, that renders the <code>.msg</code> and <code>.eml</code> files attached to an issue as email cards: subject, sender, recipients, date, body, inline images, and the message's own attachments listed with a download for each. The cards appear in an <strong>Emails</strong> tab in the issue's Activity section, and an <strong>Attached emails</strong> group in the right sidebar counts the issue's email files and lists them by filename, newest attached first. Both are present on every issue in every project from the moment the app is installed, including projects created afterwards, with nothing to configure and no setting anywhere. A file inside a rendered email (a contract or a forwarded message, say) can be attached to the work item itself with one click, as you; nothing is attached unless you click.</p>
 
@@ -20,6 +21,9 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
 
     <p>Each email is read from your own Jira as you, over Atlassian's own APIs, parsed in your browser, and stored nowhere. The app requests eleven granular Jira permissions, all reads except one write, which it uses only to attach a file to the work item you are viewing when you click Attach; it never edits, comments on, logs work against or deletes anything. It declares no external network destinations and keeps no storage of its own. Cloudscript operates no server, store or destination in that path: the only step outside your browser is a format check that reads at most the first kilobyte of each file on Atlassian-hosted Forge compute and discards it in the same call.</p>
 
+    <p class="cta-row">
+      <a class="btn btn-primary" href="https://marketplace.atlassian.com/apps/463039643/msg-eml-email-viewer-for-jira" target="_blank" rel="noopener">View on Marketplace</a>
+    </p>
 
     <figure class="shot">
       <img src="/apps/email-viewer-jira/guide-emails-tab.png" alt="The Emails tab on a Jira issue showing three attached emails: the first expanded as a full email card with subject, sender, recipients, date and body, and two more collapsed to single header rows ending in Show email. Beside the tab, the issue's right-hand column shows its detail fields and the expanded Attached emails group." width="1840" height="900" loading="lazy">
