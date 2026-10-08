@@ -32,7 +32,7 @@ synced page ends with a footer that links to the dated legal pages on the websit
   before extraction: they are build instructions, not guide text.
 - Page Sharing is the one guide without a `div.prose` wrapper (its page is a bespoke section
   layout). For a page with no `div.prose` the extractor uses the whole page fragment as the root
-  and applies the same drop rules and boundary, so all seven live guides sync.
+  and applies the same drop rules and boundary, so all live guides sync.
 - Conversion (design D4): a fixed element whitelist becomes Confluence storage format; every
   relative link and image source is rewritten to an absolute `https://cloudscript.io/...`
   URL resolved against `/apps/<slug>/`; figures become `ac:image` references to the website image
