@@ -1,0 +1,4 @@
+# Portfolio-wide legal constants shared by every app's privacy policy.
+# support_section_updated: change this whenever _includes/privacy-support.html changes,
+# so every policy shows when its shared Support section last changed.
+support_section_updated: "9 October 2026"
