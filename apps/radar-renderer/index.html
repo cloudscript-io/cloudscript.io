@@ -27,7 +27,7 @@ image: /apps/radar-renderer/share-radar-legend.png
       <li><strong>Paste data:</strong> Paste data from a spreadsheet, CSV file or JSON file directly into the macro editor.</li>
       <li><strong>Upload a file:</strong> Upload a CSV or JSON file to the macro editor.</li>
     </ol>
-    <p>The macro accepts the two common blip-list formats: the BYOR-convention CSV and the radar.js JSON dialect. Your data is stored on your Confluence page (data is never sent to Cloudscript.io or any third party) and the chart is drawn in the reader's browser when the page is viewed.</p>
+    <p>The macro accepts the two common blip-list formats: the CSV convention of Thoughtworks' Build Your Own Radar (BYOR) and the radar.js JSON dialect of Zalando's tech-radar. Your data is stored on your Confluence page (data is never sent to Cloudscript.io or any third party) and the chart is drawn in the reader's browser when the page is viewed.</p>
     <p class="cta-row">
       <a class="btn btn-primary" href="https://marketplace.atlassian.com/apps/2543668212/tech-adoption-radar-for-confluence" target="_blank" rel="noopener">View on Marketplace</a>
     </p>
@@ -90,7 +90,7 @@ image: /apps/radar-renderer/share-radar-legend.png
 
 <h2 id="formats">Accepted Data Formats</h2>
     <h3>CSV (BYOR convention)</h3>
-    <p>A header row followed by one row per blip. Headers are matched in any letter case and any order; <code>name</code>, <code>ring</code> and <code>quadrant</code> are required, the rest optional. Ring names are fixed at Adopt, Trial, Assess and Hold, with Caution accepted as the published alternative to Hold, and are matched in any letter case (the lowercase <code>adopt</code> of the BYOR convention is kept exactly as you wrote it, in the table and in the stored list); quadrant names come from the data, the first four distinct <code>quadrant</code> values in the file naming the radar's quadrants in that order. Any column not listed below is kept with the row in your data, but ignored by the chart when displaying the Radar.</p>
+    <p>A header row followed by one row per blip, in the convention used by Thoughtworks' open-source Build Your Own Radar (BYOR) tool. Headers are matched in any letter case and any order; <code>name</code>, <code>ring</code> and <code>quadrant</code> are required, the rest optional. Ring names are fixed at Adopt, Trial, Assess and Hold, with Caution accepted as the published alternative to Hold, and are matched in any letter case (the lowercase <code>adopt</code> of the BYOR convention is kept exactly as you wrote it, in the table and in the stored list); quadrant names come from the data, the first four distinct <code>quadrant</code> values in the file naming the radar's quadrants in that order. Any column not listed below is kept with the row in your data, but ignored by the chart when displaying the Radar.</p>
     <div class="table-wrap">
     <table>
       <thead><tr><th>Column</th><th>Values</th><th>Notes</th></tr></thead>
@@ -119,7 +119,7 @@ image: /apps/radar-renderer/share-radar-legend.png
 }</code></pre>
     <p>The radar.js dialect comes from Zalando's open-source <a href="https://github.com/zalando/tech-radar" target="_blank" rel="noopener">tech-radar</a> project, so the title, quadrant and ring names, and entries of an existing Zalando radar carry across. Zalando's configuration is a JavaScript object passed to <code>radar_visualization()</code>, whereas the macro reads strict JSON: copy the object out and check that every key is in double quotes, with no comments and no trailing commas. Only <code>title</code>, the <code>quadrants</code> and <code>rings</code> names, and <code>entries</code> are read. Display settings (such as <code>colors</code>, the ring colours, <code>width</code>, <code>height</code> and <code>font_family</code>) are ignored without a note, because the macro draws with its own palette; set quadrant colours in the editor instead. Entry links follow the same-site rule above.</p>
     <p>A list that violates the required format still renders where possible: every placeable blip is drawn, and a collapsed note beneath the chart (for example, "2 notes about this blip list") lists each row or entry the parser could not honour, with the reason, such as an unknown ring value or an empty name.</p>
-    <p>Both accepted formats are published by open-source radar projects; Tech Adoption Radar for Confluence is an independent product and is not affiliated with or endorsed by the projects that publish them.</p>
+    <p>The CSV convention comes from Thoughtworks' Build Your Own Radar and the JSON dialect from Zalando's tech-radar. Tech Adoption Radar for Confluence is an independent product and is not affiliated with or endorsed by either project.</p>
 
     <h2>Downloading a file</h2>
     <p>Download hands back the stored list as a local file, named from the radar's title (<code>migration-radar-blips.csv</code> for a source titled "Migration Radar", or <code>tech-adoption-radar-blips.csv</code> when the source carries no title.  A JSON list downloads verbatim as <code>.json</code>). Downloaded CSV files are neutralised against formula injection.</p>
