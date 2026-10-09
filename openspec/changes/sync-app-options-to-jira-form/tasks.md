@@ -14,15 +14,17 @@ A task is complete only when its automated verification passes.
 
 ## 2. Review and commit (Natasha; Patrick reviews the workflow and token privilege)
 
-- [ ] 2.1 Review the change and commit it (author Natasha only, no trailer, per CLAUDE.md).
-- [ ] 2.2 Push to `main`. Expected: the jira-options-sync run fails at "Sync" with "Refusing a live run" until 3.3; nothing is written.
+- [x] 2.1 Review the change and commit it (author Natasha only, no trailer, per CLAUDE.md).
+- [x] 2.2 Push to `main`. Expected: the jira-options-sync run fails at "Sync" with "Refusing a live run" until 3.3; nothing is written.
 
 ## 3. One-off setup (Natasha; see scripts/jira-options-sync/README.md)
 
-- [ ] 3.1 Service account in a group holding *Administer Jira*.
-- [ ] 3.2 Scoped token: `read:field:jira`, `read:field.option:jira`, `write:field.option:jira` only; expiry set; renewal in the Obligations Register.
-- [ ] 3.3 GitHub Environment `jira` restricted to `main`, with `JIRA_BASE_URL` (gateway), `JIRA_API_TOKEN`, `JIRA_APP_FIELD_ID`, `JIRA_PROJECT_ID`.
-- [ ] 3.4 Manual dispatch with `dry_run` on. Pass: the job summary says "No changes".
-- [ ] 3.5 Manual dispatch with `dry_run` off. Pass: "No changes" and "Read-back verified".
+- [x] 3.1 Service account in a group holding *Administer Jira*.
+- [x] 3.2 Scoped token: `read:field:jira`, `read:field.option:jira`, `write:field.option:jira` only; expiry set; renewal in the Obligations Register.
+- [x] 3.3 GitHub Environment `jira` restricted to `main`, with `JIRA_BASE_URL` (gateway), `JIRA_API_TOKEN`, `JIRA_APP_FIELD_ID`, `JIRA_PROJECT_ID`.
+- [x] 3.4 Manual dispatch with `dry_run` on. Pass: the job summary says "No changes".
+- [x] 3.5 Manual dispatch with `dry_run` off. Pass: "No changes" and "Read-back verified".
+
+  Verified 2026-10-09 (Natasha): commit d1c1859 pushed; service account `jira-options-sync` with the Jira Administration app admin role only; token scoped to the three granular scopes, terminal checks 200 (options) and 401/403 (issue); Environment `jira` restricted to `main`; dry run and live run both Bearer, "No changes", live run "Read-back verified".
 - [ ] 3.6 First real write at the next app launch: the go-live push's run shows the create and "Read-back verified", and the app appears on the live form.
 - [ ] 3.7 Archive this change and move the spec to `openspec/specs/jira-app-options/`.

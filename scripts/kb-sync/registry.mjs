@@ -1,4 +1,7 @@
-// The app registry: one flat YAML file per app in _data/apps/. The files use a small, regular
+// The app registry: one flat YAML file per app in _data/apps/. Also imported by
+// scripts/jira-options-sync (the contact form's app dropdown), so a change here must keep both
+// test suites green; the registry rules both depend on are in CLAUDE.md §9, "Registry contract".
+// The files use a small, regular
 // subset of YAML (top-level `key: value` scalars, flow lists such as `[a, b]`, and one block list
 // of mappings, `documents:`), so they are read with the strict subset parser below instead of a
 // YAML dependency, as design task 2.1 allows. Anything outside that subset is an error naming
