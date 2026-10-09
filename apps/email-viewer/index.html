@@ -10,6 +10,8 @@ image: /apps/email-viewer/guide-hero.png
     <style>
       .prose figure.shot { margin: 1.6rem 0; }
       .prose figure.shot img { width: 100%; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #FFFFFF; }
+      .prose figure.shot video { width: 100%; height: auto; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #13243B; }
+      .prose figure.shot figcaption a { color: #2E6FE0; }
       .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
     </style>
     <h1>MSG/EML Email Viewer for Confluence</h1>
@@ -24,6 +26,16 @@ image: /apps/email-viewer/guide-hero.png
     <p class="cta-row">
       <a class="btn btn-primary" href="https://marketplace.atlassian.com/apps/2052211522/msg-eml-email-viewer-for-confluence" target="_blank" rel="noopener">View on Marketplace</a>
     </p>
+
+    <figure class="shot video" id="demo">
+      <video controls playsinline preload="metadata" width="1920" height="1080"
+             poster="demo-poster.jpg" aria-label="Demo video: the Confluence act of The Attachment (MSG/EML Email Viewer for Confluence)">
+        <source src="/apps/email-viewer-jira/demo.mp4#t=86.1" type="video/mp4">
+        <track kind="captions" src="/apps/email-viewer-jira/demo.vtt" srclang="en" label="English">
+        Your browser does not play embedded video. <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo&amp;t=86s" target="_blank" rel="noopener">Watch the demo on YouTube</a>.
+      </video>
+      <figcaption>The Confluence act of <em>The Attachment</em>, a two-minute film about an email nobody could open: the player starts at the macro (1:26); the <a href="/apps/email-viewer-jira/#demo">whole film is on the Jira page</a> and on <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo" target="_blank" rel="noopener">YouTube</a>. Captions are available from the player.</figcaption>
+    </figure>
 
     <figure>
       <img src="/apps/email-viewer/guide-hero.png" alt="An email attached to a Confluence page rendered as a card: a provenance strip reading &quot;Attached email&quot;, the subject with an EML badge, From, To and Date rows, the message body with an inline image, and two attachment tiles each with a Download link." width="768" height="477" loading="lazy">

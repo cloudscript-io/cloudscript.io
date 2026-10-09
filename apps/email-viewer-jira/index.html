@@ -10,6 +10,8 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
     <style>
       .prose figure.shot { margin: 1.6rem 0; }
       .prose figure.shot img { width: 100%; height: auto; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #FFFFFF; }
+      .prose figure.shot video { width: 100%; height: auto; display: block; border: 1px solid #E4EAF1; border-radius: 12px; background: #13243B; }
+      .prose figure.shot figcaption a { color: #2E6FE0; }
       .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
     </style>
     <h1>MSG/EML Email Viewer for Jira</h1>
@@ -24,6 +26,16 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
     <p class="cta-row">
       <a class="btn btn-primary" href="https://marketplace.atlassian.com/apps/463039643/msg-eml-email-viewer-for-jira" target="_blank" rel="noopener">View on Marketplace</a>
     </p>
+
+    <figure class="shot video" id="demo">
+      <video controls playsinline preload="metadata" width="1920" height="1080"
+             poster="demo-poster.jpg" aria-label="Demo video: The Attachment (MSG/EML Email Viewer for Jira)">
+        <source src="demo.mp4" type="video/mp4">
+        <track kind="captions" src="demo.vtt" srclang="en" label="English">
+        Your browser does not play embedded video. <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo" target="_blank" rel="noopener">Watch the demo on YouTube</a>.
+      </video>
+      <figcaption>The Attachment: a two-minute film about an email nobody could open, and how the same email reads on a Jira Service Management request, a Jira work item and a Confluence page. Captions are available from the player; the video is also on <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo" target="_blank" rel="noopener">YouTube</a>.</figcaption>
+    </figure>
 
     <figure class="shot">
       <img src="/apps/email-viewer-jira/guide-emails-tab.png" alt="The Emails tab on a Jira issue showing three attached emails: the first expanded as a full email card with subject, sender, recipients, date and body, and two more collapsed to single header rows ending in Show email. Beside the tab, the issue's right-hand column shows its detail fields and the expanded Attached emails group." width="1840" height="900" loading="lazy">

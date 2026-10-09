@@ -1,0 +1,141 @@
+WEBVTT
+
+NOTE Converted from demo-video-master.srt (MSG/EML Email Viewer for Jira · for Confluence, "The Attachment", 1:52).
+NOTE No cue settings: the film keeps its bottom 200 px clear of anything that matters, so the player's default position is right.
+
+1
+00:00:00.500 --> 00:00:02.050
+[the clock ticks]
+
+2
+00:00:02.200 --> 00:00:04.061
+The source of truth for what was agreed
+
+3
+00:00:04.061 --> 00:00:06.783
+is often an email, attached to a ticket
+as a file.
+
+4
+00:00:07.183 --> 00:00:09.898
+And getting at what is inside it
+is not easy.
+
+5
+00:00:22.048 --> 00:00:24.398
+[the clock stops]
+
+6
+00:00:24.548 --> 00:00:26.522
+It didn't have to be this way.
+
+7
+00:00:27.248 --> 00:00:29.198
+[tape rewinding]
+
+8
+00:00:29.498 --> 00:00:31.769
+Same ticket,
+with the app installed.
+
+9
+00:00:34.016 --> 00:00:36.722
+Open the Emails tab,
+and there are the minutes.
+
+10
+00:00:37.022 --> 00:00:43.606
+MSG/EML Email Viewer for Jira renders
+every attached .msg and .eml file
+
+11
+00:00:43.606 --> 00:00:45.880
+as a readable email card,
+attachments included.
+
+12
+00:00:46.080 --> 00:00:47.606
+And a file inside the email
+
+13
+00:00:47.606 --> 00:00:50.283
+can be attached to the ticket itself,
+with one click.
+
+14
+00:00:56.088 --> 00:00:58.321
+The app reads each email
+from your own Jira,
+
+15
+00:00:58.321 --> 00:01:00.455
+using the permissions
+of whoever is looking,
+
+16
+00:01:00.455 --> 00:01:03.170
+so nobody sees anything
+they weren't already allowed to.
+
+17
+00:01:03.170 --> 00:01:05.158
+It becomes readable
+in their web browser,
+
+18
+00:01:05.158 --> 00:01:07.592
+and the app does not store it
+anywhere else.
+
+19
+00:01:08.992 --> 00:01:12.540
+Beyond the service desk, the same app
+works on every Jira ticket.
+
+20
+00:01:12.740 --> 00:01:15.096
+The sidebar shows which emails
+are attached,
+
+21
+00:01:15.096 --> 00:01:17.007
+who attached them, and when.
+
+22
+00:01:17.466 --> 00:01:19.485
+The Emails tab renders them.
+
+23
+00:01:27.208 --> 00:01:30.010
+On Confluence, the email viewer
+is a macro:
+
+24
+00:01:30.010 --> 00:01:32.375
+insert it once,
+choose the attached email,
+
+25
+00:01:32.375 --> 00:01:35.378
+and it renders on the page,
+attachments included.
+
+26
+00:01:36.768 --> 00:01:39.364
+In Jira there is nothing to set up;
+
+27
+00:01:39.364 --> 00:01:42.160
+on Confluence, you decide
+where the email appears.
+
+28
+00:01:43.110 --> 00:01:48.046
+MSG/EML Email Viewer,
+for Jira, and for Confluence.
+
+29
+00:01:48.046 --> 00:01:51.322
+Two new Cloudscript Apps
+on the Atlassian Marketplace.
+
