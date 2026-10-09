@@ -1,0 +1,68 @@
+# jira-options-sync: keep the "Which app is this about?" options on the Cloudscript Support
+# contact form in step with the app registry. See scripts/jira-options-sync/README.md and the
+# OpenSpec change openspec/changes/sync-app-options-to-jira-form/.
+#
+# Separate from kb-sync on purpose (design D2): it needs a Jira credential that kb-sync must not
+# see, so it runs in its own GitHub Environment, `jira` (restricted to main), whose secrets are
+# created by hand. A push to main that changes a registry file or this sync runs it live; manual
+# dispatch defaults to a dry run that prints the intended writes and writes nothing. Until the
+# secrets exist a live run is refused and the job fails, on purpose.
+name: jira-options-sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "_data/apps/*.yml"
+      - "scripts/jira-options-sync/**"
+      - "scripts/kb-sync/registry.mjs"
+      - ".github/workflows/jira-options-sync.yml"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: read Jira and print every intended write without writing"
+        type: boolean
+        default: true
+
+# Read the repository, nothing else. The workflow never writes to GitHub.
+permissions:
+  contents: read
+
+concurrency:
+  group: jira-options-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync app options to the contact form
+    runs-on: ubuntu-latest
+    environment: jira
+    timeout-minutes: 5
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node 22
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+
+      # No npm install: the sync and its tests use Node built-ins only.
+      - name: Run the sync tests
+        run: node --test tests/jira-options-sync/*.test.mjs
+
+      # Secrets reach the script as environment variables and nowhere else. An unset
+      # JIRA_USER_EMAIL secret arrives as an empty string, which selects Bearer auth (the scoped
+      # service-account token of design D3); set, it selects Basic.
+      - name: Sync
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_APP_FIELD_ID: ${{ secrets.JIRA_APP_FIELD_ID }}
+          JIRA_PROJECT_ID: ${{ secrets.JIRA_PROJECT_ID }}
+          JIRA_OPTIONS_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == true && '1' || '0' }}
+        run: node scripts/jira-options-sync/sync.mjs
