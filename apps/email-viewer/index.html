@@ -29,21 +29,21 @@ image: /apps/email-viewer/guide-hero.png
 
     <figure class="shot video" id="demo">
       <video controls playsinline preload="metadata" width="1920" height="1080"
-             poster="demo-poster.jpg" aria-label="Demo video: the Confluence act of The Attachment (MSG/EML Email Viewer for Confluence)">
+             poster="demo-poster.jpg" aria-label="Demo video: the Confluence section from The Attachment (MSG/EML Email Viewer for Confluence)">
         <source src="/apps/email-viewer-jira/demo.mp4#t=86.1" type="video/mp4">
         <track kind="captions" src="/apps/email-viewer-jira/demo.vtt" srclang="en" label="English">
         Your browser does not play embedded video. <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo&amp;t=86s" target="_blank" rel="noopener">Watch the demo on YouTube</a>.
       </video>
-      <figcaption>The Confluence act of <em>The Attachment</em>, a two-minute film about an email nobody could open: the player starts at the macro (1:26); the <a href="/apps/email-viewer-jira/#demo">whole film is on the Jira page</a> and on <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo" target="_blank" rel="noopener">YouTube</a>. Captions are available from the player.</figcaption>
+      <figcaption>The Confluence section from The Attachment, a two-minute film about an email nobody could open: the player starts from the section showing the Confluence macro (1:26). Watch the <a href="/apps/email-viewer-jira/#demo">whole film on the Jira page</a> or on <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo" target="_blank" rel="noopener">YouTube</a>.</figcaption>
     </figure>
+
+    <h2>Adding an email to a page</h2>
+    <p>Edit a Confluence page and insert the <strong>MSG/EML Email Viewer for Confluence</strong> macro, either from the macro browser or by typing <code>/</code> in the editor and part of the macro's name. The macro opens its configuration panel, titled <strong>Email attachment</strong>. Choose a <code>.msg</code> or <code>.eml</code> file already attached to the page, or drop one onto the panel to attach it, then save the macro and publish the page. The email renders when the page is viewed. Each macro shows one email; a page can hold as many macros as you need, and each one fetches, parses and renders on its own, so one email that will not render leaves the others untouched.</p>
 
     <figure>
       <img src="/apps/email-viewer/guide-hero.png" alt="An email attached to a Confluence page rendered as a card: a provenance strip reading &quot;Attached email&quot;, the subject with an EML badge, From, To and Date rows, the message body with an inline image, and two attachment tiles each with a Download link." width="768" height="477" loading="lazy">
       <figcaption>A .eml attachment rendered in place: provenance strip, header rows, body and attachment tiles.</figcaption>
     </figure>
-
-    <h2>Adding an email to a page</h2>
-    <p>Edit a Confluence page and insert the <strong>MSG/EML Email Viewer for Confluence</strong> macro, either from the macro browser or by typing <code>/</code> in the editor and part of the macro's name. The macro opens its configuration panel, titled <strong>Email attachment</strong>. Choose a <code>.msg</code> or <code>.eml</code> file already attached to the page, or drop one onto the panel to attach it, then save the macro and publish the page. The email renders when the page is viewed. Each macro shows one email; a page can hold as many macros as you need, and each one fetches, parses and renders on its own, so one email that will not render leaves the others untouched.</p>
 
     <h2>The configuration panel</h2>
     <p>The panel is one surface. Its subtitle states the choice: "Choose one .msg or .eml file attached to this page, or upload one. The macro renders it in place." Beneath it, a framed list headed <strong>Email attachments on this page</strong> shows the page's <code>.msg</code> and <code>.eml</code> attachments with their size and attachment date, newest first, with the count in the heading and a <strong>Refresh</strong> control beside it. Files of any other type are not listed. Selecting a row selects the email; the list is a single-select group, so arrow keys move through it and the whole list is one tab stop.</p>

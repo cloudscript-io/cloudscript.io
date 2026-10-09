@@ -34,16 +34,16 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
         <track kind="captions" src="demo.vtt" srclang="en" label="English">
         Your browser does not play embedded video. <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo" target="_blank" rel="noopener">Watch the demo on YouTube</a>.
       </video>
-      <figcaption>The Attachment: a two-minute film about an email nobody could open, and how the same email reads on a Jira Service Management request, a Jira work item and a Confluence page. Captions are available from the player; the video is also on <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo" target="_blank" rel="noopener">YouTube</a>.</figcaption>
+      <figcaption>The Attachment: a two-minute film about an email nobody could open, and how the same email reads on a Jira Service Management request, a Jira work item and a Confluence page. You can also watch (and like!) the video on <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo" target="_blank" rel="noopener">YouTube</a>.</figcaption>
     </figure>
+
+    <h2>Reading an email on an issue</h2>
+    <p>Open the issue and choose the <strong>Emails</strong> tab. It is in the issue's Activity section, reachable by Jira's own control in whichever layout Jira renders for you, and it needs no admin, project or per-issue action to be there. The tab lists every <code>.msg</code> and <code>.eml</code> file attached to the issue, newest attached first, and renders each one as its own card. The first card opens expanded; the rest are collapsed to a single header row carrying a format label, the subject, the sender and the sent date as the file records them, and the action <strong>Show email</strong>. Choosing the row expands that card (the action then reads <strong>Hide email</strong>), and the file is not fetched again to do so. Every card is fetched and rendered independently, so a file that cannot be displayed leaves the others untouched. An issue with no email files shows the single line "This issue has no email attachments." and nothing else.</p>
 
     <figure class="shot">
       <img src="/apps/email-viewer-jira/guide-emails-tab.png" alt="The Emails tab on a Jira issue showing three attached emails: the first expanded as a full email card with subject, sender, recipients, date and body, and two more collapsed to single header rows ending in Show email. Beside the tab, the issue's right-hand column shows its detail fields and the expanded Attached emails group." width="1840" height="900" loading="lazy">
       <figcaption>The Emails tab on an issue with three attached emails: one expanded as a full card, two collapsed to header rows.</figcaption>
     </figure>
-
-    <h2>Reading an email on an issue</h2>
-    <p>Open the issue and choose the <strong>Emails</strong> tab. It is in the issue's Activity section, reachable by Jira's own control in whichever layout Jira renders for you, and it needs no admin, project or per-issue action to be there. The tab lists every <code>.msg</code> and <code>.eml</code> file attached to the issue, newest attached first, and renders each one as its own card. The first card opens expanded; the rest are collapsed to a single header row carrying a format label, the subject, the sender and the sent date as the file records them, and the action <strong>Show email</strong>. Choosing the row expands that card (the action then reads <strong>Hide email</strong>), and the file is not fetched again to do so. Every card is fetched and rendered independently, so a file that cannot be displayed leaves the others untouched. An issue with no email files shows the single line "This issue has no email attachments." and nothing else.</p>
 
     <p>Opening the tab changes nothing on the issue. The app holds no settings anywhere, so the tab looks the same for every user who can see the issue and the same on an issue nobody has opened before. The one thing the app can add to an issue is a file you choose to attach from inside a rendered email, described under <a href="#attach">Attaching a file from an email to the work item</a>.</p>
 
