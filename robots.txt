@@ -1,0 +1,14 @@
+# robots.txt for cloudscript.io
+#
+# Decision recorded 13 October 2026: every crawler is welcome on every page, including AI
+# training crawlers (GPTBot, ClaudeBot, Google-Extended, CCBot) and AI retrieval crawlers.
+# We are a small vendor, and it matters more to us that search engines and AI assistants
+# know these apps exist and how they work than that public documentation stays out of
+# training sets. Please do not add per-crawler groups or blocking rules here without
+# revisiting that decision. A page that should stay out of search results carries a
+# noindex tag instead, which a crawler can only see if it is allowed to fetch the page.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://cloudscript.io/sitemap.xml

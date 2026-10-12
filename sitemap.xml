@@ -1,0 +1,26 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="UTF-8"?>
+{% comment %}
+  Sitemap, hand-authored in Liquid so it needs no jekyll-sitemap plugin (the site runs
+  plugin-free; CLAUDE.md §5), the same pattern as news/feed.xml. Every URL is on
+  site.canonical_url (the apex), so each <loc> equals that page's <link rel="canonical">.
+
+  Listed: every built HTML page (site.html_pages) and every news post. Left out: a page whose
+  front matter says `noindex: true` or `sitemap: false`, and 404.html. Standalone HTML files
+  with no front matter (share/index.html) are static files, not pages, so they never appear.
+  <lastmod> is given for posts only: a page has no reliable modification date without a
+  plugin, and a wrong date is worse than none.
+{% endcomment %}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{%- assign sitemap_pages = site.html_pages | sort: "url" -%}
+{%- for p in sitemap_pages -%}
+{%- if p.noindex or p.sitemap == false or p.name == "404.html" %}{% continue %}{% endif %}
+  <url><loc>{{ site.canonical_url }}{{ p.url | xml_escape }}</loc></url>
+{%- endfor -%}
+{%- for post in site.posts -%}
+{%- if post.noindex or post.sitemap == false %}{% continue %}{% endif %}
+  <url><loc>{{ site.canonical_url }}{{ post.url | xml_escape }}</loc><lastmod>{{ post.date | date_to_xmlschema }}</lastmod></url>
+{%- endfor %}
+</urlset>
