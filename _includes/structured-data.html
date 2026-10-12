@@ -1,0 +1,70 @@
+{%- comment -%}
+  Structured data (schema.org JSON-LD), included once in the <head> of _layouts/default.html.
+  At most one block per page, and nothing at all on pages that are neither of these:
+
+  - The home page: Organization and WebSite. `sameAs` lists only profiles the site footer
+    already links (Marketplace vendor page, LinkedIn Page, YouTube channel); keep the two in
+    step, and add nothing here that the site does not link.
+  - A live app's guide page (apps/<slug>/index.html whose registry entry in
+    _data/apps/<slug>.yml has status: live): SoftwareApplication, built only from that entry
+    and site config. No price, rating, review or install count: the registry holds none, and
+    we do not publish invented figures (CLAUDE.md §6).
+
+  Every value goes through `jsonify` and then has "</" rewritten to "<\/", so a registry
+  string containing "</script>" cannot close the block early. Both spellings are the same
+  JSON string. Any value added here must carry the same two filters.
+{%- endcomment -%}
+{%- assign sd_dir = page.dir | split: "/" -%}
+{%- if page.url == "/" %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": {{ site.title | jsonify | replace: "</", "<\/" }},
+        "url": {{ site.canonical_url | jsonify | replace: "</", "<\/" }},
+        "logo": {{ site.canonical_url | append: "/assets/img/logo-email.png" | jsonify | replace: "</", "<\/" }},
+        "sameAs": [
+          {{ "https://marketplace.atlassian.com/vendors/1211952" | jsonify | replace: "</", "<\/" }},
+          {{ "https://www.linkedin.com/company/cloudscript-io" | jsonify | replace: "</", "<\/" }},
+          {{ "https://www.youtube.com/channel/UCY0sqWRE1kHUklr5UyUy1sg" | jsonify | replace: "</", "<\/" }}
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "name": {{ site.title | jsonify | replace: "</", "<\/" }},
+        "url": {{ site.canonical_url | jsonify | replace: "</", "<\/" }}
+      }
+    ]
+  }
+  </script>
+{%- elsif page.name == "index.html" and sd_dir.size == 3 and sd_dir[1] == "apps" -%}
+  {%- assign sd_slug = sd_dir[2] -%}
+  {%- assign sd_app = site.data.apps[sd_slug] -%}
+  {%- if sd_app and sd_app.status == "live" %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": {{ sd_app.name | jsonify | replace: "</", "<\/" }},
+    "description": {{ sd_app.description | jsonify | replace: "</", "<\/" }},
+    "url": {{ site.canonical_url | append: page.url | jsonify | replace: "</", "<\/" }},
+    "applicationCategory": {{ "BusinessApplication" | jsonify | replace: "</", "<\/" }},
+    "operatingSystem": {{ "Atlassian " | append: sd_app.product | append: " Cloud" | jsonify | replace: "</", "<\/" }},
+    {%- if sd_app.feature_image %}
+    "image": {{ site.canonical_url | append: sd_app.feature_image | jsonify | replace: "</", "<\/" }},
+    {%- endif %}
+    {%- if sd_app.marketplace_url %}
+    "installUrl": {{ sd_app.marketplace_url | jsonify | replace: "</", "<\/" }},
+    "sameAs": {{ sd_app.marketplace_url | jsonify | replace: "</", "<\/" }},
+    {%- endif %}
+    "publisher": {
+      "@type": "Organization",
+      "name": {{ site.title | jsonify | replace: "</", "<\/" }},
+      "url": {{ site.canonical_url | jsonify | replace: "</", "<\/" }}
+    }
+  }
+  </script>
+  {%- endif -%}
+{%- endif -%}

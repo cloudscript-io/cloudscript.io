@@ -31,6 +31,7 @@
   <meta name="twitter:title" content="{{ og_title }}">
   <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
   {% if share_image %}<meta name="twitter:image" content="{{ site.canonical_url }}{{ share_image }}">{% endif %}
+  {%- include structured-data.html %}
 
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
