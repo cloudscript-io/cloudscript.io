@@ -13,21 +13,24 @@
     in a page's front matter to choose which image represents that page; without it, no
     og:image is emitted (unfurlers fall back to their own heuristics, as before).
     Use a raster image (PNG/JPG, ideally ~1200x630) — most unfurlers don't render SVG.
+    The canonical, og:url and both image URLs are built on site.canonical_url (the apex),
+    not with absolute_url: that filter uses site.url, which stays on www for the feeds
+    (see _config.yml). `image:` values must therefore be root-relative paths.
   {% endcomment %}
   {% if page.title and page.title != "" %}{% assign og_title = page.title | append: " — CloudScript.io" %}{% else %}{% assign og_title = site.title %}{% endif %}
   {% assign share_image = page.image | default: site.default_image %}
-  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="canonical" href="{{ site.canonical_url }}{{ page.url }}">
   <meta property="og:type" content="{% if page.layout == "post" %}article{% else %}website{% endif %}">
   {% if page.layout == "post" %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
   <meta property="og:site_name" content="CloudScript.io">
   <meta property="og:title" content="{{ og_title }}">
   <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
-  <meta property="og:url" content="{{ page.url | absolute_url }}">
-  {% if share_image %}<meta property="og:image" content="{{ share_image | absolute_url }}">{% endif %}
+  <meta property="og:url" content="{{ site.canonical_url }}{{ page.url }}">
+  {% if share_image %}<meta property="og:image" content="{{ site.canonical_url }}{{ share_image }}">{% endif %}
   <meta name="twitter:card" content="{% if share_image %}summary_large_image{% else %}summary{% endif %}">
   <meta name="twitter:title" content="{{ og_title }}">
   <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
-  {% if share_image %}<meta name="twitter:image" content="{{ share_image | absolute_url }}">{% endif %}
+  {% if share_image %}<meta name="twitter:image" content="{{ site.canonical_url }}{{ share_image }}">{% endif %}
 
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">

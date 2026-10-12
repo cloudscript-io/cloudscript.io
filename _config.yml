@@ -6,6 +6,15 @@ title: CloudScript.io
 description: "CloudScript.io builds practical, purpose-driven apps for the Atlassian ecosystem. Each asks only for the access its job needs, each backed by clear documentation and a plain-English privacy policy."
 url: https://www.cloudscript.io
 
+# The canonical host: the apex, which `www` redirects to (no trailing slash). Used for
+# <link rel="canonical">, og:url, og:image and twitter:image in _layouts/default.html, for
+# sitemap.xml and for the structured data in _includes/structured-data.html, each as
+# canonical_url + a root-relative path. robots.txt names the same host literally.
+# DO NOT change `url:` above to match. Both Atom feeds (news/feed.xml, news/linkedin.xml)
+# build every entry <id> from `url:`, and the Zapier -> LinkedIn Page Zap keys on <id>:
+# changing it would make every past news item look new and re-post it to the LinkedIn Page.
+canonical_url: https://cloudscript.io
+
 # Fallback link-preview image for any page without its own `image:` front matter
 # (homepage, /news, /about, /trust, /support, /security, the Mermaid guide, 404).
 # Vendor-level by design: a page that can show its own screenshot should set `image:`
