@@ -24,5 +24,10 @@
       "Bash(wget *)",
       "Read(./.env*)"
     ]
+  },
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
   }
 }
