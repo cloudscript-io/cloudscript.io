@@ -37,7 +37,7 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
       <figcaption>The Attachment: a two-minute film about an email nobody could open, and how the same email reads on a Jira Service Management request, a Jira work item and a Confluence page. You can also watch (and like!) the video on <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo" target="_blank" rel="noopener">YouTube</a>.</figcaption>
     </figure>
 
-    <h2>Reading an email on an issue</h2>
+    <h2 id="reading-an-email-on-an-issue">Reading an email on an issue</h2>
     <p>Open the issue and choose the <strong>Emails</strong> tab. It is in the issue's Activity section, reachable by Jira's own control in whichever layout Jira renders for you, and it needs no admin, project or per-issue action to be there. The tab lists every <code>.msg</code> and <code>.eml</code> file attached to the issue, newest attached first, and renders each one as its own card. The first card opens expanded; the rest are collapsed to a single header row carrying a format label, the subject, the sender and the sent date as the file records them, and the action <strong>Show email</strong>. Choosing the row expands that card (the action then reads <strong>Hide email</strong>), and the file is not fetched again to do so. Every card is fetched and rendered independently, so a file that cannot be displayed leaves the others untouched. An issue with no email files shows the single line "This issue has no email attachments." and nothing else.</p>
 
     <figure class="shot">
@@ -47,7 +47,7 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
 
     <p>Opening the tab changes nothing on the issue. The app holds no settings anywhere, so the tab looks the same for every user who can see the issue and the same on an issue nobody has opened before. The one thing the app can add to an issue is a file you choose to attach from inside a rendered email, described under <a href="#attach">Attaching a file from an email to the work item</a>.</p>
 
-    <h2>The Attached emails group</h2>
+    <h2 id="the-attached-emails-group">The Attached emails group</h2>
     <p>The right sidebar carries a collapsible group headed <strong>Attached emails</strong>. While the group is collapsed its header carries a count of the <code>.msg</code> and <code>.eml</code> files attached to the issue, computed from the attachment filenames alone with no file read; when the count is zero the header carries no count. Expanding the group shows three things in order: a count line, "3 emails attached:" (or "1 email attached:" for a single file); an index with one row per email file, newest attached first, the same order as the tab; and a pointer line, "Read them in the Emails tab." (or "Read it in the Emails tab."). For an issue with no email files the body shows "This issue has no email attachments." alone, with no index and no pointer line.</p>
 
     <p>Each index row is two lines. The first is the filename, kept to one line: a long name is shortened in the middle so that its <code>.msg</code> or <code>.eml</code> ending stays visible, and the whole name shows as a tooltip. The second, smaller and grey, reads "Attached 11 Sept 2026, 17:02 by A. Reader": the date and time the file was attached to the issue, and the display name of the person who attached it, exactly as Jira's own listing gives them to you. "Attached" and "by" always accompany their values, so the date is never the email's send date and the name is never its sender. Where Jira supplies no display name the line reads "Attached 11 Sept 2026, 17:02", and where the sidebar is too narrow for the whole line the name is dropped and returns when there is room. The rows are labels: nothing in the group is a link or a control, a click on a row goes nowhere and stores nothing, and no email content (no subject, sender or send date) appears there. Rendering happens in one place, the Emails tab.</p>
@@ -59,7 +59,7 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
       <figcaption>The expanded Attached emails group: the count line, one row per attached email, and the pointer to the Emails tab.</figcaption>
     </figure>
 
-    <h2>The email card</h2>
+    <h2 id="the-email-card">The email card</h2>
     <p>Each card sits in a frame that names the attachment's filename as Jira lists it now. Inside the frame, the card shows the subject with a format label, the sender and recipients as the file records them, the sent date, the body, and the message's own attachments. The format label comes from the file's contents once it is parsed; until then the header row carries the verdict of the format check described under Security and privacy, and no label at all where that check could not classify the file.</p>
 
     <p>Images the message carries inside itself as <code>cid:</code> parts are resolved from the file's own bytes and displayed with no network request. Remote images are blocked when the card renders; a control on the card shows them for that one view. The choice is not stored anywhere and does not apply to any other reader, so the next view of the issue starts blocked again. Across the whole sequence of listing, fetching, rendering, downloading and attaching, the app's frames make no request to any host outside Atlassian's own domains.</p>
@@ -80,15 +80,15 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
       <figcaption>The attachments at the foot of a rendered email card, each with Download and Attach to work item, and Attach all 3 files in the heading.</figcaption>
     </figure>
 
-    <h2>Which files are shown</h2>
+    <h2 id="which-files-are-shown">Which files are shown</h2>
     <p>A file is listed when its name ends in <code>.msg</code> or <code>.eml</code>, in any letter case. The same test drives the tab, the sidebar count and the sidebar index, so the three never disagree, and all of them agree with the issue's own attachment list: a file Jira shows as attached is shown here too. A file named <code>.msg</code> or <code>.eml</code> that is not an email is still listed, and its card shows the unreadable-file state after parsing instead of a plausible-looking empty message. The app reads one message per file; mailbox and archive formats (<code>.mbox</code>, <code>.pst</code>, <code>.olm</code>) are not listed.</p>
 
-    <h2>Permissions</h2>
+    <h2 id="permissions">Permissions</h2>
     <p>Every read the app makes runs as the person viewing the issue, so Jira decides what each person may see and the app never widens it. A viewer without browse permission on the issue sees "This issue has no email attachments." in the tab and in the sidebar body, and no count on the sidebar header, the same as an issue that carries no emails; no filename, display name or refusal detail is shown in either case. On the byte path, a file that was deleted after the tab listed it and a file the viewer is refused produce the same card, worded identically, so the card confirms nothing about a file the viewer may not see. The index lists an email attachment for exactly the viewers Jira's own attachment listing lists it for, and shows each file's name, attached date and uploader's display name exactly as Jira's own REST answer gives them to that reader.</p>
 
     <p>Attaching a file from an email runs under Jira's Create Attachments permission for the work item, as described above, and is the only write the app makes.</p>
 
-    <h2>Jira Service Management</h2>
+    <h2 id="jira-service-management">Jira Service Management</h2>
     <p>In Jira Service Management the app is for agents and other internal users. The Emails tab and the Attached emails group are present on requests in the agent view as on any other issue, with nothing to enable. A customer using the portal sees no part of it: the portal shows a customer the request's description and public comments, and never the work item's attachments or any surface in its Activity section. Files an agent attaches to the work item from an email are not shown to the customer either (observed 11 and 18 September 2026); to share one with a customer, the agent attaches it to a public reply, as for any other file.</p>
 
     <p>An email attached to an internal note is visible according to Jira's attachment permissions; the note's own visibility setting does not govern it. Jira attachments belong to the issue: a restriction on an internal comment hides the comment's text, and a user who can browse the issue sees the file in Jira's own Attachments panel and can download it. The app shows that viewer exactly the set of email files Jira's Attachments panel shows them, never more and never fewer, and makes such a file easier to read than a download does.</p>
@@ -100,10 +100,10 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
       <figcaption>The Emails tab open on a Jira Service Management request in the agent view.</figcaption>
     </figure>
 
-    <h2>Licensing</h2>
+    <h2 id="licensing">Licensing</h2>
     <p>The app is licensed per site through the Atlassian Marketplace. While a site's licence is inactive, the Emails tab and the sidebar body each show a notice titled "An active licence is required." with the line "Ask a Jira administrator to restore the licence for MSG/EML Email Viewer for Jira under Manage apps." and, after "For more information see", a link to this page. The licence check runs before any listing or fetch: under an inactive licence no attachment is listed, no bytes are requested, nothing is parsed, the sidebar shows no count and no index, and no attach button exists. The tab itself still appears in the Activity section, because Jira does not let an app hide an Activity tab by licence state; the gating is inside the tab.</p>
 
-    <h2>Known limitations</h2>
+    <h2 id="known-limitations">Known limitations</h2>
     <p>Where a file runs into one of these, the tab shows a card in its place naming what happened.</p>
 
     <p><strong>The app renders emails already attached to the issue.</strong> It connects to no mailbox, holds no mail credentials and imports nothing: there is no Microsoft Graph integration, no IMAP and no scheduled import. Whether a request raised by email carries its original as an attachment depends on how your mail flow attaches it; the app adds nothing to an issue on its own.</p>
@@ -152,7 +152,7 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
     </ul>
     <p>After <strong>Attach all 3 files</strong>, the header shows the counts that apply, in this order: "3 attached", "1 not accepted", "1 not permitted", "1 blocked by the app's permissions", "1 not confirmed", "1 failed", "2 not attempted".</p>
 
-    <h2>Security and privacy</h2>
+    <h2 id="security-and-privacy">Security and privacy</h2>
     <p>The app runs as a Custom UI app inside its own sandboxed iframe. Two Forge functions run on Atlassian-hosted compute: the listing, which the Emails tab and the sidebar body invoke when they open, and the count, which Jira invokes for the sidebar header. Both derive the issue from the Forge invocation context and read nothing a browser could send, both call Jira's REST API as the viewing user, and neither can act as the app. The listing returns metadata only (for each email file its id, filename, size, MIME type, the date it was attached, the uploader's display name and a format verdict, and for every attachment on the issue its name and size); the count returns a number. Of the uploader's Jira record the listing carries the display name and nothing else: no account id, no email address, no avatar. Each function writes one structured log line per call carrying booleans, the issue id, the response status and the count, and on a caught error the error's class name; never a filename, a message body, an account id or a display name.</p>
 
     <p>The format verdict is the one read of email content that happens outside your browser. For each listed file within the size cap, the listing function requests the first 1,024 bytes from Jira as the viewing user, accepts only a partial-content response (a response carrying the whole file is discarded without reading its body), classifies the bytes as <code>.msg</code>, <code>.eml</code> or unknown, and discards them in the same call. For a <code>.eml</code> file that first kilobyte is where the message headers sit. The bytes are never returned to the browser, never logged and never stored, and a check that cannot run leaves the file listed with no verdict; it never removes a file from the list. Expanding the sidebar group calls the same listing, so the check runs for the index exactly as for the tab; the sidebar body itself fetches no bytes and parses nothing.</p>
@@ -165,7 +165,7 @@ description: "Renders the .msg and .eml files attached to a Jira issue as email 
 
     {% include release-history.html app="email-viewer-jira" %}
 
-    <h2>Legal</h2>
+    <h2 id="legal">Legal</h2>
     <p>Terms and privacy specific to this app:</p>
     <ul>
       <li><a href="/apps/email-viewer-jira/terms">Terms of Service</a></li>

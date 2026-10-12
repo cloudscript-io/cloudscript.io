@@ -42,7 +42,7 @@ image: /apps/radar-renderer/share-radar-legend.png
       <figcaption>A two-minute tour of the app. Captions are available from the player; the video is also on <a href="https://www.youtube.com/watch?v=X9wxTSpgqzw" target="_blank" rel="noopener">YouTube</a>.</figcaption>
     </figure>
 
-    <h2>Adding a radar</h2>
+    <h2 id="adding-a-radar">Adding a radar</h2>
     <p>Edit a Confluence page and insert the <strong>Tech Adoption Radar</strong> macro, either by typing <code>/radar</code> in the editor or by choosing it from the macro browser. (The macro is listed as Tech Adoption Radar in the editor; under an administrator's Manage apps it appears by its full name, Tech Adoption Radar for Confluence.) The macro editor opens on a table seeded with three example rows spanning three rings, three quadrants and three movement states, one of them carrying a description and a link. Replace the examples with your own technologies using one of the three methods described below, then save the macro and publish the page.</p>
 
     <figure class="shot">
@@ -50,7 +50,7 @@ image: /apps/radar-renderer/share-radar-legend.png
       <figcaption>A new macro's editor: the quadrant panel expanded above three example rows, the second expanded.</figcaption>
     </figure>
 
-    <h2>Enter Data in a Table</h2>
+    <h2 id="enter-data-in-a-table">Enter Data in a Table</h2>
     <p>The macro editor opens in Table View. The upper Panel, titled <strong>Quadrant names &amp; colours</strong>, defines the Radar's four quadrant names and colours and can be collapsed/expanded by clicking on the panel title. Below this panel, a table defines each blip on the radar.</p>
       <p>Use the <strong>Quadrant names &amp; colours</strong> panel to define Quadrant names via the name field, and to update quadrant colours via the dropdown for each quadrant. Each quadrant must have a unique name. Renaming a quadrant rewrites the quadrant of every row that used the old name in one pass.</p>
       <p>Use the table directly below the Quadrant Panel to define a blip list containing your technologies. Each table row corresponds to one blip on the radar, with columns <strong>Name</strong>, <strong>Ring</strong>, <strong>Quadrant</strong> and <strong>Move</strong>. When specifying the <strong>Ring</strong> for a blip, choose from the dropdown containing options Adopt, Trial, Assess and Hold (these options cannot be modified by a user). Specify a <strong>Quadrant</strong> using the dropdown in this column, you can modify Quadrant names from the panel above the table. The <strong>Move</strong> column indicates if a blip's position on the radar is unchanged, new to the radar, moved inwards or moved outwards since the last edition (–, New, In, Out). Movement must be declared by the Radar author, rather than calculated from history. Each table row can be expanded (via the chevron at the start of the row) to allow a user to enter a multi-line <strong>Description</strong> and a <strong>Link</strong> to a same-site Confluence page. Where a description and link are provided, these are shown on the blip's hover card in the Radar. To remove a blip, delete a row via the bin icon at the end of the row. Use the <strong>+ Add row</strong> option to create additional rows. Save with the <strong>Save</strong> button (or Cmd/Ctrl+Enter) and cancel with the <strong>Cancel</strong> button (or Escape).</p>
@@ -67,7 +67,7 @@ image: /apps/radar-renderer/share-radar-legend.png
       <figcaption>The same radar in Text View: the canonical CSV, one line per blip, with Download CSV in the footer.</figcaption>
     </figure>
 
-    <h2>Pasting Data</h2><h3>Pasting Data: From a Spreadsheet</h3>
+    <h2 id="pasting-data">Pasting Data</h2><h3>Pasting Data: From a Spreadsheet</h3>
     <p>Most radars start life in a spreadsheet, so the macro editor accepts one directly. Select the required rows in your spreadsheet, copy them, and then paste anywhere in the macro editor. The tab-separated text that every spreadsheet places on the clipboard is recognised as a list rather than a single value, so your data will be automatically added to the correct rows and columns in the macro editor's table. A notice reports what happened (for example, "Pasted spreadsheet recognised — 12 rows added"). If the first row you copied is a header row naming <code>name</code>, <code>ring</code> and <code>quadrant</code>, columns are matched by header in any letter case and any order; otherwise the columns are read positionally as Name, Ring, Quadrant, isNew, Description, Status and Link. Pasting data over the example rows replaces them; pasting data into a list you have already edited appends the new rows after the existing ones in the order you copied them. A pasted ring or quadrant value that the radar does not recognise (for example, a ring called "Evaluate") is not remapped: data is retained but a message below the table indicates that the row "needs attention", and the radar will only render it once you have picked a value from the available dropdown options. A single copied value, with no tab and no line break, pastes into the focused cell as normal.</p>
 
     <figure class="shot">
@@ -85,7 +85,7 @@ image: /apps/radar-renderer/share-radar-legend.png
 
  <h3>Pasting Data: CSV format</h3>
  <p>CSV data with a header row can be pasted in either Table View or Text View; CSV without a header row should be pasted in Text View. Data pasted in CSV format can be edited as text in Text View or, more easily, by editing individual table cells in Table View. Your data can be downloaded as a CSV file via the <strong>Download CSV</strong> button available in both Table View and Text View of the macro editor.</p>
-    <h2>Uploading Data</h2>
+    <h2 id="uploading-data">Uploading Data</h2>
         <p>An <strong>Upload</strong> button in both Text View and Table View allows you to upload a file containing data. Files must be in .csv, .json, or .txt format. Data in CSV format will be displayed in Table View and data in radar.js JSON format will be displayed in Text View (regardless of which view it was uploaded from). Data in an uploaded file replaces any existing data. A file that does not contain a valid blip-list CSV or a valid radar.js list, or that is larger than 512 KiB is rejected and existing data is not overwritten.</p>
 
 <h2 id="formats">Accepted Data Formats</h2>
@@ -121,10 +121,10 @@ image: /apps/radar-renderer/share-radar-legend.png
     <p>A list that violates the required format still renders where possible: every placeable blip is drawn, and a collapsed note beneath the chart (for example, "2 notes about this blip list") lists each row or entry the parser could not honour, with the reason, such as an unknown ring value or an empty name.</p>
     <p>The CSV convention comes from Thoughtworks' Build Your Own Radar and the JSON dialect from Zalando's tech-radar. Tech Adoption Radar for Confluence is an independent product and is not affiliated with or endorsed by either project.</p>
 
-    <h2>Downloading a file</h2>
+    <h2 id="downloading-a-file">Downloading a file</h2>
     <p>Download hands back the stored list as a local file, named from the radar's title (<code>migration-radar-blips.csv</code> for a source titled "Migration Radar", or <code>tech-adoption-radar-blips.csv</code> when the source carries no title.  A JSON list downloads verbatim as <code>.json</code>). Downloaded CSV files are neutralised against formula injection.</p>
 
-    <h2>The 400-blip limit and the crowding warning</h2>
+    <h2 id="the-400-blip-limit-and-the-crowding-warning">The 400-blip limit and the crowding warning</h2>
     <p>A radar can display a maximum of 400 blips. In Table View, the 400 limit is enforced during data entry (at 400 rows, "+ Add row" is disabled). Where data containing more than 400 blips is pasted or uploaded, data is truncated to its first 400 rows in the order they appear in your file, with a warning naming the limit and the number of rows discarded.</p>
     <p>Below the 400 blip limit, a quadrant can still be too crowded to draw every blip without overlap. When this happens, the Radar displays a warning that names the affected quadrant and the number of blips not drawn, and the per-blip detail stays in the collapsed notes ("3 blips in Platforms are not shown: that area is too crowded to place them without overlap. They are numbered and named in the legend below."). The undrawn blips keep their numbers and appear in the legend.</p>
 
@@ -133,7 +133,7 @@ image: /apps/radar-renderer/share-radar-legend.png
       <figcaption>The on-figure crowding warning, naming the quadrant and the number of blips not drawn.</figcaption>
     </figure>
 
-    <h2>Viewing the Radar</h2>
+    <h2 id="viewing-the-radar">Viewing the Radar</h2>
     <p>Blips are numbered by quadrant, ring and name, with numbering displayed on the Radar and blip status indicated by the shape of blip. A legend below the radar displays both blip name and status. Hovering a blip (or tapping it, on touch) opens a card with the blip's number, name, movement and description; Escape or tapping elsewhere dismisses it.</p>
     <p>Confluence's page history can be used to track blip movement; for example, moving one technology from Trial to Adopt will be visible as an edit in the page history.</p>
     <p>Where a blip contains a valid value in the <strong>Link</strong> field (the <code>link</code> column in CSV, the <code>link</code> field in JSON), the blip's hover card gains an <strong>Open in Confluence</strong> button. Clicking this button, or the blip itself, opens the target in a new tab. Links for blips are also keyboard-reachable (focus shows the card; Enter or Space opens the link).</p>
@@ -143,7 +143,7 @@ image: /apps/radar-renderer/share-radar-legend.png
       <figcaption>A linked blip's hover card, with the Open in Confluence button.</figcaption>
     </figure>
 
-    <h2>Downloading an image of the radar</h2>
+    <h2 id="downloading-an-image-of-the-radar">Downloading an image of the radar</h2>
     <p>On the top right of the chart, the <strong>Download SVG</strong> and <strong>Download PNG</strong> buttons produce an image of the rendered radar that shows the chart, the movement key, the caption, and the numbered legend displaying blip names grouped by quadrant and ring exactly as seen on the Confluence page. The SVG is self-contained, with styles inlined; the PNG is rasterised at twice the chart's pixel dimensions. The filename is the radar's title as a slug (<code>migration-radar.svg</code> for a source titled "Migration Radar"), or <code>tech-adoption-radar</code> when the source carries no title.</p>
 
     <figure class="shot">
@@ -151,7 +151,7 @@ image: /apps/radar-renderer/share-radar-legend.png
       <figcaption>A downloaded PNG, with the numbered key beneath the chart.</figcaption>
     </figure>
 
-    <h2>Page exports (PDF, Word and Markdown)</h2>
+    <h2 id="page-exports-pdf-word-and-markdown">Page exports (PDF, Word and Markdown)</h2>
     <p>Using Confluence's Export Page to PDF function exports your Confluence page with the rendered chart and legend as seen in your browser (the quadrant cards, the movement key and the numbered legend). Because the capture shows the chart rather than a data table, per-blip descriptions and link URLs (hover detail on the live page) do not appear in the exported PDF. If these are required, export the page to Word instead.</p>
 
     <figure class="shot">
@@ -168,7 +168,7 @@ image: /apps/radar-renderer/share-radar-legend.png
 
 <p>Confluence's Export to Markdown does not export the macro's table or the Radar. Where a Markdown copy of the list is needed, download the CSV from the macro editor, or export the page to Word and copy the table.</p>
 
-    <h2>Known limitations</h2>
+    <h2 id="known-limitations">Known limitations</h2>
     <p><strong>Word exports display a table, not a chart.</strong> The Word export contains the structured blip table as described above. An image of the chart is available via the on-page Download SVG and Download PNG buttons, and pasting one into a Word document is a manual step. Alternatively, exporting a Confluence page as a PDF can be used where a page export containing the chart is needed.</p>
     <p><strong>PDF exports contain the chart, but do not include hover details.</strong> The exported PDF shows the page at rest, so per-blip descriptions and link URLs (which the live page shows on hover) appear in the Word export's table but not in the PDF.</p>
     <p><strong>Markdown exports carry neither.</strong> See Page exports above; the CSV download (available from the macro editor) can be used to obtain a portable copy of the list.</p>
@@ -190,14 +190,14 @@ image: /apps/radar-renderer/share-radar-legend.png
     </ul>
     <p>The unreadable and internal-error cards carry the rendering engine's version in a small footer. Please quote this if you need to contact support.</p>
 
-    <h2>Security and privacy</h2>
+    <h2 id="security-and-privacy">Security and privacy</h2>
     <p>The macro runs as a Custom UI app inside its own sandboxed iframe: the blip list is parsed and the chart drawn in the viewer's browser, and no blip data is sent to Cloudscript.io or any third party. The app requests no Confluence permissions (the manifest declares <code>scopes: []</code>), declares no external network destinations, keeps no storage of its own, and runs no analytics. The blip list, the optional format override and the colour selections are stored as the macro's parameters inside your own Confluence page content, governed by ordinary page permissions, page history and Confluence's own data lifecycle.</p>
     <p>The editor's file and clipboard handling stays inside the browser as well. An uploaded file is read with the browser's own file reader and checked against the size cap before its contents can touch the list; an Excel workbook is recognised by its extension and its file signature and refused without being parsed. Spreadsheet paste prefers the plain tab-separated text the clipboard carries, and falls back to the clipboard's HTML table only when no usable text is present, parsing it as an inert document from which only cell text is read, so no script in a pasted table can run. Names and descriptions entering by any route (typed, pasted or uploaded) are neutralised on render and on export exactly as before: HTML in a label is inert, and bidirectional and zero-width characters are neutralised in display.</p>
     <p>Full detail can be found in the app's <a href="/apps/radar-renderer/privacy">Privacy Policy</a>, and our broader approach is described in the <a href="/security">Security Policy</a> and <a href="/trust">Trust Center</a>.</p>
 
     {% include release-history.html app="radar-renderer" %}
 
-    <h2>Legal</h2>
+    <h2 id="legal">Legal</h2>
     <p>Terms and privacy specific to this app:</p>
     <ul>
       <li><a href="/apps/radar-renderer/terms">Terms of Service</a></li>

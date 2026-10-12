@@ -89,12 +89,19 @@ only from that app's registry entry and site config, with no price, rating or re
 
 ### Requirement: Guide sections are addressable
 
-Every `<h2>` in `apps/*/index.html` SHALL have an `id` unique within its page, and the IDs
-`attach`, `page-exports`, `mermaid-versions` and `formats` SHALL remain on their current headings.
+Every `<h2>` in `apps/*/index.html` SHALL be addressable: it SHALL have an `id` unique within
+its page, unless its enclosing `<section>` already has an `id`, in which case the `<h2>` SHALL
+NOT carry an `id` of its own (the section's `id` addresses it). The IDs `attach`,
+`page-exports`, `mermaid-versions` and `formats` SHALL remain on their current headings.
 
 #### Scenario: Deep link to a section
 - **GIVEN** the Mermaid guide's "Layout engines (ELK)" heading
 - **THEN** it has an `id` and `https://cloudscript.io/apps/mermaid/#<id>` scrolls to it
+
+#### Scenario: Heading inside a section that already has an id
+- **GIVEN** the Page Sharing guide, where every `<h2>` sits inside a `<section>` with an `id` (`how`, `data-flow`, `publisher`, `subscriber`, `space-admin`, `admin`, `faq`)
+- **THEN** each such `<h2>` has no `id` of its own and its enclosing `<section>` has one
+- **AND** `https://cloudscript.io/apps/page-sharing/#<section id>` scrolls to that section
 
 #### Scenario: Knowledge base unaffected
 - **GIVEN** the guides with new heading IDs

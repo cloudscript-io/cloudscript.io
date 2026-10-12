@@ -78,6 +78,14 @@ the page append `-2`, `-3`. Existing IDs (`attach`, `page-exports`, `mermaid-ver
 may already be linked. The Legal heading becomes `id="legal"`. `<h3>` is out of scope.
 These are hand edits to hand-authored HTML (no build step may rewrite pages, CLAUDE.md §5).
 
+Exemption (Natasha, 13 Oct 2026): an `<h2>` whose enclosing `<section>` already has an `id`
+gets no id of its own. The section id already addresses that place, and a second, longer id
+on the heading inside it would be a duplicate address to keep stable for ever. Today this
+covers all seven `<h2>`s in `apps/page-sharing/index.html`, whose sections are `how`,
+`data-flow`, `publisher`, `subscriber`, `space-admin`, `admin` and `faq`, so Page Sharing gets
+no heading-id additions. "Enclosing" means the nearest `<section>` ancestor; an `<h2>` inside a
+`<section>` with no id is not exempt and gets an id by the rule above.
+
 kb-sync impact: `convert.mjs` carries only table-cell attributes into storage format, so heading
 IDs should not change any page body or content hash. A kb-sync dry run proves it before push.
 

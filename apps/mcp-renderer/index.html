@@ -23,7 +23,7 @@ image: /apps/mcp-renderer/guide-rendered-server-json.png
       <a class="btn btn-primary" href="https://marketplace.atlassian.com/apps/2358641825/cloudscript-renderer-for-mcp-documentation" target="_blank" rel="noopener">View on Marketplace</a>
     </p>
 
-    <h2>Inserting the macro</h2>
+    <h2 id="inserting-the-macro">Inserting the macro</h2>
     <p>Edit a Confluence page and insert the macro titled <strong>MCP Server Documentation</strong>, either by typing <code>/mcp</code> in the editor or by choosing it from the macro browser, where it also answers to searches for "model context protocol", "server" and "tools". To place documentation for several servers on one page, add a separate macro for each: every macro holds and renders its own pasted source independently.</p>
 
         <figure class="shot">
@@ -31,7 +31,7 @@ image: /apps/mcp-renderer/guide-rendered-server-json.png
       <figcaption>Insert the macro from the editor: search "mcp" or any of its other search terms in the macro browser.</figcaption>
     </figure>
 
-    <h2>Pasting a server.json or tools/list result</h2>
+    <h2 id="pasting-a-server-json-or-tools-list-result">Pasting a server.json or tools/list result</h2>
     <p>Open the macro's configuration and paste your MCP artefact into the editor, which shows the placeholder text "Paste your server.json or tools/list JSON here…" until you do. The renderer detects which of the two formats you pasted, in this precedence order: a <code>server.json</code> document (identified by its <code>$schema</code> or by its overall shape), then a <code>tools/list</code> result (bare or wrapped in a JSON-RPC envelope), then a JSON-RPC error object, then anything else as a generic, unrecognised document. A live status line above the editor reads "Detected format: " followed by <code>server.json</code>, <code>tools/list result</code>, <code>JSON-RPC error response</code>, <code>unrecognised (generic view)</code>, <code>invalid JSON</code>, or <code>nothing pasted yet</code>, so you can see what the renderer made of your paste as you edit.</p>
     <p>If detection picks the wrong format for an ambiguous paste, a <strong>Format override</strong> select beside the detected-format line lets you force it: <code>Auto-detect</code>, <code>server.json</code>, or <code>tools/list</code>. Choosing a specific format bypasses detection entirely and parses your paste that way; choosing <code>Auto-detect</code> (the default) hands the decision back to the precedence order above.</p>
 
@@ -40,10 +40,10 @@ image: /apps/mcp-renderer/guide-rendered-server-json.png
       <figcaption>The configuration editor: paste your JSON, and the detected-format line and size meter update as you type.</figcaption>
     </figure>
 
-    <h2>The sample document</h2>
+    <h2 id="the-sample-document">The sample document</h2>
     <p>An empty macro offers a one-click sample: a "Load a sample server.json" link appears beneath the editor whenever the draft is empty. It loads a small, synthetic <code>com.example/sample-server</code> entry with a package, a secret-bearing environment variable, and a remote, so a first render succeeds within seconds and gives you a working document to replace with your own paste.</p>
 
-    <h2>What renders</h2>
+    <h2 id="what-renders">What renders</h2>
     <p>A parsed <code>server.json</code> renders as a header block (name, description, version and schema declaration), one labelled section per package with its environment-variable and argument tables, and a remotes table where the document declares any. A parsed <code>tools/list</code> result renders one capability card per tool, each with its description, a nested parameter table built from the tool's <code>inputSchema</code>, and a collapsed raw-JSON view with its own copy button. Any field neither format's mapping recognises still renders, in a generic key-value section, instead of being dropped silently.</p>
 
         <figure class="shot">
@@ -67,15 +67,15 @@ image: /apps/mcp-renderer/guide-rendered-server-json.png
       <figcaption>Three or more capability cards adds a summary panel with an annotation legend.</figcaption>
     </figure>
 
-    <h2>Editing and re-rendering</h2>
+    <h2 id="editing-and-re-rendering">Editing and re-rendering</h2>
     <p>The pasted source is the one canonical copy: editing the macro and saving replaces it, and the page re-renders from the new source the next time it is viewed. Re-opening the editor always shows your stored source back, unchanged. A copy affordance in the top-right corner of the edit zone places the current draft on the clipboard byte-for-byte, including any characters the rendered view would otherwise strip - this is the one surface where the unedited paste survives.</p>
     <p>The editor saves on Cmd+Enter (macOS) or Ctrl+Enter, and cancels on Escape, from anywhere inside the configuration panel; a hint in the actions row states the shortcut for your platform. Saving is disabled while your draft is over the size limit, and the editor panel fills the height Confluence gives it, so there is no dead space in the dialog at any Confluence-provided size.</p>
 
-    <h2>Exporting to PDF and Word</h2>
+    <h2 id="exporting-to-pdf-and-word">Exporting to PDF and Word</h2>
     <p>Because the live document is drawn in your browser when the page is viewed, exporting the page to PDF or Word, or viewing its version history, runs a separate, stateless transform that reproduces the same content as native document structure: headings, tables and code blocks, not a flattened image. Tool annotation pills export as their plain label; the summary panel, its legend and the caution line export too, in the same order they render on the page, for documents that meet the three-card threshold.</p>
     <p>If the stored source no longer parses as JSON at export time, the export falls back to that raw source in a code block instead of producing a blank page. If the macro has no stored source at all, the export is a short explanatory paragraph instead of an empty frame. An export can never be blank.</p>
 
-    <h2>Edge cases and limits</h2>
+    <h2 id="edge-cases-and-limits">Edge cases and limits</h2>
     <p>Each edge case renders a specific, readable message in place of a blank or broken frame:</p>
     <ul>
       <li><strong>Empty.</strong> An unconfigured macro reads "No MCP document yet." and points you at the editor's sample document.</li>
@@ -101,7 +101,7 @@ image: /apps/mcp-renderer/guide-rendered-server-json.png
       <figcaption>Source over 512 KiB is rejected before parsing, with the limit enforced in both the editor and the live page.</figcaption>
     </figure>
 
-    <h2>String hygiene and disclosure</h2>
+    <h2 id="string-hygiene-and-disclosure">String hygiene and disclosure</h2>
     <p>Every string in a pasted document is treated as untrusted. Script tags, HTML and markdown syntax inside a pasted name, description or field render as plain visible text, never as HTML - so a hostile paste cannot inject a live element onto your page. A URL becomes a clickable link only when it parses as an <code>http</code> or <code>https</code> address; every other scheme, including <code>javascript:</code> and <code>data:</code>, renders as inert text instead.</p>
     <p>Unicode bidirectional-override and zero-width characters, which can visually reverse text or hide characters from a reviewer, are stripped from every rendered string before display. When a paste actually contains any, the rendered page carries a plain info notice disclosing it: "Control characters (bidirectional overrides or zero-width characters) were removed from the rendered text. The stored source is unchanged." Nothing is silently normalised without that disclosure, and the underlying stored source itself is never altered - only the rendered display and the copy button that follows it are affected. The editor's own copy affordance, described above, is the one place the untouched paste is available verbatim.</p>
 
@@ -110,16 +110,16 @@ image: /apps/mcp-renderer/guide-rendered-server-json.png
       <figcaption>When a paste contains invisible bidirectional or zero-width characters, the renderer strips them and discloses it plainly.</figcaption>
     </figure>
 
-    <h2>Security and privacy</h2>
+    <h2 id="security-and-privacy">Security and privacy</h2>
     <p>The app requests no Confluence or Jira permissions at all: its manifest declares an empty scope list, so it cannot read your pages, modify content, or see account or directory data beyond what you paste into its own configuration. It declares no external network destination of any kind, and it operates no storage of its own - the pasted source lives only in the macro's own configuration on your Confluence page, and rendering happens client-side, in your browser, when the page is viewed.</p>
     <p>One narrow exception applies. When a page is exported to PDF or Word, or its history is viewed, a single stateless, server-side function reads the pasted source from that request only, to reproduce the same document as native content (see "Exporting to PDF and Word" above); it stores nothing and makes no network call of its own. Links you click open through Confluence's own host application, which is your browser's navigation carried out by the host, not a request the app makes itself. For the full detail, see the <a href="/apps/mcp-renderer/privacy">Privacy Policy</a>; our broader posture is described on the <a href="/security">Security</a> and <a href="/trust">Trust Center</a> pages.</p>
 
-    <h2>About MCP</h2>
+    <h2 id="about-mcp">About MCP</h2>
     <p>Cloudscript Renderer for MCP Documentation is an independent tool and is not affiliated with, or endorsed by, the Model Context Protocol project. It does not implement the protocol and does not connect to any MCP server; it renders documents you paste into it. Model Context Protocol® and MCP™ are marks of their respective owners. Learn more about the protocol at <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">modelcontextprotocol.io</a>.</p>
 
     {% include release-history.html app="mcp-renderer" %}
 
-    <h2>Legal</h2>
+    <h2 id="legal">Legal</h2>
     <p>Terms and privacy specific to this app:</p>
     <ul>
       <li><a href="/apps/mcp-renderer/terms">Terms of Service</a></li>
