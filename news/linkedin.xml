@@ -21,8 +21,8 @@ layout: null
   og:image for posts created through it (confirmed 7 Sep 2026: Post Inspector showed the
   image, the Zapier-created post did not).
 
-  Zap configuration as shipped (7 Sep 2026), LinkedIn Pages "Create Company Update":
-    Update Content = Description + "\n\nFull release notes: " + ID
+  Zap configuration (shipped 7 Sep 2026; v2 published 12 Oct 2026), LinkedIn Pages "Create Company Update":
+    Update Content = Description + "\n\nRead more: " + ID   (was "Full release notes: " until 12 Oct 2026)
     Image Type     = post_media          Image = Link Enclosure
     Media URL, Preview Title, Preview Description = empty
   Zapier flattens the two <link> elements into one space-joined "Link" value, so the article

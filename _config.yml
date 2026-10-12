@@ -51,3 +51,9 @@ exclude:
   - tests/
   # OpenSpec change proposals, designs and task lists are internal design documents.
   - openspec/
+
+# RFC 9116 security contact file at /.well-known/security.txt (Contact, Expires, Policy).
+# Jekyll drops dot-directories unless they are listed here. The Expires date is refreshed
+# annually (Obligations Register row).
+include:
+  - .well-known
