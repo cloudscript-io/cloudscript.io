@@ -82,12 +82,20 @@ completion report.
 
 ## 9. Live verification (after Natasha pushes)
 
-- [ ] 9.1 `curl -sI https://cloudscript.io/robots.txt` and `/sitemap.xml`: 200 and sensible
+- [x] 9.1 `curl -sI https://cloudscript.io/robots.txt` and `/sitemap.xml`: 200 and sensible
       `content-type`; `curl -s` both and confirm they match the build.
+      Checked 13 Oct 2026 with a browser `fetch` (`cache: no-store`), not curl, which
+      `.claude/settings.json` denies to Claude Code. Both 200, `text/plain; charset=utf-8` and
+      `application/xml`. robots.txt is byte-identical to the build; sitemap.xml is identical
+      once the build's `<lastmod>` offsets are `+00:00` (sha256 compared for both).
 - [ ] 9.2 `curl -sI https://www.cloudscript.io/support`: a 301 to `https://cloudscript.io/support`.
-- [ ] 9.3 Canonical on the live `/`, `/support`, `/apps/mermaid/` and one post equals the apex URL.
-- [ ] 9.4 The kb-sync and jira-options-sync runs for the push are green, and the kb-sync log
+      Open. The browser lands on `https://cloudscript.io/support`, so the redirect works, but
+      the 301 status itself can only be read with curl (Natasha).
+- [x] 9.3 Canonical on the live `/`, `/support`, `/apps/mermaid/` and one post equals the apex URL.
+- [x] 9.4 The kb-sync and jira-options-sync runs for the push are green, and the kb-sync log
       reports no page updates.
+      kb-sync run 38327142560 for `5afd197`: green, all eight pages `unchanged`.
+      jira-options-sync did not run, as expected: no registry or sync path changed.
 - [ ] 9.5 The Zapier LinkedIn Zap shows no new runs triggered by the push (Natasha checks; Claude
       Code cannot see Zapier).
 - [ ] 9.6 Owner, optional: submit the sitemap in Google Search Console and Bing Webmaster Tools.
