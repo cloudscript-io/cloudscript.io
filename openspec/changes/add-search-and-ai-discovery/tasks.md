@@ -88,9 +88,8 @@ completion report.
       `.claude/settings.json` denies to Claude Code. Both 200, `text/plain; charset=utf-8` and
       `application/xml`. robots.txt is byte-identical to the build; sitemap.xml is identical
       once the build's `<lastmod>` offsets are `+00:00` (sha256 compared for both).
-- [ ] 9.2 `curl -sI https://www.cloudscript.io/support`: a 301 to `https://cloudscript.io/support`.
-      Open. The browser lands on `https://cloudscript.io/support`, so the redirect works, but
-      the 301 status itself can only be read with curl (Natasha).
+- [x] 9.2 `curl -sI https://www.cloudscript.io/support`: a 301 to `https://cloudscript.io/support`.
+      Run by Natasha, 13 Oct 2026: `HTTP/2 301`, `location: https://cloudscript.io/support`.
 - [x] 9.3 Canonical on the live `/`, `/support`, `/apps/mermaid/` and one post equals the apex URL.
 - [x] 9.4 The kb-sync and jira-options-sync runs for the push are green, and the kb-sync log
       reports no page updates.
