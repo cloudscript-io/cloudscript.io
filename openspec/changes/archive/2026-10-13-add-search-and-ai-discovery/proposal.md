@@ -37,8 +37,9 @@ crawler documentation uses it. It can be added later at negligible cost if that 
 - **Structured data**: one include, `_includes/structured-data.html`, emitted from
   `_layouts/default.html`: a `SoftwareApplication` JSON-LD block on each live app's guide page,
   built from its registry entry, and an `Organization` + `WebSite` block on the home page.
-- **Section anchors**: every `<h2>` in `apps/*/index.html` carries a stable, unique `id`; the four
-  existing IDs are kept unchanged.
+- **Section anchors**: every `<h2>` in `apps/*/index.html` carries a stable, unique `id`, unless
+  its enclosing `<section>` already has an `id`, in which case the `<h2>` gets none (the D5
+  exemption: Page Sharing); the four existing IDs are kept unchanged.
 - **Docs**: CLAUDE.md §4 (repo structure) and §9 (publish checklist) and PROJECT_STATUS.md record
   the new files and the rules for new pages.
 - **Not changing**: `url:` in `_config.yml`, `news/feed.xml`, `news/linkedin.xml`, page copy,

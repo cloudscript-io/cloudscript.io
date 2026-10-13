@@ -50,8 +50,9 @@ completion report.
 
 ## 5. Section anchors (D5)
 
-- [x] 5.1 Add an `id` to every `<h2>` in `apps/*/index.html` per the D5 rule, keeping the four
-      existing IDs. No other edits to those files.
+- [x] 5.1 Add an `id` to every `<h2>` in `apps/*/index.html` per the D5 rule, unless its
+      enclosing `<section>` already has an `id`, in which case the `<h2>` gets none (the D5
+      exemption: Page Sharing), keeping the four existing IDs. No other edits to those files.
 - [x] 5.2 Verify: `git diff --stat apps/` shows only `index.html` files; `git diff apps/` contains
       only `id="..."` additions on `<h2>` lines (state how this was checked).
 - [x] 5.3 Verify kb-sync impact offline: recompute each guide's content hash as in 0.3 and confirm
@@ -95,6 +96,9 @@ completion report.
       reports no page updates.
       kb-sync run 38327142560 for `5afd197`: green, all eight pages `unchanged`.
       jira-options-sync did not run, as expected: no registry or sync path changed.
-- [ ] 9.5 The Zapier LinkedIn Zap shows no new runs triggered by the push (Natasha checks; Claude
+- [x] 9.5 The Zapier LinkedIn Zap shows no new runs triggered by the push (Natasha checks; Claude
       Code cannot see Zapier).
-- [ ] 9.6 Owner, optional: submit the sitemap in Google Search Console and Bing Webmaster Tools.
+      Confirmed by Natasha, 13 Oct 2026: the LinkedIn Zap had no runs triggered by the push.
+- [x] 9.6 Owner, optional: submit the sitemap in Google Search Console and Bing Webmaster Tools.
+      Submitted by Natasha, 13 Oct 2026: `https://cloudscript.io/sitemap.xml` in both (Bing
+      verified with `/BingSiteAuth.xml`, commit `68a2c64`).
