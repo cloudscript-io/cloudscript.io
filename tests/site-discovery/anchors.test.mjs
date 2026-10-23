@@ -14,7 +14,7 @@ const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const LEGACY = [
   ["apps/email-viewer-jira/index.html", "attach", "Attaching a file from an email to the work item"],
   ["apps/email-viewer/index.html", "page-exports", "Page exports (PDF and Word)"],
-  ["apps/mermaid/index.html", "mermaid-versions", "Supported Mermaid versions"],
+  ["apps/mermaid/index.html", "mermaid-versions", "Supported engines"],
   ["apps/radar-renderer/index.html", "formats", "Accepted Data Formats"],
 ];
 const PAGE_SHARING_SECTIONS = ["how", "data-flow", "publisher", "subscriber", "space-admin", "admin", "faq"];
@@ -78,7 +78,7 @@ test("the Legal heading is #legal wherever a guide has one", () => {
 
 test("scenario: deep link to a section (Mermaid, Layout engines)", () => {
   const rel = "apps/mermaid/index.html";
-  const heading = headings(read(rel)).find((h) => h.text === "Layout engines (ELK)");
+  const heading = headings(read(rel)).find((h) => h.text === "Layout engines (Dagre and ELK)");
   assert.ok(heading, "the heading is on the built page");
   assert.match(heading.id ?? "", ID);
   assert.equal(idsOf(read(rel)).filter((id) => id === heading.id).length, 1, `#${heading.id} names one element`);

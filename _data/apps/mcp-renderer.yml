@@ -13,6 +13,7 @@ featured: false
 platform: Forge
 product: Confluence
 description: Renders a pasted MCP Registry server.json or tools/list result as structured, readable Confluence documentation. The source stays canonical and re-renders on edit. Zero scopes, zero egress, no app-side storage.
+structured_description: "Confluence Cloud macro that renders a pasted MCP Registry server.json or tools/list result as structured documentation, with capability cards, parameter tables and a table of contents. Rendered in the browser with no permissions, no egress and no app-side storage. Built on Atlassian Forge."
 marketplace_url: https://marketplace.atlassian.com/apps/2358641825/cloudscript-renderer-for-mcp-documentation
 badges: [runs-on-atlassian]
 stores_personal_data: "No"

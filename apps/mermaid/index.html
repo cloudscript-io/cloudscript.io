@@ -1,7 +1,8 @@
 ---
 layout: default
 title: "CloudScript Mermaid Diagrams for Confluence"
-description: "CloudScript Mermaid Diagrams for Confluence — render Mermaid diagrams inline on a Confluence Cloud page. Description, full user guide, terms and privacy."
+description: "CloudScript Mermaid Diagrams for Confluence — render Mermaid diagrams inline on a Confluence Cloud page, with Mermaid 12, Mermaid 11 or Pele, including diagrams that follow dark mode. Description, full user guide, terms and privacy."
+image: /apps/mermaid/share-pele-radar.png
 ---
 
 <div class="page wrap">
@@ -14,52 +15,226 @@ description: "CloudScript Mermaid Diagrams for Confluence — render Mermaid dia
     <h1>CloudScript Mermaid Diagrams for Confluence</h1>
     {% include trust-badges.html app="mermaid" %}
 
-    <p>CloudScript Mermaid Diagrams for Confluence lets you write <a href="https://mermaid.js.org/">Mermaid</a> diagram code directly on a Confluence page and have it display as a diagram in place. It is a Confluence Cloud app built on Atlassian Forge. Each diagram is rendered in the browser when the page is viewed.</p>
+    <p>CloudScript Mermaid Diagrams for Confluence lets you write <a href="https://mermaid.js.org/">Mermaid</a> diagram code directly on a Confluence page and have it display as a diagram in place. It is a Confluence Cloud app built on Atlassian Forge. Each diagram is rendered in the browser when the page is viewed, by one of three engines: Mermaid 12, Mermaid 11 or Pele. A diagram drawn with Pele follows the reader's light or dark mode and can carry Confluence's colours or a theme of your own.</p>
 
     <p class="cta-row">
       <a class="btn btn-primary" href="https://marketplace.atlassian.com/apps/1219878/cloudscript-mermaid-diagrams-for-confluence" target="_blank" rel="noopener">View on Marketplace</a>
     </p>
 
     <h2 id="adding-a-diagram">Adding a diagram</h2>
-    <p>Edit a Confluence page, insert the <strong>Mermaid Diagram</strong> macro (type <code>/Mermaid</code> in the editor, or choose it from the macro list), then open the macro's configuration panel and enter your Mermaid code. The settings underneath the code let you give the diagram a title and choose its theme, look and layout. You can also choose which Mermaid version draws the diagram and whether the diagram source is shown beneath it. Save the macro and publish the page, and the diagram is rendered when the page is viewed.</p>
-    <p>To show several diagrams on one page, add a separate Mermaid Diagram macro for each one. Each macro holds and renders its own diagram independently, with its own settings and its own Mermaid version.</p>
+    <p>Edit a Confluence page, insert the <strong>Mermaid Diagram</strong> macro (type <code>/Mermaid</code> in the editor, or choose it from the macro list), then open the macro's configuration panel and enter your Mermaid code. Above the code you can give the diagram a title. Underneath it you choose which engine draws the diagram (<strong>Draw with</strong>), then that engine's own settings: Theme, Look and Layout for Mermaid 12 or Mermaid 11, or a Diagram colour and optional Pele CSS for Pele. A checkbox shows the diagram source beneath the diagram. Save the macro and publish the page, and the diagram is rendered when the page is viewed.</p>
+    <p>To show several diagrams on one page, add a separate Mermaid Diagram macro for each one. Each macro holds and renders its own diagram independently, with its own settings and its own engine.</p>
 
     <h2 id="configuration-options">Configuration options</h2>
-    <p>The macro's configuration panel has the diagram source at the top and the diagram's settings underneath it.</p>
-    <figure class="shot">
-      <img src="/apps/mermaid/share-editor-redux-colour.png" alt="The Mermaid diagram configuration panel beside its result: flowchart source with front matter setting the theme, look and layout, the Title, Theme, Look, Layout and Version controls set to Redux colour, Neo, ELK and Mermaid 12, and the rendered order-processing flowchart." width="1840" height="900" loading="lazy">
-      <figcaption>The configuration panel and the diagram it produces. The Theme, Look and Layout controls match the front matter at the top of the source.</figcaption>
-    </figure>
-    <p>The <strong>diagram source</strong> is a text box where you paste or write your Mermaid code (for example <code>graph TD</code> followed by your nodes and edges).</p>
-    <p><strong>Title</strong>, <strong>Theme</strong>, <strong>Look</strong> and <strong>Layout</strong> are a visual editor for the diagram's front matter, which is the block of YAML settings between two <code>---</code> lines at the top of a Mermaid diagram. Changing one of these controls writes the setting into the front matter in the source box, and editing the front matter by hand updates the controls, so the two always agree. Any other front matter settings or comments you have written yourself are left untouched.</p>
+    <p>The macro's configuration panel is laid out top to bottom: Diagram title, the diagram source, Draw with, the settings of the chosen engine, Show source below diagram, then Save and Cancel. The panel follows Confluence's light or dark mode.</p>
+    <p><strong>Diagram title</strong> adds a heading above the diagram on your Confluence page. Leave it empty if you don't want one. The title is stored in the diagram's front matter as <code>title:</code>, so you can also set it in the code if you prefer.</p>
+    <p>The <strong>diagram source</strong> is the text box where you paste or write your Mermaid code (for example <code>graph TD</code> followed by your nodes and edges). A diagram copied out of a Markdown note with its code fence (a first line of <code>```mermaid</code> and a last line of <code>```</code>) works as pasted, because every engine ignores the fence.</p>
+    <p><strong>Draw with</strong> chooses the engine that draws this diagram: <code>Mermaid 12 (latest)</code>, <code>Mermaid 11</code> or <code>Pele</code>. The bundled versions are shown beside it. See <a href="#mermaid-versions">Supported engines</a> below. Switching engine changes nothing in your code, so a diagram moved to Pele and back keeps every setting it had.</p>
+
+    <h3>Mermaid settings</h3>
+    <p>With Mermaid 12 or Mermaid 11 selected, <strong>Theme</strong>, <strong>Look</strong> and <strong>Layout</strong> are a visual editor for the diagram's front matter, which is the block of YAML settings between two <code>---</code> lines at the top of a Mermaid diagram. Changing one of these controls writes the setting into the front matter in the source box, and editing the front matter by hand updates the controls, so the two always agree. Any other front matter settings or comments you have written yourself are left untouched.</p>
     <ul>
-      <li><strong>Title</strong> adds a heading above the diagram. Leave it empty for no title.</li>
-      <li><strong>Theme</strong> controls the diagram's colours. The options are <code>Automatic</code>, <code>Default</code>, <code>Neutral</code>, <code>Dark</code>, <code>Forest</code>, <code>Neo</code>, <code>Neo dark</code>, <code>Redux</code>, <code>Redux dark</code>, <code>Redux colour</code>, <code>Redux dark colour</code> and <code>Custom colours</code>.</li>
+      <li><strong>Theme</strong> controls the diagram's colours. The options are <code>Automatic</code>, <code>Mermaid default</code>, <code>Neutral</code>, <code>Dark</code>, <code>Forest</code>, <code>Neo</code>, <code>Neo dark</code>, <code>Redux</code>, <code>Redux dark</code>, <code>Redux colour</code>, <code>Redux dark colour</code> and <code>Custom colours</code>. <code>Mermaid default</code> is Mermaid's own theme named "default".</li>
       <li><strong>Look</strong> controls the drawing style. The options are <code>Automatic</code>, <code>Classic</code>, <code>Hand-drawn</code> and <code>Neo</code>.</li>
-      <li><strong>Layout</strong> controls how nodes are arranged. The options are <code>Automatic</code> and <code>ELK</code>.</li>
+      <li><strong>Layout</strong> controls how nodes are arranged. The options are <code>Automatic</code>, <code>Dagre</code> and <code>ELK</code>.</li>
     </ul>
     <p><code>Automatic</code> means the setting is left out of the front matter, so Mermaid chooses whatever suits the diagram type. This matters most for Mermaid 12, where diagram types such as flowcharts and swimlanes bring their own theme and look.</p>
-    <p>Choosing the <code>Custom colours</code> theme reveals four colour settings (Fill, Border, Text and Lines), each with a colour picker and a box for a hex code. These apply only to this theme.</p>
-    <p>Every theme and look is available with both Mermaid 11 and Mermaid 12.</p>
-    <p><strong>Version</strong> chooses the Mermaid version that draws this diagram, either <code>Mermaid 12 (latest)</code> or <code>Mermaid 11</code>. See <a href="#mermaid-versions">Supported Mermaid versions</a> below.</p>
+    <p>Choosing the <code>Custom colours</code> theme reveals four colour settings (Fill, Border, Text and Lines), each with a colour picker and a box for a hex code. These apply only to this theme, and only to the Mermaid engines. Every theme and look is available with both Mermaid 11 and Mermaid 12.</p>
+    <p>If the source holds Pele settings (a Diagram colour or Pele CSS) while a Mermaid engine is selected, the panel notes that they do not apply to the Mermaid engines. Switch Draw with to Pele to use them.</p>
+
+    <h3>Pele settings</h3>
+    <p>With Pele selected, the panel shows Pele's settings in place of Theme, Look and Layout. Pele adapts the diagram to light and dark mode: colours from Confluence's palette adapt with it, and custom colours stay as written. See <a href="#colours-on-pele">Colours on Pele</a> below.</p>
+    <ul>
+      <li><strong>Diagram colour</strong> tints every box in the diagram except those given their own colour in the code. Choose one of Confluence's colour families (Blue, Teal, Green, Lime, Yellow, Orange, Red, Magenta or Purple). <code>White</code>, the default, leaves the diagram in your site's own colours. Beside the menu, a Light mode and a Dark mode sample show how a box looks in each mode. The setting is written into the front matter as <code>pele: color:</code>.</li>
+      <li><strong>Pele CSS</strong>, the checkbox at the end of the Diagram colour row, gives the diagram a theme of its own in Pele's CSS variables. Tick it and a text box appears under the row. Paste or type a block such as the one under <a href="#pele-css">Pele CSS</a> below. The CSS is written into the front matter as <code>pele: css:</code>, so you can also write it there. Untick the box to remove the theme from the diagram, or tick it again to put it back (Cancel discards every change as usual).</li>
+      <li>If the code has fill or border colours that are not Confluence palette colours, the panel says how many and offers to review them. See Custom colours under <a href="#colours-on-pele">Colours on Pele</a>.</li>
+      <li>If the code carries Mermaid theme settings (a <code>themeVariables</code> block or an <code>%%{init}%%</code> directive), the panel notes that Pele does not apply them. Choose a Diagram colour, or switch Draw with to Mermaid 12 to keep them.</li>
+    </ul>
+
     <p><strong>Show source below diagram</strong> is a checkbox that, when ticked, prints the original Mermaid code in a panel underneath the rendered diagram. This is useful for documentation pages where readers may want to copy the source.</p>
 
-    <h2 id="mermaid-versions">Supported Mermaid versions</h2>
-    <p>The app includes two versions of Mermaid: Mermaid 12 (12.1.0 at the time of writing) and Mermaid 11 (11.15.0). The version is chosen separately for each macro using the <strong>Version</strong> setting in its configuration panel.</p>
-    <p>New diagrams use Mermaid 12. Diagrams created before version 2.9 stay on Mermaid 11, so they look exactly as they did before the update. To move an existing diagram to Mermaid 12, open its configuration panel, change Version to <code>Mermaid 12 (latest)</code> and save. You can change it back in the same way if you prefer the earlier rendering.</p>
+    <h2 id="mermaid-versions">Supported engines</h2>
+    <p>The app includes three rendering engines, chosen separately for each macro with the <strong>Draw with</strong> setting in its configuration panel:</p>
+    <ul>
+      <li><strong>Mermaid 12</strong> (12.1.0 at the time of writing), the default for new diagrams. It is the reference rendering of the Mermaid documentation, with every theme, look and layout.</li>
+      <li><strong>Mermaid 11</strong> (11.15.0). Diagrams created before version 2.9 stay on Mermaid 11, so they look exactly as they did before that update.</li>
+      <li><strong>Pele</strong> (1.8.0), an open-source renderer published by Obsidian. It reads the same diagram syntax as Mermaid 12.1.0 and draws it in its own style, in your site's colours, which it follows into dark mode. See <a href="#when-to-choose-pele">When to choose Pele</a> below.</li>
+    </ul>
+    <p>New diagrams use Mermaid 12. To move an existing diagram to another engine, open its configuration panel, change Draw with and save. You can change it back in the same way.</p>
     <figure class="shot">
       <img src="/apps/mermaid/guide-mermaid-11-and-12.png" alt="A Confluence page with the same release pipeline flowchart drawn twice: by Mermaid 11 with purple filled nodes and thin connectors, and by Mermaid 12 with white outlined nodes and heavier, squared connectors." width="1840" height="900" loading="lazy">
       <figcaption>The same flowchart drawn by Mermaid 11 with the Classic look and by Mermaid 12 with the Neo look.</figcaption>
     </figure>
-    <p>A page only loads the Mermaid versions its diagrams use, so a page whose diagrams are all on one version does not download the other.</p>
-    <p>Diagram syntax follows the specification for the version you have chosen. The Mermaid documentation at <a href="https://mermaid.js.org/">mermaid.js.org</a> is the authoritative reference for syntax.</p>
+    <p>A page only loads the engines its diagrams use, so a page whose diagrams are all on one engine does not download the others.</p>
+    <p>Diagram syntax follows the specification for the engine you have chosen. The Mermaid documentation at <a href="https://mermaid.js.org/">mermaid.js.org</a> is the authoritative reference for syntax, and Pele follows Mermaid 12.1.0. Pele's own documentation, including its theme variables, is at <a href="https://pele.run/">pele.run</a>.</p>
+
+    <h2 id="when-to-choose-pele">When to choose Pele</h2>
+    <p>Pele draws every colour and font from CSS variables, where Mermaid writes its colours into the drawing. That difference gives a Pele diagram several advantages on a Confluence page:</p>
+    <ul>
+      <li><strong>It follows your site's light and dark mode.</strong> A Mermaid diagram is drawn in fixed colours, so in Confluence's dark mode it stays on a white card. A Pele diagram takes its colours from the site's theme and switches with it as you read, with no reload: background, text, lines, node fills and chart colours all follow, and so does the source panel under it when Show source is on.</li>
+      <li><strong>It can be coloured with Confluence's own colours.</strong> Give the whole diagram a Diagram colour, or colour individual steps with Mermaid's colour statements. Palette colours switch to their dark-mode partners automatically.</li>
+      <li><strong>It can carry a theme of your own.</strong> Pele CSS sets the diagram's colours, font, corner radius and chart colours, for example in your brand's colours, with separate values for dark mode.</li>
+      <li><strong>Pasted diagrams keep their colours.</strong> A diagram copied from an Obsidian note or another Mermaid tool renders as pasted, with its colour statements drawn as written.</li>
+    </ul>
+    <figure class="shot">
+      <img src="/apps/mermaid/guide-pele-dark-mode.png" alt="The same release-pipeline flowchart on a dark page, drawn twice. Above, Mermaid 12's drawing in light colours on a white card. Below, Pele's drawing in dark colours, with green, blue, yellow, grey and red status boxes in their dark-mode shades." width="1840" height="874" loading="lazy">
+      <figcaption>The same flowchart on a page in dark mode: drawn by Mermaid 12 (top) and by Pele (bottom).</figcaption>
+    </figure>
+    <p>Pele does not do everything Mermaid does, so keep a diagram on Mermaid 12 when any of these matter:</p>
+    <ul>
+      <li><strong>Themes, looks, layouts and custom colours.</strong> These are Mermaid features. With Pele selected the panel shows Pele's settings instead, and the diagram's colours come from the site theme, the Diagram colour and Pele CSS.</li>
+      <li><strong>Syntax newer than Mermaid 12.1.0.</strong> Pele follows that release. A diagram written for a later Mermaid may show a "Diagram error" on Pele. Switch the macro to Mermaid 12 or adjust the source.</li>
+      <li><strong>Icon packs.</strong> Architecture diagrams render with Pele's built-in icons (cloud, database, server, disk, internet). Icons from registered icon packs, such as <code>logos:aws</code>, are not available on Pele and show as their name.</li>
+      <li><strong>Node images.</strong> Pele does not draw images inside nodes. A node given an image (<code>A@{ img: "…" }</code>) appears without it. Mermaid 11 and 12 draw embedded images.</li>
+    </ul>
+    <p>Every diagram type that Mermaid 12 renders, Pele renders too, including the types that are only in Mermaid 12 (swimlanes, use cases, Cynefin, railroad and agent-flow diagrams). Three types are drawn in a visibly different arrangement, not just different colours: C4 diagrams (each element as a labelled box rather than Mermaid's C4 shapes), mindmaps (an indented tree rather than a radial layout) and Ishikawa diagrams (a horizontal fishbone rather than Mermaid 12's vertical one). Journeys are drawn as a score chart, and Gantt charts have no "today" line. If the exact Mermaid arrangement matters for one of these, keep that diagram on Mermaid 12.</p>
+
+    <h2 id="colours-on-pele">Colours on Pele</h2>
+    <p>A Pele diagram can be coloured in two ways, and both follow the reader's light and dark mode.</p>
+    <p><strong>One colour for the whole diagram.</strong> Choose a Diagram colour in the panel. Every box that has no colour of its own is tinted in that family, while lines, text and the background stay neutral. In code, it is the front matter</p>
+    <pre><code>---
+pele:
+  color: blue
+---</code></pre>
+    <p>with one of <code>blue</code>, <code>teal</code>, <code>green</code>, <code>lime</code>, <code>yellow</code>, <code>orange</code>, <code>red</code>, <code>magenta</code>, <code>purple</code> or <code>gray</code> (<code>colour</code> is accepted too).</p>
+    <figure class="shot">
+      <img src="/apps/mermaid/guide-pele-diagram-colours.png" alt="A small flowchart drawn four times with the Diagram colour set to blue, teal, purple and orange, each shown in light mode above and dark mode below." width="1840" height="400" loading="lazy">
+      <figcaption>The Diagram colour in blue, teal, purple and orange, in light mode (top) and dark mode (bottom).</figcaption>
+    </figure>
+    <p><strong>Colour for meaning.</strong> Use Mermaid's own colour statements, exactly as you would anywhere else: <code>classDef</code> with <code>class</code> or <code>:::</code> for nodes and states, <code>style</code> for a single node or a subgraph, <code>linkStyle</code> for a path, and <code>rect</code> for the steps of a sequence diagram. A step with its own colour keeps it whatever the Diagram colour is. Here is a ready-made set of status colours to paste into a flowchart, using Confluence's own palette:</p>
+    <pre><code>%% Status colours (Confluence palette; they switch with dark mode on Pele)
+classDef todo     fill:#DDDEE1,stroke:#7D818A
+classDef progress fill:#CFE1FD,stroke:#357DE8
+classDef done     fill:#BAF3DB,stroke:#22A06B
+classDef risk     fill:#F5E989,stroke:#B38600
+classDef blocked  fill:#FFD5D2,stroke:#E2483D
+%% Apply one with   C[Review]:::done   or   class A,B done</code></pre>
+    <p>The same text draws with those colours in Obsidian or any other Mermaid tool, so the diagram stays portable. The block shows best on the White diagram colour: on a Blue diagram, a <code>progress</code> step is one shade from its neighbours. You can rename the classes or add more colours from the Confluence colour palette table below.</p>
+    <p><strong>Dark mode.</strong> Any colour in the code that is one of Confluence's palette colours switches to its dark-mode partner when the reader uses dark mode, with no second set of colours to write. Any other colour stays exactly as you wrote it. The app keeps the text on it readable, draws a border or line that would vanish on the dark page in the neutral line colour, and fades a coloured sequence highlight so the messages over it stay readable. A custom colour therefore shows as a light area on the dark page, readable and unchanged.</p>
+    <p><strong>Custom colours.</strong> A fill or border colour that is not one of Confluence's palette colours stays the same in dark mode, so it shows as a light patch on the dark page. When the code has one, the Pele settings show the warning "This diagram uses N custom colours that won't adapt to dark mode", with a Review link. Review lists each custom colour as written, where it is used (fill or border, and line number), and the nearest Confluence palette colour, previewed as it appears in light and in dark mode. Hover over a swatch to see its family, shade and hex value. Replace writes the nearest colour into every place that colour is used. This edits your diagram code, so Save keeps the change and Cancel discards it. Text colours, translucent colours and <code>none</code> are not listed: text follows the rules above, and a translucent colour blends with the page in both modes.</p>
+    <p><strong>Confluence's colour palette.</strong> These are the colours Confluence uses in its own interface, taken from Atlassian's design system, and each one has a dark-mode partner designed to go with it. The app uses them in three places:</p>
+    <ul>
+      <li>the Diagram colour menu offers their colour families;</li>
+      <li>Review suggests the nearest of them as a replacement for a custom colour;</li>
+      <li>any of the values below written in your own colour statements switches to its dark-mode partner automatically.</li>
+    </ul>
+    <p>Each family has a lightest and a light background, a bold background, a border colour and a text colour. The table gives the light-mode values, which are the ones to write in your code.</p>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Family</th><th>Lightest background</th><th>Light background</th><th>Bold background</th><th>Border</th><th>Text</th></tr></thead>
+      <tbody>
+        <tr><td>Blue</td><td><code>#E9F2FE</code></td><td><code>#CFE1FD</code></td><td><code>#1868DB</code></td><td><code>#357DE8</code></td><td><code>#1558BC</code></td></tr>
+        <tr><td>Teal</td><td><code>#E7F9FF</code></td><td><code>#C6EDFB</code></td><td><code>#227D9B</code></td><td><code>#2898BD</code></td><td><code>#206A83</code></td></tr>
+        <tr><td>Green</td><td><code>#DCFFF1</code></td><td><code>#BAF3DB</code></td><td><code>#1F845A</code></td><td><code>#22A06B</code></td><td><code>#216E4E</code></td></tr>
+        <tr><td>Lime</td><td><code>#EFFFD6</code></td><td><code>#D3F1A7</code></td><td><code>#5B7F24</code></td><td><code>#6A9A23</code></td><td><code>#4C6B1F</code></td></tr>
+        <tr><td>Yellow</td><td><code>#FEF7C8</code></td><td><code>#F5E989</code></td><td><code>#946F00</code></td><td><code>#B38600</code></td><td><code>#7F5F01</code></td></tr>
+        <tr><td>Orange</td><td><code>#FFF5DB</code></td><td><code>#FCE4A6</code></td><td><code>#BD5B00</code></td><td><code>#E06C00</code></td><td><code>#9E4C00</code></td></tr>
+        <tr><td>Red</td><td><code>#FFECEB</code></td><td><code>#FFD5D2</code></td><td><code>#C9372C</code></td><td><code>#E2483D</code></td><td><code>#AE2E24</code></td></tr>
+        <tr><td>Magenta</td><td><code>#FFECF8</code></td><td><code>#FDD0EC</code></td><td><code>#AE4787</code></td><td><code>#CD519D</code></td><td><code>#943D73</code></td></tr>
+        <tr><td>Purple</td><td><code>#F8EEFE</code></td><td><code>#EED7FC</code></td><td><code>#964AC0</code></td><td><code>#AF59E1</code></td><td><code>#803FA5</code></td></tr>
+        <tr><td>Gray</td><td><code>#F0F1F2</code></td><td><code>#DDDEE1</code></td><td><code>#6B6E76</code></td><td><code>#7D818A</code></td><td><code>#505258</code></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>A bold background gets white text in light mode automatically. Leave <code>color:</code> out of the statement and the app picks the readable text colour.</p>
+    <p><strong>Word export</strong> uses the light-mode colours: the image in the document is the diagram as read in light mode, with the Diagram colour, your colour statements and readable labels on dark fills.</p>
+
+    <h2 id="pele-css">Pele CSS</h2>
+    <p>Pele draws every colour and font from a set of CSS variables, and lets you set them with a few lines of CSS (the full list is at <a href="https://pele.run/theming">pele.run/theming</a>). The Pele CSS box takes that CSS as Pele's documentation writes it: a block that sets the variables, and a second block under <code>@media (prefers-color-scheme: dark)</code> for dark mode. This is how to give a diagram your brand's colours and font. For example, the Flexoki colours:</p>
+    <pre><code>.pele {
+  --pele-bg: #fffcf0;
+  --pele-fg: #100f0f;
+  --pele-muted: #6f6e69;
+  --pele-line: #100f0f;
+  --pele-surface: #f2f0e5;
+  --pele-surface-alt: #e6e4d9;
+  --pele-border: #cecdc3;
+  --pele-accent: #205ea6;
+  --pele-critical: #af3029;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pele {
+    --pele-bg: #100f0f;
+    --pele-fg: #cecdc3;
+    --pele-muted: #878580;
+    --pele-line: #cecdc3;
+    --pele-surface: #1c1b1a;
+    --pele-surface-alt: #282726;
+    --pele-border: #403e3c;
+    --pele-accent: #4385be;
+    --pele-critical: #d14d41;
+  }
+}</code></pre>
+    <p>In the diagram's front matter it is stored as</p>
+    <pre><code>---
+pele:
+  css: |-
+    .pele {
+      --pele-bg: #fffcf0;
+      ...
+    }
+---</code></pre>
+    <figure class="shot">
+      <img src="/apps/mermaid/guide-pele-css-brand.png" alt="A numbered sequence diagram drawn by Pele in a blue brand theme with rounded boxes, in light mode on a pale blue background and in dark mode on a navy background." width="1840" height="620" loading="lazy">
+      <figcaption>A sequence diagram with a brand theme in Pele CSS (colours, font and a 12px corner radius), light and dark.</figcaption>
+    </figure>
+    <p><strong>What the app reads.</strong> Only Pele's own variables, set on the diagram as a whole (a rule for <code>.pele</code>, <code>svg</code>, <code>:root</code> or <code>*</code>). The first block is used in light mode, and the dark block when the reader's Confluence is in dark mode (the app maps the media query to Confluence's theme, not to the reader's operating system). A rule for part of a diagram, any other property, a variable Pele does not have, or a value the app cannot check (anything with <code>url()</code>, <code>var()</code> or <code>calc()</code>, for instance) is ignored, and the line under the box says what was read and what was not. CSS longer than 20,000 characters is not read at all. Variables you do not set keep the site's colours, or the Diagram colour's, so you can set one or two or the whole set.</p>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Variable</th><th>What it controls</th><th>Takes</th></tr></thead>
+      <tbody>
+        <tr><td><code>--pele-bg</code></td><td>Backgrounds</td><td>a colour</td></tr>
+        <tr><td><code>--pele-fg</code></td><td>Text</td><td>a colour</td></tr>
+        <tr><td><code>--pele-muted</code></td><td>Secondary text</td><td>a colour</td></tr>
+        <tr><td><code>--pele-line</code></td><td>Edges and arrowheads</td><td>a colour</td></tr>
+        <tr><td><code>--pele-surface</code></td><td>Node fill</td><td>a colour</td></tr>
+        <tr><td><code>--pele-surface-alt</code></td><td>Subgraph fill</td><td>a colour</td></tr>
+        <tr><td><code>--pele-border</code></td><td>Node and subgraph borders</td><td>a colour</td></tr>
+        <tr><td><code>--pele-accent</code></td><td>Highlights</td><td>a colour</td></tr>
+        <tr><td><code>--pele-critical</code></td><td>Critical Gantt tasks, high-priority kanban items</td><td>a colour</td></tr>
+        <tr><td><code>--pele-error</code></td><td>Pele's own error text</td><td>a colour</td></tr>
+        <tr><td><code>--pele-font</code></td><td>Label font</td><td>a font family list, for example <code>Georgia, serif</code></td></tr>
+        <tr><td><code>--pele-font-mono</code></td><td>Monospace labels</td><td>a font family list</td></tr>
+        <tr><td><code>--pele-title-weight</code></td><td>Diagram title</td><td><code>normal</code>, <code>bold</code>, <code>bolder</code>, <code>lighter</code> or 100–900</td></tr>
+        <tr><td><code>--pele-heading-weight</code></td><td>Headings, such as class names and section labels</td><td>a weight</td></tr>
+        <tr><td><code>--pele-bold-weight</code></td><td>Bold label text</td><td>a weight</td></tr>
+        <tr><td><code>--pele-radius</code></td><td>Corner radius of rounded shapes</td><td>a length, for example <code>4px</code> or <code>0</code></td></tr>
+        <tr><td><code>--pele-series-1</code> … <code>--pele-series-8</code></td><td>Chart series and colour-coded categories (they repeat after 8)</td><td>a colour</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>A colour is a hex value (<code>#fffcf0</code>), <code>rgb()</code>, <code>rgba()</code>, <code>hsl()</code> or <code>hsla()</code>, a CSS colour name, <code>transparent</code> or <code>currentColor</code>. A font must be one the reader's machine has, or a generic family such as <code>serif</code>, because the app loads no fonts.</p>
+    <p><strong>Charts.</strong> The series variables colour bar and line charts, pie slices, radar charts, Sankey flows and other colour-coded categories, and like every other variable they can have separate dark-mode values.</p>
+    <figure class="shot">
+      <img src="/apps/mermaid/guide-pele-radar.png" alt="A radar chart drawn by Pele comparing four teams across eight skills, from Design to Docs, as overlapping translucent shapes in blue, green, orange and purple, shown in light mode and in dark mode." width="1840" height="1036" loading="lazy">
+      <figcaption>A radar chart with series colours set in Pele CSS, in light mode and dark mode.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="/apps/mermaid/guide-pele-charts.png" alt="A bar and line chart, a pie chart and a Sankey diagram drawn by Pele with blue, green, orange and purple series colours, in light mode above and dark mode below." width="1840" height="882" loading="lazy">
+      <figcaption>Charts with four series colours set in Pele CSS, light and dark.</figcaption>
+    </figure>
+    <p><strong>With the Diagram colour and coloured steps.</strong> A variable you set wins over the Diagram colour, and variables you leave out keep it. Steps coloured with Mermaid's <code>classDef</code>, <code>style</code>, <code>linkStyle</code> or <code>rect</code> keep their colours as written, and the app's dark-mode rules for them (readable labels, visible lines) stay as described under <a href="#colours-on-pele">Colours on Pele</a>. Those rules judge contrast against Confluence's colours, so with a dark theme of your own, check your coloured steps in both modes.</p>
+    <p><strong>Dark mode.</strong> Without a dark block, your theme is used as written in both modes, like a custom colour. With one, the diagram switches to it with the page, with no reload.</p>
+    <p><strong>Word export</strong> uses the light-mode theme: the image in the document is the diagram as read in light mode, in your colours and font. A font the export cannot find is drawn in the document's standard font.</p>
+    <p><strong>Switching engines.</strong> Mermaid 12 and Mermaid 11 ignore the <code>pele:</code> block, so a diagram with Pele CSS still draws on them, in Mermaid's own colours.</p>
+
+    <h2 id="copying-a-diagram-from-obsidian">Copying a diagram from Obsidian</h2>
+    <p>A diagram copied from an Obsidian note renders as pasted, with its colours: <code>classDef</code>, <code>style</code>, <code>linkStyle</code> and sequence <code>rect</code> statements are all drawn as written, and a copied code fence is ignored. What to expect:</p>
+    <ul>
+      <li>Pele uses its own layout and style. Obsidian currently draws diagrams with Mermaid, so the Mermaid 12 engine here is the closer match for layout and proportions, and a diagram looks exactly as it did in Obsidian only once Obsidian itself draws with Pele.</li>
+      <li>On Pele, parts of the diagram without a colour of their own take Confluence's colours, not the Obsidian theme's. A theme written in Pele's variables can be pasted into <a href="#pele-css">Pele CSS</a> to set them.</li>
+      <li>Mermaid theme variables and <code>%%{init}%%</code> theming are ignored by Pele and honoured by Mermaid 12. A diagram that relies on them should stay on Mermaid 12, and the panel says so when it sees them.</li>
+      <li>Obsidian-only behaviour, such as internal links and CSS snippets, does not carry over.</li>
+      <li>Colours outside Confluence's palette stay the same in dark mode, while palette colours switch.</li>
+    </ul>
 
     <h2 id="supported-diagram-types">Supported diagram types</h2>
-    <p>Because the app passes your code straight to the Mermaid rendering engine, it supports the full range of diagram types provided by the Mermaid version chosen for the macro. This includes flowcharts, sequence diagrams, class diagrams, state diagrams, entity-relationship (ER) diagrams, Gantt charts, pie charts, Git graphs, user-journey diagrams, mindmaps and timelines, among others. If a diagram type is valid in that version of Mermaid, it will render in the macro.</p>
-    <p>Some diagram types are only available in Mermaid 12. Swimlane diagrams (<code>swimlane-beta</code>) are one example. If a diagram type from the current Mermaid documentation shows a "Diagram error" in an older macro, check that the macro's Version is set to Mermaid 12.</p>
+    <p>Because the app passes your code straight to the rendering engine, it supports the full range of diagram types provided by the engine chosen for the macro. This includes flowcharts, sequence diagrams, class diagrams, state diagrams, entity-relationship (ER) diagrams, Gantt charts, pie charts, Git graphs, user-journey diagrams, mindmaps and timelines, among others. If a diagram type is valid in that version of Mermaid, it will render in the macro. Pele renders every type Mermaid 12 renders, with the differences in arrangement listed under <a href="#when-to-choose-pele">When to choose Pele</a>.</p>
+    <p>Some diagram types are only available in Mermaid 12 and Pele. Swimlane diagrams (<code>swimlane-beta</code>) are one example. If a diagram type from the current Mermaid documentation shows a "Diagram error" in an older macro, check that the macro's Draw with is set to Mermaid 12.</p>
 
-    <h2 id="layout-engines-elk">Layout engines (ELK)</h2>
-    <p>In addition to Mermaid's default layout, the app supports the <strong>ELK</strong> layout engine for flowcharts and other node-based diagrams, which often produces tidier routing and spacing on larger, more complex diagrams. To use it, set Layout to <code>ELK</code> in the configuration panel. This adds the setting to the diagram's front matter, which you can also write by hand:</p>
+    <h2 id="layout-engines-elk">Layout engines (Dagre and ELK)</h2>
+    <p>On the Mermaid engines, the Layout setting chooses how nodes are arranged. <code>Dagre</code> is Mermaid's standard layout. <code>ELK</code> is an alternative layout engine for flowcharts and other node-based diagrams, which often produces tidier routing and spacing on larger, more complex diagrams. Setting Layout writes the setting into the diagram's front matter, which you can also write by hand:</p>
     <pre><code>---
 config:
   layout: elk
@@ -67,21 +242,28 @@ config:
 flowchart TD
   A --&gt; B --&gt; C
   A --&gt; C</code></pre>
-    <p>ELK is available with both Mermaid 11 and Mermaid 12. However, swimlane diagrams only draw their lanes when Layout is set to <code>Automatic</code>, and the configuration panel shows a reminder if a swimlane diagram has another layout selected.</p>
+    <p>Both layouts are available with Mermaid 11 and Mermaid 12. Pele uses its own layout and ignores this setting. Swimlane diagrams only draw their lanes when Layout is set to <code>Automatic</code>, and the configuration panel shows a reminder if a swimlane diagram has another layout selected.</p>
 
     <h2 id="exporting-your-page">Exporting your page</h2>
-    <p>Diagrams are included when you use Confluence's built-in <strong>Export to PDF</strong>, so a page exported to PDF shows each diagram as it appears on the page, with no extra steps. <strong>Export to Word</strong> is not yet available.</p>
+    <p>Diagrams are included when you use Confluence's built-in <strong>Export to PDF</strong>, which uses Confluence's own capture of each diagram as it appears on the page, with no extra steps.</p>
+    <p>Diagrams are also included in <strong>Export to Word</strong>. Word export uses an image of the diagram that the app captures when the macro is saved, so a diagram looks the same in Word as on the page, and a diagram taller than a Word page is split across pages. Pele diagrams export in their light-mode colours. Macros created outside the editor, for example by a template or the REST API, or saved before Word export was available, export with a standard rendering of the same diagram until they are next saved from the editor.</p>
 
     <h2 id="coming-from-the-previous-connect-version">Coming from the previous (Connect) version</h2>
     <p>If you used the earlier version of the app, diagrams you created previously continue to work; the macro reads the diagram code stored by the older version, so existing pages keep rendering without you needing to re-enter their source.</p>
 
     <h2 id="troubleshooting">Troubleshooting</h2>
     <p>If a macro shows the message "No diagram yet", the macro has no source code saved, so open its configuration and add your Mermaid code.</p>
-    <p>If a macro shows a "Diagram error" message, the Mermaid code contains a syntax error or uses a feature that the macro's Mermaid version does not support. Check the code against the Mermaid documentation, using the error text shown to find where the problem is, and check that Version is set to the Mermaid version the syntax belongs to.</p>
-    <p>If the Title, Theme, Look and Layout settings are greyed out, the front matter at the top of the diagram contains a YAML error. The configuration panel shows the error, and the settings become available again as soon as the front matter is corrected in the source box.</p>
+    <p>If a macro shows a "Diagram error" message, the code contains a syntax error or uses a feature that the macro's engine does not support. Check the code against the Mermaid documentation, using the error text shown to find where the problem is, and check that Draw with is set to the engine the syntax belongs to.</p>
+    <p>If a diagram shows a "Diagram error" only on Pele, the source uses syntax that Pele (Mermaid 12.1.0) does not have. Switch the macro's Draw with to Mermaid 12, or rewrite that part of the diagram.</p>
+    <p>If the diagram error says "Node images must be inline data: URIs", a node image (<code>A@{ img: "…" }</code>) points at a web address. The macro never loads images from other locations, on any engine or in a Word export, so the diagram does not draw until the image is embedded as a <code>data:image/png</code>, <code>gif</code>, <code>jpeg</code> or <code>webp</code> URI. Mermaid 11 and 12 draw an embedded image. Pele does not draw node images, so on Pele the node appears without it.</p>
+    <p>A <code>click</code> link, or a link written in a label, works when it points at a web page (http or https), an email address (mailto) or a page on this site. Any other kind of link target is left out, and the node is not clickable.</p>
+    <p>If Diagram title and the engine's settings are greyed out, the front matter at the top of the diagram contains a YAML error. The configuration panel shows the error, and the settings become available again as soon as the front matter is corrected in the source box. The same error switches off the Pele CSS checkbox.</p>
+    <p>If the panel shows a Diagram colour instead of Theme, Look and Layout, the macro is on the Pele engine, which does not use them. Switch Draw with to Mermaid 12 or Mermaid 11 to see them.</p>
+    <p>If the Diagram colour menu shows a value it does not recognise, the front matter's <code>pele: color:</code> names something other than one of the colour families, and the diagram uses the site's colours until it is corrected.</p>
+    <p>If a coloured step looks the same as its neighbours on a coloured diagram, the step's colour and the Diagram colour are from the same family. Choose another Diagram colour, or White.</p>
+    <p>If a diagram with Pele CSS keeps the site's colours, open the macro and look at the line under the Pele CSS box, which says how many variables Pele reads and what it ignored. The usual causes are a rule for part of the diagram (<code>.pele-node { … }</code>, not read in this version), a value the app cannot check (<code>var(--font-text)</code> from an Obsidian theme, for instance), or a variable name Pele does not have.</p>
     <p>If a swimlane diagram renders without its lanes, set Layout to <code>Automatic</code>.</p>
     <p>For anything else, see the <a href="/support">Support</a> page.</p>
-
     {% include release-history.html app="mermaid" %}
 
     <h2 id="legal">Legal</h2>

@@ -37,7 +37,7 @@ test("each live app's guide has one SoftwareApplication block built from its reg
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       name: app.name,
-      description: app.description,
+      description: app.structured_description,
       url: canonicalOf(read(rel)),
       applicationCategory: "BusinessApplication",
       operatingSystem: `Atlassian ${app.product} Cloud`,
@@ -49,6 +49,14 @@ test("each live app's guide has one SoftwareApplication block built from its reg
     assert.deepEqual(data, expected, rel);
     assert.equal(data.url, `${CANONICAL}/apps/${app.slug}/`);
     if (data.image) assert.ok(built(data.image.slice(CANONICAL.length + 1)), `${rel}: image ${data.image} is a built file`);
+  }
+});
+
+test("every live app has a structured_description of its own, separate from the tile text", () => {
+  for (const app of apps) {
+    assert.equal(typeof app.structured_description, "string", `${app.slug}: structured_description`);
+    assert.ok(app.structured_description.trim().length > 0, `${app.slug}: structured_description is empty`);
+    assert.notEqual(app.structured_description, app.description, `${app.slug}: structured_description repeats the tile text`);
   }
 });
 

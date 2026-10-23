@@ -10,10 +10,14 @@ slug: mermaid
 order: 10
 status: live
 homepage_visible: true
-featured: false
+featured: true
+featured_label: "New: dark mode"
 platform: Forge
 product: Confluence
-description: Author Mermaid diagrams directly in Confluence Cloud. Flowcharts, sequence diagrams and more, rendered cleanly inside your pages. A full user guide, kept current with the app.
+description: "Diagrams that switch to dark mode with your Confluence page. Draw with Mermaid as always, or with Pele, the new open-source renderer from the makers of Obsidian. Use Confluence's colours or your own brand theme."
+structured_description: "Confluence Cloud macro that renders Mermaid diagram code on the page, with a choice of engine for each diagram: Mermaid 12, Mermaid 11 or Pele. Pele diagrams follow Confluence's light and dark mode and can use Confluence palette colours or a custom CSS theme. Diagrams are included in Word and PDF exports. Built on Atlassian Forge; nothing is sent outside Atlassian."
+feature_image: /assets/img/features/mermaid.png
+feature_image_alt: "A radar chart drawn by the Pele engine in dark mode, with four overlapping translucent shapes in blue, green, orange and purple across eight axes such as Design, Backend and Security."
 marketplace_url: https://marketplace.atlassian.com/apps/1219878/cloudscript-mermaid-diagrams-for-confluence
 badges: [runs-on-atlassian]
 stores_personal_data: "No"

@@ -7,7 +7,10 @@
     step, and add nothing here that the site does not link.
   - A live app's guide page (apps/<slug>/index.html whose registry entry in
     _data/apps/<slug>.yml has status: live): SoftwareApplication, built only from that entry
-    and site config. No price, rating, review or install count: the registry holds none, and
+    and site config. Its description is the entry's `structured_description` (a factual
+    definition of the app for search engines and AI tools), never `description`, which is the
+    home page tile text written for people; the fallback to `description` only covers an entry
+    that lacks the field, and the site-discovery tests require it for every live app. No price, rating, review or install count: the registry holds none, and
     we do not publish invented figures (CLAUDE.md §6).
 
   Every value goes through `jsonify` and then has "</" rewritten to "<\/", so a registry
@@ -48,7 +51,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": {{ sd_app.name | jsonify | replace: "</", "<\/" }},
-    "description": {{ sd_app.description | jsonify | replace: "</", "<\/" }},
+    "description": {{ sd_app.structured_description | default: sd_app.description | jsonify | replace: "</", "<\/" }},
     "url": {{ site.canonical_url | append: page.url | jsonify | replace: "</", "<\/" }},
     "applicationCategory": {{ "BusinessApplication" | jsonify | replace: "</", "<\/" }},
     "operatingSystem": {{ "Atlassian " | append: sd_app.product | append: " Cloud" | jsonify | replace: "</", "<\/" }},

@@ -70,11 +70,13 @@ page and each post at its canonical URL, and nothing else.
 
 Each live app's guide page SHALL include exactly one JSON-LD `SoftwareApplication` block built
 only from that app's registry entry and site config, with no price, rating or review data.
+Its `description` SHALL be the entry's `structured_description`, a factual definition of the
+app for machine readers, kept separate from `description`, which is the home page tile text.
 
 #### Scenario: Live app
 - **GIVEN** `_data/apps/radar-renderer.yml` with `status: live`
 - **WHEN** `/apps/radar-renderer/` is built
-- **THEN** it has one `application/ld+json` block that parses as JSON with `@type` `SoftwareApplication`, `name` equal to the registry `name`, `operatingSystem` `Atlassian Confluence Cloud`, `url` equal to the page canonical and `installUrl` equal to the registry `marketplace_url`
+- **THEN** it has one `application/ld+json` block that parses as JSON with `@type` `SoftwareApplication`, `name` equal to the registry `name`, `description` equal to the registry `structured_description`, `operatingSystem` `Atlassian Confluence Cloud`, `url` equal to the page canonical and `installUrl` equal to the registry `marketplace_url`
 - **AND** it has no `offers`, `aggregateRating` or `review` key
 
 #### Scenario: Jira app
@@ -97,7 +99,7 @@ NOT carry an `id` of its own (the section's `id` addresses it). The IDs `attach`
 `page-exports`, `mermaid-versions` and `formats` SHALL remain on their current headings.
 
 #### Scenario: Deep link to a section
-- **GIVEN** the Mermaid guide's "Layout engines (ELK)" heading
+- **GIVEN** the Mermaid guide's "Layout engines (Dagre and ELK)" heading
 - **THEN** it has an `id` and `https://cloudscript.io/apps/mermaid/#<id>` scrolls to it
 
 #### Scenario: Heading inside a section that already has an id

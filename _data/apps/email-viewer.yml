@@ -25,6 +25,7 @@ featured: false
 platform: Forge
 product: Confluence
 description: "Renders a .msg or .eml file attached to a Confluence page as a faithful email card: subject, sender, recipients, date, body, inline images and attachments. Read from your own Confluence and parsed in your browser."
+structured_description: "Confluence Cloud macro that renders a .msg (Outlook) or .eml email file attached to a page as a readable email card showing subject, sender, recipients, date, body, inline images and attachments. The file is read from your Confluence site and parsed in the reader's browser. Built on Atlassian Forge."
 marketplace_url: https://marketplace.atlassian.com/apps/2052211522/msg-eml-email-viewer-for-confluence
 badges: [runs-on-atlassian]
 stores_personal_data: "No"

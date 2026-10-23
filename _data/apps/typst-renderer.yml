@@ -7,6 +7,7 @@ featured: false
 platform: Forge
 product: Confluence
 description: Render Typst documents and mathematics right on your Confluence pages — live from source, entirely in the browser, storing nothing.
+structured_description: "Confluence Cloud macro that renders Typst documents and mathematics on the page from their source, compiled in the reader's browser, as an alternative to pasting LaTeX screenshots. Stores nothing outside the page. Built on Atlassian Forge."
 marketplace_url: https://marketplace.atlassian.com/apps/1871294913/cloudscript-typst-renderer
 badges: [runs-on-atlassian]
 stores_personal_data: "No"

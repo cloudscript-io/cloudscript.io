@@ -7,6 +7,7 @@ featured: false
 platform: Forge
 product: Confluence
 description: Enables collaboration by sharing a Confluence page across instances or between spaces by link invitation. Subscribers always see the latest published version, and your original stays the source of truth.
+structured_description: "Confluence Cloud app that shares a page across Confluence sites or between spaces by link invitation. Subscribers see a read-only copy that always shows the latest published version, while the original page stays the source of truth. Built on Atlassian Forge."
 marketplace_url: https://marketplace.atlassian.com/apps/3283173088/page-sharing-for-confluence
 badges: []
 stores_personal_data: "Only UserId"

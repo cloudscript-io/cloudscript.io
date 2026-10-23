@@ -28,6 +28,7 @@ featured: false
 platform: Forge
 product: Confluence
 description: "Puts the niko-niko team practice on a Confluence page: one entry a day per person builds a shared grid, several labelled calendars can share one page to track separate questions, and entries stay in storage on Forge."
+structured_description: "Confluence Cloud macro for the niko-niko team practice: each person adds one entry a day to a shared calendar grid with a team trend row, and several labelled calendars can share one page. Entries are kept in Forge storage inside Atlassian's infrastructure."
 marketplace_url: https://marketplace.atlassian.com/apps/1223001/cloudscript-io-nikoniko-calendar
 badges: [runs-on-atlassian]
 stores_personal_data: "Yes &mdash; a Confluence account identifier, an entry date, the scale value entered (0&ndash;5), an entry timestamp and a reference to the calendar the entry was recorded on, held in Atlassian's Forge storage"
