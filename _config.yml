@@ -35,7 +35,8 @@ default_image: /assets/img/share-default.png
 # The stream itself is news/index.html (-> /news/) and the Atom feed is
 # news/feed.xml, both hand-authored Liquid — no jekyll-feed, no plugins.
 # news/linkedin.xml is a second, unadvertised Atom feed read only by the Zapier -> LinkedIn
-# Page Zap (body from each post's `linkedin:` front matter, else `description`).
+# Page Zap. Opt-in since 29 Oct 2026: only posts with a non-empty `linkedin:` block are in it,
+# and that block is the body (no fallback to `description`).
 permalink: /news/:title
 
 # Internal / authoring files must NOT be published to the live site.

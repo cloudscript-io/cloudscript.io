@@ -25,8 +25,10 @@ layout: default
                    the app has not been introduced on LinkedIn before, open with what the
                    app does before what the release changes. Read
                    only by news/linkedin.xml, never rendered on the page or in the public
-                   feed. Omit to fall back to `description`; set `linkedin: false` to keep a
-                   post (e.g. a retrodated one) off LinkedIn entirely.
+                   feed. Syndication is opt-in (since 29 Oct 2026): a post reaches LinkedIn
+                   only if it has a non-empty `linkedin:` block. Omitted, empty or
+                   `linkedin: false`, the post stays off LinkedIn; there is no fallback to
+                   `description`.
   The date and the URL slug come from the filename (YYYY-MM-DD-<slug>.md).
 {% endcomment %}
 {% if page.app %}{% assign app = site.data.apps[page.app] %}{% endif %}
