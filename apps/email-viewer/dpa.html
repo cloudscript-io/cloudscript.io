@@ -678,6 +678,14 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
     parsing library it uses.
   </li>
   <li>
+    <strong>Export function containment.</strong> On a Word or other non-PDF export
+    the same parse runs in the Forge function instead, under its own limits: a
+    20-second deadline inside the function, the platform's 25-second invocation
+    limit, and 256 MB of memory, with the 50 MiB attachment cap applied before any
+    byte is read. A file that exhausts either limit ends that one export instance
+    with Confluence's own export-error message, and nothing is stored.
+  </li>
+  <li>
     <strong>Size bound before retrieval.</strong> A 50 MiB (52,428,800 byte) cap is
     applied from the attachment listing's own metadata before any bytes are
     retrieved, with a second check on the bytes in hand as the authoritative
