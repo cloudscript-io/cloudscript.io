@@ -8,7 +8,9 @@ title: MSG/EML Email Viewer for Confluence — Privacy
 
 <h1>MSG/EML Email Viewer for Confluence Privacy Policy</h1>
 
-<p><em>Effective 9 October 2026 (supersedes the version dated 19 August 2026)</em></p>
+<p><em>Effective 29 October 2026 (supersedes the version dated 9 October 2026)</em></p>
+
+<p><em>Change in this version, Word export: the email's text is produced inside Atlassian's Forge runtime.</em></p>
 
 <h2>Who we are</h2>
 
@@ -100,7 +102,7 @@ title: MSG/EML Email Viewer for Confluence — Privacy
   Email content is never saved anywhere. On each render, the attached
   file's bytes are read from your Confluence instance's own attachment
   storage over Atlassian's own platform APIs, and parsed inside a
-  sandboxed process running in your browser; the rendered result is
+  sandboxed process running in your browser on the page (a Word export is the exception, described below); the rendered result is
   displayed and then discarded. No email content is written to
   Confluence's macro configuration or to any other store.
 </p>
@@ -115,12 +117,21 @@ title: MSG/EML Email Viewer for Confluence — Privacy
 <p>
   One exception to the client-side pattern: exporting a page containing
   the macro to a static format other than PDF (for example, Word) invokes
-  a single Atlassian-hosted Forge function, which reads the attachment
-  reference's file name and display label to build a placeholder card in
-  the export. That function does not receive the email body, sender or
-  recipient details, or the attachment's bytes, and does not store
-  anything. PDF exports do not use this function; a PDF export captures
-  the same client-side render shown on the live page.
+  a single Atlassian-hosted Forge function. It reads the attachment
+  through Confluence's own API with the exporting user's permissions,
+  parses it inside Atlassian's Forge runtime, and returns the text of the
+  email (subject, From, To, Cc, date, plain-text body, and attachment
+  names and sizes) to Confluence for the export. It does not store
+  anything and sends nothing to any other destination. PDF exports do
+  not use this function; a PDF export captures the same client-side
+  render shown on the live page.
+</p>
+
+<p>
+  A message with only an HTML body is exported with a line saying so and
+  pointing to the PDF export, and formatting and inline images appear
+  only in the PDF export. If the email cannot be read, the export carries
+  a short card naming the cause and the PDF alternative instead.
 </p>
 
 <h2>Egress destinations and sub-processors</h2>
