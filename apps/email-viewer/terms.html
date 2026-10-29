@@ -8,7 +8,9 @@ title: MSG/EML Email Viewer for Confluence — Terms
 
 <h1>MSG/EML Email Viewer for Confluence Terms of Use</h1>
 
-<p><em>Effective 19 August 2026</em></p>
+<p><em>Effective 29 October 2026 (supersedes the version dated 19 August 2026)</em></p>
+
+<p><em>Change in this version, Word export: the email's text is produced inside Atlassian's Forge runtime.</em></p>
 
 <h2>About these terms</h2>
 
@@ -57,7 +59,8 @@ title: MSG/EML Email Viewer for Confluence — Terms
   attachments and <code>write:confluence-file</code> to create an attachment on
   the upload path, and it declares no outbound network access to any host. Email
   content is retrieved from the page's own Confluence attachments over
-  Atlassian's platform APIs, parsed in the viewing user's browser, and written to
+  Atlassian's platform APIs, parsed in the viewing user's browser on the page (a
+  Word or other non-PDF export is the exception, described below), and written to
   no store at any point. Remote content referenced by an email is blocked when
   the card is drawn, and the viewing user can choose to load it for that render.
   Every read travels the acting user's own Confluence permissions, so what a
@@ -69,12 +72,15 @@ title: MSG/EML Email Viewer for Confluence — Terms
 <p>
   A page containing the macro can be exported to PDF, which reproduces the email
   card as it appears on the page, including inline images. Word and other static
-  export paths receive a card naming the configured attachment and pointing to
-  PDF as the export format that carries the rendered email. On those non-PDF
-  export paths a function hosted on Atlassian's Forge platform receives the macro's
-  configured attachment file name and display label in order to produce that card.
-  No email body, recipient list, or attachment content reaches that function, and
-  it retains nothing and sends nothing onward.
+  export paths carry the email as text instead (the subject, sender and
+  recipients, date, plain-text body, and the attachment names and sizes), and
+  PDF is the export format that carries the rendered email with its formatting
+  and inline images. On those non-PDF export paths one function hosted on
+  Atlassian's Forge platform reads the attachment with the exporting user's own
+  permissions, parses it inside Atlassian's Forge runtime, and returns the
+  email's text to Confluence for the export. It stores nothing and sends nothing
+  onward. If the email cannot be read, the export carries a card naming the
+  cause and pointing to PDF.
 </p>
 
 <h2>Access and licensing</h2>
@@ -181,9 +187,10 @@ title: MSG/EML Email Viewer for Confluence — Terms
   neither. Because there is no Cloudscript-operated server, database, cache, or
   log destination in this app's path, there is no separate Cloudscript-operated
   store or transmission path for this app to secure. Email content travels only
-  between your own Confluence attachments and the viewing user's browser, over
+  between your own Confluence attachments and the viewing user's browser (or, for a
+  Word or other non-PDF export, the Atlassian-hosted export function), over
   Atlassian's own platform. Email HTML is sanitised before it is rendered, remote
-  content is blocked by default, and parsing runs in a Web Worker under a
+  content is blocked by default, and parsing in the browser runs in a Web Worker under a
   fifteen-second deadline so that a malformed or hostile file yields an error
   card rather than an unresponsive page.
 </p>
