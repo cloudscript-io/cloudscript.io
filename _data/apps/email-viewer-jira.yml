@@ -36,7 +36,7 @@ featured: false
 platform: Forge
 product: Jira
 description: "Renders a .msg or .eml file attached to a Jira issue as a faithful email card: subject, sender, recipients, date, body, inline images and attachments. Read from your own Jira and parsed in your browser."
-structured_description: "Jira Cloud app that renders a .msg (Outlook) or .eml email file attached to an issue as a readable email card showing subject, sender, recipients, date, body, inline images and attachments. The file is read from your Jira site and parsed in the reader's browser. Built on Atlassian Forge."
+structured_description: "Jira Cloud app that renders a .msg (Outlook) or .eml email file attached to a work item as a readable email card showing subject, sender, recipients, date, body, inline images and attachments. The file is read from your Jira site and parsed in the reader's browser. Built on Atlassian Forge."
 marketplace_url: https://marketplace.atlassian.com/apps/463039643/msg-eml-email-viewer-for-jira
 badges: [runs-on-atlassian]
 stores_personal_data: "No"
