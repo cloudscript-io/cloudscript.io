@@ -8,7 +8,9 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
 
 <h1>MSG/EML Email Viewer for Confluence Data Processing Addendum</h1>
 
-<p><em>Effective 19 August 2026</em></p>
+<p><em>Effective 29 October 2026 (supersedes the version dated 19 August 2026)</em></p>
+
+<p><em>Change in this version, Word export: the email's text is produced inside Atlassian's Forge runtime.</em></p>
 
 <h2>Status of this document</h2>
 
@@ -112,9 +114,12 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
   attached by hand. Nothing leaves the browser before Save. Second, on every
   non-PDF export path Confluence invokes a function that Cloudscript authored and
   that runs on Atlassian's Forge platform. That function reads the macro's
-  configured attachment file name and display label in order to return a
-  configuration-only card. A file name can itself be disclosive. The function
-  performs no storage call, makes no product API call, sends nothing onward, and
+  configured attachment reference, fetches the attachment through Confluence's
+  API under the exporting user's own permissions, parses it, and returns the
+  email's text to Confluence for the export. On that path the email's content is
+  therefore processed inside Atlassian's Forge runtime rather than in the
+  browser, and it can include any of the personal data described in section 5.
+  The function performs no storage call, sends nothing onward, and
   declines PDF export outright by returning nothing, so that PDF export is served
   by Confluence's own browser-render capture of the card already displayed on the
   page. The App is therefore not purely client-side, and this Addendum does not
@@ -139,9 +144,12 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
 
 <p>
   Processing of email content occurs only while a page carrying the macro is being
-  rendered for a user who is permitted to view it. On each render the attachment
+  rendered, or exported, for a user who is permitted to view it. On each render the attachment
   bytes are read fresh from the Customer's own Confluence attachment storage,
-  parsed in the viewing user's browser, displayed, and discarded. There is no
+  parsed in the viewing user's browser, displayed, and discarded. On a Word or
+  other non-PDF export the bytes are instead read as the exporting user and
+  parsed inside Atlassian's Forge runtime, and only the email's text is returned
+  to Confluence for the export. There is no
   processing between renders, and Cloudscript retains nothing at any point.
   Duration is therefore governed entirely by the Customer's own decisions about
   how long the page and its attachments exist, and by how long the App remains
@@ -164,7 +172,7 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
     <code>read:attachment:confluence</code>;
   </li>
   <li>
-    parsing those bytes in a Web Worker in the viewing user's browser under a
+    parsing those bytes, on the page, in a Web Worker in the viewing user's browser under a
     15,000 millisecond deadline, and rendering the result as an email card showing
     the subject, sender, recipients, date, body, inline images and a list of the
     email's own attachments;
@@ -189,9 +197,9 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
     <code>write:confluence-file</code>, on Save; and
   </li>
   <li>
-    on a non-PDF export path, returning a configuration-only card built from the
-    stored attachment file name and display label, as described in "Roles of the
-    parties" above.
+    on a non-PDF export path, reading the attachment as the exporting user and
+    returning its text, in memory, to Confluence for the export, as described in
+    "Roles of the parties" above.
   </li>
 </ul>
 
@@ -341,7 +349,10 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
   What can be stated precisely about the route is this: attachment bytes travel
   from Confluence's own attachment storage, through Atlassian-operated platform
   machinery, into the viewing user's browser, and are written to no store at any
-  point on that route. No hop on it is Cloudscript's. This Addendum does not claim
+  point on that route. No hop on it is Cloudscript's. On a Word or other non-PDF
+  export the route instead ends in the Atlassian-hosted Forge function, which holds
+  the bytes in memory for the invocation only and returns the email's text to
+  Confluence; no hop on that route is Cloudscript's either. This Addendum does not claim
   that email content "never leaves the browser" or that the App "never transmits
   email content", because the bytes do travel to the browser and both statements
   would be false.
@@ -367,10 +378,11 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
 
 <p>
   This position is recorded as contestable rather than presented as settled. A
-  reviewer who took the view that the Forge export function's receipt of a stored
-  file name amounts to a transfer to Cloudscript would find no Standard
+  reviewer who took the view that the Forge export function's processing of an
+  email's content amounts to a transfer to Cloudscript would find no Standard
   Contractual Clauses in place as a fallback, because none have been entered into.
-  Cloudscript's position is that no transfer occurs and that no transfer mechanism
+  Cloudscript's position is that no transfer occurs, because the function runs on
+  Atlassian's platform and sends nothing onward, and that no transfer mechanism
   is therefore engaged. A customer whose own assessment differs should raise it at
   <a href="mailto:support@cloudscript.io">support@cloudscript.io</a> before
   installing the App.
@@ -573,7 +585,7 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
   </tr>
   <tr>
     <td>Duration</td>
-    <td>Per render, for the duration of a render. No processing between renders. Governed by the Customer's own page and attachment lifecycle.</td>
+    <td>Per render or export, for the duration of that render or export. No processing between them. Governed by the Customer's own page and attachment lifecycle.</td>
   </tr>
   <tr>
     <td>Nature and purpose</td>
@@ -597,7 +609,7 @@ title: MSG/EML Email Viewer for Confluence — Data Processing Addendum
   </tr>
   <tr>
     <td>Processing locations</td>
-    <td>The Customer's own Confluence site and the viewing user's own browser. No Cloudscript location exists. See section 9, including the open item on the platform-internal hop and the Forge function execution region.</td>
+    <td>The Customer's own Confluence site, the viewing user's own browser and, for a Word or other non-PDF export, the Atlassian-hosted Forge runtime. No Cloudscript location exists. See section 9, including the open item on the platform-internal hop and the Forge function execution region.</td>
   </tr>
   <tr>
     <td>Transfers</td>
