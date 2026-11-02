@@ -9,14 +9,14 @@ description: "Privacy policy for the CloudScript Mermaid Diagrams for Confluence
     <h1>Privacy Policy — CloudScript Mermaid Diagrams for Confluence</h1>
 
     <p class="meta">
-      <strong>Effective date:</strong> 23 October 2026 (supersedes the version dated 9 October 2026)<br>
+      <strong>Effective date:</strong> 3 November 2026 (supersedes the version dated 23 October 2026)<br>
       <strong>Applies to:</strong> the CloudScript Mermaid Diagrams for Confluence app (the Forge version), published on the Atlassian Marketplace by Cloudscript Pty Ltd (ABN 14 700 662 362) ("CloudScript.io", "we", "us").
     </p>
 
     <p>This policy explains what the CloudScript Mermaid Diagrams for Confluence app does and does not do with data when it runs inside your Confluence Cloud site. It describes the behaviour of the app as built, and the wording reflects the permissions the app actually requests and the way it processes diagram content.</p>
 
     <h2>Summary</h2>
-    <p>CloudScript Mermaid Diagrams for Confluence renders Mermaid diagrams inline on Confluence pages. The app runs on Atlassian's Forge platform, inside your own Atlassian environment. It draws each diagram in your browser, and when a page is exported to Word, a function of the app running on Atlassian's Forge platform supplies an image of the diagram for the Word document. The app does not send your content to CloudScript.io or to any third party, it does not store your content on any CloudScript.io system, and it does not use analytics, cookies, or trackers. The one thing that can reach us is a short technical log line written during a Word export, which contains no diagram code and no page text (see "Technical logs" below). This is consistent with our Atlassian Marketplace declaration that the app does not store personal data.</p>
+    <p>CloudScript Mermaid Diagrams for Confluence renders Mermaid diagrams inline on Confluence pages. The app runs on Atlassian's Forge platform, inside your own Atlassian environment. It draws each diagram in your browser, and when a page is exported to Word, a function of the app running on Atlassian's Forge platform supplies an image of the diagram for the Word document. The app does not send your content to CloudScript.io or to any third party, it does not store your content on any CloudScript.io system, and it does not use analytics, cookies, or trackers. It keeps two display preferences in the reader's own browser, which hold no content and are never sent anywhere (see "In the reader's browser" below). The one thing that can reach us is a short technical log line written during a Word export, which contains no diagram code and no page text (see "Technical logs" below). This is consistent with our Atlassian Marketplace declaration that the app does not store personal data.</p>
 
     <h2>What the app is</h2>
     <p>CloudScript Mermaid Diagrams for Confluence is a Confluence macro. When you add the macro to a page and enter Mermaid diagram code, the macro converts that code into a diagram and displays it where the macro sits. When you save the macro, it keeps the following, all entered or chosen by you when you configure it:</p>
@@ -42,6 +42,14 @@ description: "Privacy policy for the CloudScript Mermaid Diagrams for Confluence
 
     <h2>How your diagram content is stored</h2>
     <p>Everything the macro keeps (the diagram code and its front matter, the engine, the theme, the show-source option, and the image of the diagram) is saved as part of the macro's configuration on the Confluence page, which lives within your own Confluence Cloud site and is hosted and controlled by Atlassian. The image shows the diagram as drawn, so it contains whatever text the diagram displays. Storage and handling of that page content is governed by your agreement with Atlassian and by Atlassian's own privacy and security commitments rather than by CloudScript.io. The app reads that configuration back in order to redraw the diagram when the page is viewed, and Confluence passes it to the export function when the page is exported to Word.</p>
+
+    <h2>In the reader's browser</h2>
+    <p>The app keeps two display preferences in the reader's own browser, in local storage that belongs to the app's frames rather than to the Confluence page:</p>
+    <ul>
+      <li>whether the reader chose <strong>Show on light background</strong> for a diagram in dark mode. It is stored against Confluence's identifier for that macro or, where there is none, a short code computed from the diagram's source, so that no diagram text is stored. Turning the option off removes it.</li>
+      <li>whether the page was last shown in light or dark mode, so that the next diagram the reader opens starts in the right colours instead of flashing white.</li>
+    </ul>
+    <p>Neither holds diagram code, page text or personal data, and neither is sent to CloudScript.io or to anyone else. They stay in the browser until the reader clears its stored site data. A browser that blocks this storage still shows every diagram; the choices are simply not remembered. These are not cookies, and the app still uses no analytics or tracking.</p>
 
     <h2>Technical logs</h2>
     <p>Each time a diagram is exported to Word, the export function writes one line to the app's log on the Forge platform, so that we can diagnose a failed or unexpected export. The line records which route the export took (the stored image, a drawing made by the function, the diagram code as text, or the subscription notice), the Confluence identifiers of the page and of the macro on that page, the engine and its version, your site's subscription details for the app as Atlassian supplies them, image sizes and how long the export took, and, if something failed, the kind of error and the first few characters of an internal checksum. It never records the diagram code, the text of the page, or the wording of an error message.</p>
