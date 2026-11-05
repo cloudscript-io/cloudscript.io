@@ -34,7 +34,7 @@ Jira's built-in mail handler turns an email into a work item, but it does not ke
 
 If you need a record of the original email, the reliable way to keep it without another app is to forward the email to your Jira address as an attachment, not as an ordinary forward. Jira then saves the original on the work item it creates, and a viewer app can show it there, headers included. There is a trade-off: Jira builds the summary and description from your forwarding email, not from the original, so this guide also covers how to keep the work item useful and how to automate the whole thing.
 
-This guide covers what the handler keeps and discards, how to forward as an attachment from Outlook, Gmail and Apple Mail, how to do it for every email automatically, what is different in Jira Service Management, how to check an email is genuine, how to get the original's attachments onto the work item, and the alternatives to forwarding it yourself.
+This guide covers what the handler keeps and discards, how to forward as an attachment from Outlook, Gmail and Apple Mail, how to do it for every email automatically, what is different in Jira Service Management, how to check an email is genuine, and how to get the original's attachments onto the work item.
 
 ## What does Jira's mail handler keep?
 
@@ -109,10 +109,6 @@ Jira has no viewer for email files. An .eml opens as raw text and a .msg as unre
 Our app, [MSG & EML Email Viewer for Jira](/apps/email-viewer-jira), is built to solve this problem. It adds an Emails tab to the work item, where it shows the saved email as it was sent: subject, real sender and recipients, date, body with its tables and images, and the email's attachments as tiles. Each tile has an Attach to work item button, and there is an Attach all button for the email. The invoice that arrived inside the original goes onto the work item with one click, no download and upload. Everything in the email is visible, and only what you choose is attached, so the work item's attachment list stays short. A viewer that only displays the email leaves those files inside it.
 
 Since version 2.6 the app recognises an email by its content as well as its name, so the file Jira saves from an Outlook forward, and the renamed file from Service Management, show like any other email. Every read runs as the person viewing the work item, under Jira's own permissions. The file is read in that person's browser and no email data is stored or sent outside of your Atlassian environment.
-
-## Are there alternatives to forwarding as an attachment myself?
-
-Forwarding as an attachment relies on a person doing it every time, or on a rule or flow someone sets up. For a desk that receives outside email all day, a mail handler app that creates the work item and saves the original in one step removes both. JEMH Cloud and Email This Issue both document a setting that attaches the incoming email to the work item as an .eml file. An email they attach to a work item for you shows in the viewer like any other and will be displayed with MSG & EML Email Viewer for Jira in the Emails tab.
 
 ## What we checked, and when
 
