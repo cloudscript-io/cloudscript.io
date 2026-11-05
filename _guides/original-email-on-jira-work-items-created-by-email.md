@@ -114,7 +114,7 @@ Since version 2.6 the app recognises an email by its content as well as its name
 
 On 5 November 2026 we sent test emails from Gmail and Apple Mail to a Jira Cloud mail handler and to a Service Management email channel, and read what Jira stored. The Outlook naming is reported by a customer and matches the tracker issue above. We have not yet reproduced it with a mailbox of our own, and will update this page when we have.
 
-## Short answers
+## Quick answers
 
 **Does Jira's mail handler keep the original email?** No. Forward the email as an attachment and Jira saves that copy on the work item.
 
