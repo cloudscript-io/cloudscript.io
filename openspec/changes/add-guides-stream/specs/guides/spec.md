@@ -45,7 +45,7 @@ product, each entry with its title linked, its `description` and its app chip.
 
 #### Scenario: One Jira guide
 - **GIVEN** the placeholder guide only
-- **THEN** the index has one product heading, `Jira`, and under it the guide's title linked to its URL, its description and the MSG/EML Email Viewer for Jira chip
+- **THEN** the index has one product heading, `Jira`, and under it the guide's title linked to its URL, its description and the MSG & EML Email Viewer for Jira chip
 - **AND** no `Confluence` heading
 
 ### Requirement: Each app page lists its own guides

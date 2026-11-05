@@ -1,4 +1,4 @@
-# CloudScript.io app registry entry — MSG/EML Email Viewer for Jira.
+# CloudScript.io app registry entry — MSG & EML Email Viewer for Jira.
 #
 # order: 50 continues the established 5-point spacing after the highest slot
 # in use (email-viewer=45); no conflicting slot.

@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "MSG/EML Email Viewer for Confluence: read the attached email on the page"
-description: "MSG/EML Email Viewer for Confluence, new on the Atlassian Marketplace, renders a .msg or .eml file attached to a Confluence page as an email card, parsed in the reader's browser."
+title: "MSG & EML Email Viewer for Confluence: read the attached email on the page"
+description: "MSG & EML Email Viewer for Confluence, new on the Atlassian Marketplace, renders a .msg or .eml file attached to a Confluence page as an email card, parsed in the reader's browser."
 app: email-viewer
 version: "2.3"
 image: /apps/email-viewer/guide-hero.png
 ---
 
-MSG/EML Email Viewer for Confluence is now live on the [Atlassian Marketplace](https://marketplace.atlassian.com/apps/2052211522/msg-eml-email-viewer-for-confluence). An email filed on a Confluence page is often the documentation itself, whether an approval, a client instruction or a piece of incident correspondence, and until now it has been a download link: reading it meant saving the file and opening it in a mail application. This macro renders the attached .msg or .eml file on the page as an email card, under the page's own permissions, making the email contents more readily accessible to anyone who can already see the page.
+MSG & EML Email Viewer for Confluence is now live on the [Atlassian Marketplace](https://marketplace.atlassian.com/apps/2052211522/msg-eml-email-viewer-for-confluence). An email filed on a Confluence page is often the documentation itself, whether an approval, a client instruction or a piece of incident correspondence, and until now it has been a download link: reading it meant saving the file and opening it in a mail application. This macro renders the attached .msg or .eml file on the page as an email card, under the page's own permissions, making the email contents more readily accessible to anyone who can already see the page.
 
 ## The email card
 

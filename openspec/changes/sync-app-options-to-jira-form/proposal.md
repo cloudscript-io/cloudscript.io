@@ -7,7 +7,7 @@ required "Which app is this about?" dropdown is a Jira select field ("Cloudscrip
 `customfield_10458`, context `10632` scoped to the CUS space). Its options were typed in by hand
 from the registry names. Every app launch since July has shipped on its own schedule, and the
 launch process already flips `_data/apps/<slug>.yml` to `status: live` on go-live day (it did so
-for MSG/EML Email Viewer for Jira on 8 Oct). A hand-kept list on the form will be missed on some
+for MSG & EML Email Viewer for Jira on 8 Oct). A hand-kept list on the form will be missed on some
 launch, and a customer of the new app then has to pick a wrong app or "Not app-specific", which
 mis-routes the ticket. This change makes the registry the only list: the form follows it on every
 push to `main`.

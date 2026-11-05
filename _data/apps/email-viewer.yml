@@ -1,4 +1,4 @@
-# CloudScript.io app registry entry — MSG/EML Email Viewer for Confluence.
+# CloudScript.io app registry entry — MSG & EML Email Viewer for Confluence.
 #
 # order: 45 continues the established 5-point spacing after the highest slot
 # in use (mermaid=10, page-sharing=20, typst-renderer=25, mcp-renderer=30,
@@ -16,7 +16,7 @@
 # landing page, so the same page serves as both product description and user
 # guide. Matches the radar-renderer and mcp-renderer precedent (field
 # omitted), not typst-renderer's (has_page: false, legal pages only).
-name: MSG/EML Email Viewer for Confluence
+name: MSG & EML Email Viewer for Confluence
 slug: email-viewer
 order: 45
 status: live

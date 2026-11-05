@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "MSG/EML Email Viewer for Confluence"
+title: "MSG &amp; EML Email Viewer for Confluence"
 description: "Render a .msg or .eml file attached to a Confluence page as a readable email card: subject, sender, recipients, date, body, inline images and attachments, parsed in the reader's browser."
 image: /apps/email-viewer/guide-hero.png
 ---
@@ -14,10 +14,10 @@ image: /apps/email-viewer/guide-hero.png
       .prose figure.shot figcaption a { color: #2E6FE0; }
       .prose figure.shot figcaption { font-size: 0.85rem; color: #5C6B7E; margin-top: 0.5rem; text-align: center; }
     </style>
-    <h1>MSG/EML Email Viewer for Confluence</h1>
+    <h1>MSG &amp; EML Email Viewer for Confluence</h1>
     {% include trust-badges.html app="email-viewer" %}
 
-    <p class="lede">MSG/EML Email Viewer for Confluence is a Confluence Cloud app, built on Atlassian Forge, that renders a <code>.msg</code> or <code>.eml</code> file attached to a page as a readable email card: subject, sender, recipients, date, body, inline images, and the message's own attachments listed with a download for each. Nothing about the message is copied into the page. The macro's stored configuration holds the attachment's id, its filename and an optional label, and the file itself is read and parsed again on every view, so the card shows what the attached file says now.</p>
+    <p class="lede">MSG &amp; EML Email Viewer for Confluence is a Confluence Cloud app, built on Atlassian Forge, that renders a <code>.msg</code> or <code>.eml</code> file attached to a page as a readable email card: subject, sender, recipients, date, body, inline images, and the message's own attachments listed with a download for each. Nothing about the message is copied into the page. The macro's stored configuration holds the attachment's id, its filename and an optional label, and the file itself is read and parsed again on every view, so the card shows what the attached file says now.</p>
 
     <p>Without the macro, a <code>.msg</code> attached to a Confluence page opens in Confluence's preview window as plain text, with the files attached inside it listed by name and size and no way to open them; nothing of the email appears on the page itself or in a PDF export, and an <code>.eml</code> opens as its raw source. Emails filed on pages are frequently the documentation itself, an approval, a client instruction, a piece of incident correspondence kept where the work is written up. This macro renders that file on the page, with its formatting, inline images and attachments, under the page's own permissions, for anyone who can already see the page, including Confluence guests and (where a space allows them) anonymous readers.</p>
 
@@ -29,7 +29,7 @@ image: /apps/email-viewer/guide-hero.png
 
     <figure class="shot video" id="demo">
       <video controls playsinline preload="metadata" width="1920" height="1080"
-             poster="demo-poster.jpg" aria-label="Demo video: the Confluence section from The Attachment (MSG/EML Email Viewer for Confluence)">
+             poster="demo-poster.jpg" aria-label="Demo video: the Confluence section from The Attachment (MSG &amp; EML Email Viewer for Confluence)">
         <source src="/apps/email-viewer-jira/demo.mp4#t=86.1" type="video/mp4">
         <track kind="captions" src="/apps/email-viewer-jira/demo.vtt" srclang="en" label="English">
         Your browser does not play embedded video. <a href="https://www.youtube.com/watch?v=1_UTDRjLHlo&amp;t=86s" target="_blank" rel="noopener">Watch the demo on YouTube</a>.
@@ -38,7 +38,7 @@ image: /apps/email-viewer/guide-hero.png
     </figure>
 
     <h2 id="adding-an-email-to-a-page">Adding an email to a page</h2>
-    <p>Edit a Confluence page and insert the <strong>MSG/EML Email Viewer for Confluence</strong> macro, either from the macro browser or by typing <code>/</code> in the editor and part of the macro's name. The macro opens its configuration panel, titled <strong>Email attachment</strong>. Choose a <code>.msg</code> or <code>.eml</code> file already attached to the page, or drop one onto the panel to attach it, then save the macro and publish the page. The email renders when the page is viewed. Each macro shows one email; a page can hold as many macros as you need, and each one fetches, parses and renders on its own, so one email that will not render leaves the others untouched.</p>
+    <p>Edit a Confluence page and insert the <strong>MSG &amp; EML Email Viewer for Confluence</strong> macro, either from the macro browser or by typing <code>/</code> in the editor and part of the macro's name. The macro opens its configuration panel, titled <strong>Email attachment</strong>. Choose a <code>.msg</code> or <code>.eml</code> file already attached to the page, or drop one onto the panel to attach it, then save the macro and publish the page. The email renders when the page is viewed. Each macro shows one email; a page can hold as many macros as you need, and each one fetches, parses and renders on its own, so one email that will not render leaves the others untouched.</p>
 
     <figure>
       <img src="/apps/email-viewer/guide-hero.png" alt="An email attached to a Confluence page rendered as a card: a provenance strip reading &quot;Attached email&quot;, the subject with an EML badge, From, To and Date rows, the message body with an inline image, and two attachment tiles each with a Download link." width="768" height="477" loading="lazy">
@@ -155,10 +155,10 @@ image: /apps/email-viewer/guide-hero.png
 
     <p>Two narrow reads happen outside the browser, both inside Atlassian's infrastructure. On a Word or other static export, a stateless Forge function receives the stored attachment reference, reads the attachment with the exporting user's own permissions, parses it inside Atlassian's infrastructure and returns the text to Confluence. It stores nothing and sends nothing anywhere else. The licence check reads the licence state Atlassian supplies to the app's own runtime context, which is a local read with no network call. The full detail is in the app's <a href="/apps/email-viewer/privacy">Privacy Policy</a>, and our broader approach is described in the <a href="/security">Security Policy</a> and <a href="/trust">Trust Center</a>.</p>
 
-    <p>Emails attached to Jira work items are rendered by the same renderer in <a href="/apps/email-viewer-jira">MSG/EML Email Viewer for Jira</a>.</p>
+    <p>Emails attached to Jira work items are rendered by the same renderer in <a href="/apps/email-viewer-jira">MSG &amp; EML Email Viewer for Jira</a>.</p>
 
     <h2 id="open-source-components">Open-source components</h2>
-    <p>The app bundles <code>@kenjiuno/msgreader</code> 1.28.0 (Apache-2.0) and <code>@kenjiuno/decompressrtf</code> 0.1.4 (BSD-2-Clause) for <code>.msg</code> files, <code>postal-mime</code> 2.7.6 (MIT-0) for <code>.eml</code> files, <code>DOMPurify</code> 3.4.17 (used under Apache-2.0) for sanitisation, and <code>iconv-lite</code> 0.6.3 (MIT) for character-set decoding, together with the runtime libraries <code>react</code>, <code>react-dom</code>, <code>buffer</code> and <code>string_decoder</code> (all MIT), under their respective open-source licences. <code>.msg</code> is the message format Microsoft Outlook saves; <code>.eml</code> is the MIME format most other mail applications save. MSG/EML Email Viewer for Confluence is an independent product and is not affiliated with, or endorsed by, Microsoft.</p>
+    <p>The app bundles <code>@kenjiuno/msgreader</code> 1.28.0 (Apache-2.0) and <code>@kenjiuno/decompressrtf</code> 0.1.4 (BSD-2-Clause) for <code>.msg</code> files, <code>postal-mime</code> 2.7.6 (MIT-0) for <code>.eml</code> files, <code>DOMPurify</code> 3.4.17 (used under Apache-2.0) for sanitisation, and <code>iconv-lite</code> 0.6.3 (MIT) for character-set decoding, together with the runtime libraries <code>react</code>, <code>react-dom</code>, <code>buffer</code> and <code>string_decoder</code> (all MIT), under their respective open-source licences. <code>.msg</code> is the message format Microsoft Outlook saves; <code>.eml</code> is the MIME format most other mail applications save. MSG &amp; EML Email Viewer for Confluence is an independent product and is not affiliated with, or endorsed by, Microsoft.</p>
 
     {% include guides-list.html app="email-viewer" %}
     {% include release-history.html app="email-viewer" %}

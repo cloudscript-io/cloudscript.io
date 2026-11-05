@@ -77,7 +77,7 @@ per pair. Every value SHALL pass `jsonify` then `replace: "</", "<\/"`.
 #### Scenario: Guide without faq
 - **GIVEN** the placeholder guide with `faq: []`
 - **WHEN** its page is built
-- **THEN** it has one block whose `@graph` has exactly one node, a `TechArticle` with `headline` equal to the title, `datePublished` `2026-11-05`, `dateModified` `2026-11-05`, `author.name` `Natasha Roumanoff`, `about.name` `MSG/EML Email Viewer for Jira`, `about.url` `https://cloudscript.io/apps/email-viewer-jira/` and `mainEntityOfPage` equal to the canonical
+- **THEN** it has one block whose `@graph` has exactly one node, a `TechArticle` with `headline` equal to the title, `datePublished` `2026-11-05`, `dateModified` `2026-11-05`, `author.name` `Natasha Roumanoff`, `about.name` `MSG & EML Email Viewer for Jira`, `about.url` `https://cloudscript.io/apps/email-viewer-jira/` and `mainEntityOfPage` equal to the canonical
 
 #### Scenario: Guide with faq
 - **GIVEN** a guide whose `faq` has two `{q, a}` pairs

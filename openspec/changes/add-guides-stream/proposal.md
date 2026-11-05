@@ -6,13 +6,13 @@ The site has two kinds of page about an app: the guide on the app page (one long
 document per app, mirrored into the Confluence knowledge base) and the news posts (dated release
 announcements). Neither answers a question a reader types into a search engine or an AI
 assistant, such as "how do I keep the original email on a Jira work item created by email?".
-A competitor to MSG/EML Email Viewer runs about twenty such how-to pages for its rival app, and
+A competitor to MSG & EML Email Viewer runs about twenty such how-to pages for its rival app, and
 they draw search and assistant traffic that the app pages, written as reference, do not.
 
 Natasha decided on 5 Nov 2026 to add a stream of standalone how-to articles, written by a person
 for people, each about one question and one app, with a machine-readable layer (schema.org
 `TechArticle`, and `FAQPage` where the article carries question-and-answer pairs). The first
-answers the question above for MSG/EML Email Viewer for Jira, whose version 2.6 (released the
+answers the question above for MSG & EML Email Viewer for Jira, whose version 2.6 (released the
 same day, `/news/email-viewer-jira-2-6`) exists for exactly that case.
 
 ## What Changes
@@ -68,7 +68,7 @@ of the app pages, who gain a "Guides" list where an app has guides.
 
 ## Impact on existing users
 
-No existing URL changes. App pages gain a short list only where a guide exists (today: MSG/EML
+No existing URL changes. App pages gain a short list only where a guide exists (today: MSG & EML
 Email Viewer for Jira, once the placeholder's body is written). The nav gains one link.
 
 ## Adversarial security review

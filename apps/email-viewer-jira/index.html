@@ -149,7 +149,7 @@ description: "Renders the .msg and .eml files attached to a Jira work item as em
       <li><strong>Not accepted.</strong> "Jira wouldn't accept this file. It may be too large, or this work item may have reached its attachment limit." Jira's answer does not say which, so the card names both.</li>
       <li><strong>Not confirmed.</strong> "Jira didn't confirm this file was attached. Reload the work item to check, then try again or use Download." Shown when the request brought no answer, or an answer that did not confirm the file.</li>
       <li><strong>Failed.</strong> "Couldn't attach this file. Try again, or use Download."</li>
-      <li><strong>The app's permissions need updating.</strong> "MSG/EML Email Viewer for Jira can't add attachments because its Jira permissions need updating. See " followed by a link to this page. This means Jira's permission set for the attachments call no longer matches what the app declares; it concerns the app's declared permissions and nothing about your sign-in.</li>
+      <li><strong>The app's permissions need updating.</strong> "MSG &amp; EML Email Viewer for Jira can't add attachments because its Jira permissions need updating. See " followed by a link to this page. This means Jira's permission set for the attachments call no longer matches what the app declares; it concerns the app's declared permissions and nothing about your sign-in.</li>
     </ul>
     <p>After <strong>Attach all 3 files</strong>, the header shows the counts that apply, in this order: "3 attached", "1 not accepted", "1 not permitted", "1 blocked by the app's permissions", "1 not confirmed", "1 failed", "2 not attempted".</p>
 
@@ -164,7 +164,7 @@ description: "Renders the .msg and .eml files attached to a Jira work item as em
 
     <p>Message HTML is untrusted input and is sanitised before display; remote references are blocked after that pass, as described under The email card. Filenames, display names, subjects and sender names are stripped of bidirectional-override and zero-width characters before they are shown, so a name crafted to read as a different one cannot spoof the display. The licence check reads the licence state Atlassian supplies to the app's own runtime context. The full detail is in the app's <a href="/apps/email-viewer-jira/privacy">Privacy Policy</a>, and our broader approach is described in the <a href="/security">Security Policy</a> and <a href="/trust">Trust Center</a>.</p>
 
-    <p>Emails on Confluence pages are rendered by the same renderer in <a href="/apps/email-viewer">MSG/EML Email Viewer for Confluence</a>.</p>
+    <p>Emails on Confluence pages are rendered by the same renderer in <a href="/apps/email-viewer">MSG &amp; EML Email Viewer for Confluence</a>.</p>
 
     {% include guides-list.html app="email-viewer-jira" %}
     {% include release-history.html app="email-viewer-jira" %}
