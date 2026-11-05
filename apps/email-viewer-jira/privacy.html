@@ -35,7 +35,11 @@ title: MSG/EML Email Viewer for Jira — Privacy
   "View issue attachments", lets the app read attachment content: at most
   the first kilobyte of a candidate file, to work out whether it is a
   <code>.msg</code> or an <code>.eml</code> file, and the full file when
-  you open it. The eleventh and only write permission, "Create and update
+  you open it. A candidate is a file whose name ends in <code>.msg</code> or
+  <code>.eml</code>, or a file with no recognised extension that Jira lists as
+  <code>text/html</code> or <code>application/octet-stream</code>, which is how
+  Jira's mail handler saves an email that arrived attached to another email.
+  The eleventh and only write permission, "Create and update
   issue attachments", is used solely when you click "Attach to work item"
   or "Attach all N files": it lets the app post the file you chose to the
   work item you are viewing, as you. The app holds no permission to
