@@ -7,10 +7,10 @@
     step, and add nothing here that the site does not link.
   - A guide page (layout: guide, a document of the _guides/ collection): one block holding a
     @graph of a TechArticle (headline, description, datePublished from `date`, dateModified from
-    `checked`, image when set, author Person, publisher Organization, `about` the app's
+    `checked`, image when set, author Organization (the site), publisher Organization, `about` the app's
     SoftwareApplication by registry name and app-page URL, mainEntityOfPage the canonical) and,
     only when `faq` is a non-empty list of {q, a}, a FAQPage with one Question per pair. The
-    author is a name only, never an email address.
+    the author is the organisation, never a person or an email address.
   - A live app's guide page (apps/<slug>/index.html whose registry entry in
     _data/apps/<slug>.yml has status: live): SoftwareApplication, built only from that entry
     and site config. Its description is the entry's `structured_description` (a factual
@@ -92,8 +92,9 @@
         "image": {{ site.canonical_url | append: page.image | jsonify | replace: "</", "<\/" }},
         {%- endif %}
         "author": {
-          "@type": "Person",
-          "name": {{ "Natasha Roumanoff" | jsonify | replace: "</", "<\/" }}
+          "@type": "Organization",
+          "name": {{ site.title | jsonify | replace: "</", "<\/" }},
+          "url": {{ site.canonical_url | jsonify | replace: "</", "<\/" }}
         },
         "publisher": {
           "@type": "Organization",

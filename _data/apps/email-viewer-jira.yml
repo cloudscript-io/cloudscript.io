@@ -27,7 +27,7 @@
 # stores_personal_data and documents: populated 19 Sep 2026 on Natasha's
 # per-document sign-off of privacy, terms and the DPA. The three URLs are the
 # URL contract's rows.
-name: MSG/EML Email Viewer for Jira
+name: MSG & EML Email Viewer for Jira
 slug: email-viewer-jira
 order: 50
 status: live

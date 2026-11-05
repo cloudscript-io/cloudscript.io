@@ -28,7 +28,7 @@ import {
   sitemap,
 } from "./helpers.mjs";
 
-const AUTHOR = "Natasha Roumanoff";
+const BYLINE = "Created by the Cloudscript team";
 const all = guides();
 const apps = liveApps();
 const appBySlug = (slug) => apps.find((a) => a.slug === slug);
@@ -59,7 +59,7 @@ function assertTechArticle(data, guide, html, where) {
     datePublished: guide.date,
     dateModified: guide.checked,
     ...(guide.image ? { image: `${CANONICAL}${guide.image}` } : {}),
-    author: { "@type": "Person", name: AUTHOR },
+    author: { "@type": "Organization", name: "CloudScript.io", url: CANONICAL },
     publisher: { "@type": "Organization", name: "CloudScript.io", url: CANONICAL },
     about: { "@type": "SoftwareApplication", name: app.name, url: `${CANONICAL}/apps/${app.slug}/` },
     mainEntityOfPage: canonicalOf(html),
@@ -116,7 +116,7 @@ test("scenario: placeholder guide renders (title, byline, checked date, chip, CT
     const app = appBySlug(guide.app);
     assert.ok(app, `${guide.file}: app ${guide.app} is live`);
     assert.match(article, new RegExp(`<h1>${guide.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/'/g, "&#39;")}</h1>`), `${guide.file}: h1`);
-    assert.ok(article.includes(`By ${AUTHOR}`), `${guide.file}: byline`);
+    assert.ok(article.includes(`<span class="byline">${BYLINE}</span>`), `${guide.file}: byline`);
     assert.ok(article.includes(`Checked on <time datetime="${guide.checked}">${longDate(guide.checked)}</time>`), `${guide.file}: checked line`);
     assert.ok(article.includes(`<a class="app-chip" href="/apps/${app.slug}">`), `${guide.file}: app chip`);
     assert.ok(article.includes(`href="${app.marketplace_url}"`), `${guide.file}: Marketplace CTA`);

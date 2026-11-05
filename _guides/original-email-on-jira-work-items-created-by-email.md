@@ -23,7 +23,7 @@ faq:
   - q: "Does this work in Jira Service Management?"
     a: "Yes. The forward becomes a request with the original attached, under a generated filename."
   - q: "Do the original's attachments end up on the work item?"
-    a: "Not by themselves. In MSG/EML Email Viewer for Jira, each one has an Attach to work item button."
+    a: "Not by themselves. In MSG & EML Email Viewer for Jira, each one has an Attach to work item button."
   - q: "How can I check whether the email was genuine?"
     a: "From the original's headers, which survive a forward as an attachment: open the file in a mail program and view the headers, or read them in the viewer's Details panel, which shows the recorded SPF, DKIM and DMARC results, the Reply-To, and where each link goes."
   - q: "Does the app fetch emails from a mailbox?"
@@ -102,19 +102,19 @@ This assumes the original email is on the work item as an attachment, forwarded 
 
 With the attachment there, anyone can check it without any app. Download the file and open it in a mail program, then view the headers (in Outlook, File, then Properties, shows them under Internet headers; Gmail's "Show original" does the same for an email in a mailbox). Three things tell most of the story. First, the From address and the Reply-To address: if replies would go somewhere other than the sender, ask why. Second, the Authentication-Results line, which records whether the sending domain passed the SPF, DKIM and DMARC checks when the email arrived; a fail or a missing result on an email asking for money or a change of details is a reason to pick up the phone. Third, where the links go: hover over each one and compare the real address with the text.
 
-To make this verification easier, an app like [MSG/EML Email Viewer for Jira](/apps/email-viewer-jira) can be used to view details about emails attached to a work item from within Jira. MSG/EML Email Viewer for Jira shows each attached email in an Emails tab on the work item, and its Details panel can be opened to view the email headers without a download: the SPF, DKIM and DMARC results the receiving mail server recorded, the Reply-To address if it differs from the sender, where each link in the body really goes, and any hidden or lookalike characters in the names shown. It shows those facts, so a work item reader can check the email details themself rather than take the description on trust.
+To make this verification easier, an app like [MSG & EML Email Viewer for Jira](/apps/email-viewer-jira) can be used to view details about emails attached to a work item from within Jira. MSG & EML Email Viewer for Jira shows each attached email in an Emails tab on the work item, and its Details panel can be opened to view the email headers without a download: the SPF, DKIM and DMARC results the receiving mail server recorded, the Reply-To address if it differs from the sender, where each link in the body really goes, and any hidden or lookalike characters in the names shown. It shows those facts, so a work item reader can check the email details themself rather than take the description on trust.
 
 ## How do I read the attached email and get its attachments onto the work item?
 
 Jira has no viewer for email files. An .eml opens as raw text and a .msg as unreadable code, so readers download the file and open it in a mail program ([Atlassian tracker JRACLOUD-77500](https://jira.atlassian.com/browse/JRACLOUD-77500)).
 
-Our app, [MSG/EML Email Viewer for Jira](/apps/email-viewer-jira), is built to solve this problem. It adds an Emails tab to the work item, where it shows the saved email as it was sent: subject, real sender and recipients, date, body with its tables and images, and the email's attachments as tiles. Each tile has an Attach to work item button, and there is an Attach all button for the email. The invoice that arrived inside the original goes onto the work item with one click, no download and upload. Everything in the email is visible, and only what you choose is attached, so the work item's attachment list stays short. A viewer that only displays the email leaves those files inside it.
+Our app, [MSG & EML Email Viewer for Jira](/apps/email-viewer-jira), is built to solve this problem. It adds an Emails tab to the work item, where it shows the saved email as it was sent: subject, real sender and recipients, date, body with its tables and images, and the email's attachments as tiles. Each tile has an Attach to work item button, and there is an Attach all button for the email. The invoice that arrived inside the original goes onto the work item with one click, no download and upload. Everything in the email is visible, and only what you choose is attached, so the work item's attachment list stays short. A viewer that only displays the email leaves those files inside it.
 
 Since version 2.6 the app recognises an email by its content as well as its name, so the file Jira saves from an Outlook forward, and the renamed file from Service Management, show like any other email. Every read runs as the person viewing the work item, under Jira's own permissions. The file is read in that person's browser and no email data is stored or sent outside of your Atlassian environment.
 
 ## Are there alternatives to forwarding as an attachment myself?
 
-Forwarding as an attachment relies on a person doing it every time, or on a rule or flow someone sets up. For a desk that receives outside email all day, a mail handler app that creates the work item and saves the original in one step removes both. JEMH Cloud and Email This Issue both document a setting that attaches the incoming email to the work item as an .eml file. An email they attach to a work item for you shows in the viewer like any other and will be displayed with MSG/EML Email Viewer for Jira in the Emails tab.
+Forwarding as an attachment relies on a person doing it every time, or on a rule or flow someone sets up. For a desk that receives outside email all day, a mail handler app that creates the work item and saves the original in one step removes both. JEMH Cloud and Email This Issue both document a setting that attaches the incoming email to the work item as an .eml file. An email they attach to a work item for you shows in the viewer like any other and will be displayed with MSG & EML Email Viewer for Jira in the Emails tab.
 
 ## What we checked, and when
 
@@ -136,7 +136,7 @@ On 5 November 2026 we sent test emails from Gmail and Apple Mail to a Jira Cloud
 
 **Does this work in Jira Service Management?** Yes. The forward becomes a request with the original attached, under a generated filename.
 
-**Do the original's attachments end up on the work item?** Not by themselves. In MSG/EML Email Viewer for Jira, each one has an Attach to work item button.
+**Do the original's attachments end up on the work item?** Not by themselves. In MSG & EML Email Viewer for Jira, each one has an Attach to work item button.
 
 **How can I check whether the email was genuine?** From the original's headers, which survive a forward as an attachment: open the file in a mail program and view the headers, or read them in the viewer's Details panel, which shows the recorded SPF, DKIM and DMARC results, the Reply-To, and where each link goes.
 
