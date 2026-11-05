@@ -38,7 +38,7 @@ This guide covers what the handler keeps and discards, how to forward as an atta
 
 ## What does Jira's mail handler keep?
 
-A mail handler is set up under Settings, System, Incoming mail. It reads each email and creates a work item from it ([Atlassian: Create issues and comments from email](https://support.atlassian.com/jira-cloud-administration/docs/create-issues-and-comments-from-email/)). It keeps the subject as the summary, the body as plain text in the description, and any attached files as attachments on the work item.
+A mail handler is set up under Settings, System, Incoming mail. It reads each email and creates a work item from it ([Atlassian: Create issues and comments from email](https://support.atlassian.com/jira-cloud-administration/docs/create-issues-and-comments-from-email/){:target="_blank" rel="noopener"}). It keeps the subject as the summary, the body as plain text in the description, and any attached files as attachments on the work item.
 
 ## What does Jira's mail handler discard?
 
@@ -56,7 +56,7 @@ Forwarding the email as an attachment keeps all of this, because the original tr
 
 ## Who is shown as the reporter on a work item created by Jira's email handler?
 
-If the sender's address matches a Jira account, that account is the reporter. If not, the handler's Default Reporter is used, and the sender's address is noted at the end of the description. If there is no Default Reporter, the email is ignored and nothing is created ([Atlassian: Create issues and comments from email](https://support.atlassian.com/jira-cloud-administration/docs/create-issues-and-comments-from-email/)).
+If the sender's address matches a Jira account, that account is the reporter. If not, the handler's Default Reporter is used, and the sender's address is noted at the end of the description. If there is no Default Reporter, the email is ignored and nothing is created ([Atlassian: Create issues and comments from email](https://support.atlassian.com/jira-cloud-administration/docs/create-issues-and-comments-from-email/){:target="_blank" rel="noopener"}).
 
 So a work item created from a customer's email usually shows your own default account as the reporter. The customer's name survives only inside the original email, which is another reason to keep it.
 
@@ -64,7 +64,7 @@ So a work item created from a customer's email usually shows your own default ac
 
 An ordinary forward copies the text into a new message. Forwarding as an attachment sends the whole original email as a file inside the new message. That file is what Jira saves.
 
-- Outlook on the web: open the message, choose More actions, then Forward as attachment. In Outlook for Windows, choose Forward, then Forward as Attachment. Outlook sends the file without a name, so Jira names it after the subject, with no file extension ([Atlassian tracker JRACLOUD-40477](https://jira.atlassian.com/browse/JRACLOUD-40477)).
+- Outlook on the web: open the message, choose More actions, then Forward as attachment. In Outlook for Windows, choose Forward, then Forward as Attachment. Outlook sends the file without a name, so Jira names it after the subject, with no file extension ([Atlassian tracker JRACLOUD-40477](https://jira.atlassian.com/browse/JRACLOUD-40477){:target="_blank" rel="noopener"}).
 - Gmail: open the message's three-dot menu and choose Forward as attachment. The file is named after the subject, ending in .eml.
 - Apple Mail: select the message, then Message, Forward as Attachment. The file is named like Gmail's.
 
@@ -82,9 +82,9 @@ One thing to avoid: do not save the email as a file, rename it and attach that. 
 
 Forwarding one email at a time is fine for the occasional approval. For a mailbox that receives work every day there are three ways to automate it.
 
-A mailbox rule. Outlook on the web and Exchange Online rules include a "Forward as attachment" action ([Microsoft: New-InboxRule, ForwardAsAttachmentTo](https://learn.microsoft.com/en-us/powershell/module/exchange/new-inboxrule)). A rule on the shared mailbox forwards every matching email to your Jira address as an attachment, with no one involved. The work item gets the original's subject, with "FW:" in front, and the original email attached. Its description is empty, because an automatic forward has no body of its own; the original's text is in the attached email.
+A mailbox rule. Outlook on the web and Exchange Online rules include a "Forward as attachment" action ([Microsoft: New-InboxRule, ForwardAsAttachmentTo](https://learn.microsoft.com/en-us/powershell/module/exchange/new-inboxrule){:target="_blank" rel="noopener"}). A rule on the shared mailbox forwards every matching email to your Jira address as an attachment, with no one involved. The work item gets the original's subject, with "FW:" in front, and the original email attached. Its description is empty, because an automatic forward has no body of its own; the original's text is in the attached email.
 
-A flow. A Power Automate flow on Microsoft 365 ([Microsoft: Office 365 Outlook connector, Export email](https://learn.microsoft.com/en-us/connectors/office365/)), or an Apps Script on Google Workspace, can take each new email, export it as an .eml file, and send Jira a new email with the original's subject and body and the .eml attached. Jira then creates a work item with the subject, the text and the original email. This takes a flow someone owns, and it is the complete answer without another Jira app.
+A flow. A Power Automate flow on Microsoft 365 ([Microsoft: Office 365 Outlook connector, Export email](https://learn.microsoft.com/en-us/connectors/office365/){:target="_blank" rel="noopener"}), or an Apps Script on Google Workspace, can take each new email, export it as an .eml file, and send Jira a new email with the original's subject and body and the .eml attached. Jira then creates a work item with the subject, the text and the original email. This takes a flow someone owns, and it is the complete answer without another Jira app.
 
 A mail handler app. Apps such as JEMH Cloud and Email This Issue read the mailbox themselves, create the work item from the email, and attach the original in the same step, with their own settings for reporters and routing. For a desk that lives on inbound email this is the purpose-built route.
 
@@ -92,7 +92,7 @@ In each case the viewer shows the attached original on the work item, with its h
 
 ## What is different in Jira Service Management?
 
-A Service Management project reads its email channel the same way. The original email is kept only in the project's email processing log, where a project admin can download it until the log is cleaned ([Atlassian: View the email processing and connectivity logs](https://support.atlassian.com/jira-service-management-cloud/docs/view-the-email-processing-and-connectivity-logs/)). Saving it on the request automatically is a long-standing request on Atlassian's tracker ([JRACLOUD-42402](https://jira.atlassian.com/browse/JRACLOUD-42402)).
+A Service Management project reads its email channel the same way. The original email is kept only in the project's email processing log, where a project admin can download it until the log is cleaned ([Atlassian: View the email processing and connectivity logs](https://support.atlassian.com/jira-service-management-cloud/docs/view-the-email-processing-and-connectivity-logs/){:target="_blank" rel="noopener"}). Saving it on the request automatically is a long-standing request on Atlassian's tracker ([JRACLOUD-42402](https://jira.atlassian.com/browse/JRACLOUD-42402){:target="_blank" rel="noopener"}).
 
 Forwarding as an attachment works here too. The forward becomes a request with the original email attached, and the request's summary is your forward's subject, as in any other project. The one difference is the saved file's name: in our tests on 5 November 2026, Service Management gave the attached email a random eight-character name instead of the subject, so look for it in the request's attachments rather than by name. It renders in the Emails tab like any other email.
 
@@ -106,7 +106,7 @@ To make this verification easier, an app like [MSG & EML Email Viewer for Jira](
 
 ## How do I read the attached email and get its attachments onto the work item?
 
-Jira has no viewer for email files. An .eml opens as raw text and a .msg as unreadable code, so readers download the file and open it in a mail program ([Atlassian tracker JRACLOUD-77500](https://jira.atlassian.com/browse/JRACLOUD-77500)).
+Jira has no viewer for email files. An .eml opens as raw text and a .msg as unreadable code, so readers download the file and open it in a mail program ([Atlassian tracker JRACLOUD-77500](https://jira.atlassian.com/browse/JRACLOUD-77500){:target="_blank" rel="noopener"}).
 
 Our app, [MSG & EML Email Viewer for Jira](/apps/email-viewer-jira), is built to solve this problem. It adds an Emails tab to the work item, where it shows the saved email as it was sent: subject, real sender and recipients, date, body with its tables and images, and the email's attachments as tiles. Each tile has an Attach to work item button, and there is an Attach all button for the email. The invoice that arrived inside the original goes onto the work item with one click, no download and upload. Everything in the email is visible, and only what you choose is attached, so the work item's attachment list stays short. A viewer that only displays the email leaves those files inside it.
 

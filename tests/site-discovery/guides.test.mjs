@@ -192,6 +192,20 @@ test("scenario: guides present in the sitemap with lastmod on the checked date",
   }
 });
 
+test("scenario: every external link in a guide opens in a new tab", () => {
+  for (const guide of all) {
+    const html = read(`guides/${guide.slug}.html`);
+    const article = /<article[\s\S]*?<\/article>/.exec(html)?.[0] ?? "";
+    const anchors = [...article.matchAll(/<a\s[^>]*>/g)].map((m) => m[0]);
+    const external = anchors.filter((a) => /href="https?:\/\//.test(a) && !a.includes('href="https://cloudscript.io'));
+    assert.ok(external.length > 0, `${guide.file}: has at least one external link`);
+    for (const a of external) {
+      assert.ok(/\starget="_blank"/.test(a), `${guide.file}: external link opens in a new tab: ${a}`);
+      assert.ok(/\srel="[^"]*noopener[^"]*"/.test(a), `${guide.file}: external link carries rel=noopener: ${a}`);
+    }
+  }
+});
+
 test("scenario: feeds and the news stream carry no guide", () => {
   // A guide must never be a feed ENTRY. A post's body may link to a guide, so the check reads
   // each entry's <id> and <link href>, not the whole file.
