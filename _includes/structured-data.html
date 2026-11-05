@@ -5,6 +5,12 @@
   - The home page: Organization and WebSite. `sameAs` lists only profiles the site footer
     already links (Marketplace vendor page, LinkedIn Page, YouTube channel); keep the two in
     step, and add nothing here that the site does not link.
+  - A guide page (layout: guide, a document of the _guides/ collection): one block holding a
+    @graph of a TechArticle (headline, description, datePublished from `date`, dateModified from
+    `checked`, image when set, author Person, publisher Organization, `about` the app's
+    SoftwareApplication by registry name and app-page URL, mainEntityOfPage the canonical) and,
+    only when `faq` is a non-empty list of {q, a}, a FAQPage with one Question per pair. The
+    author is a name only, never an email address.
   - A live app's guide page (apps/<slug>/index.html whose registry entry in
     _data/apps/<slug>.yml has status: live): SoftwareApplication, built only from that entry
     and site config. Its description is the entry's `structured_description` (a factual
@@ -70,4 +76,57 @@
   }
   </script>
   {%- endif -%}
+{%- elsif page.layout == "guide" -%}
+  {%- assign sd_app = site.data.apps[page.app] -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "headline": {{ page.title | jsonify | replace: "</", "<\/" }},
+        "description": {{ page.description | jsonify | replace: "</", "<\/" }},
+        "datePublished": {{ page.date | date: "%Y-%m-%d" | jsonify | replace: "</", "<\/" }},
+        "dateModified": {{ page.checked | date: "%Y-%m-%d" | jsonify | replace: "</", "<\/" }},
+        {%- if page.image %}
+        "image": {{ site.canonical_url | append: page.image | jsonify | replace: "</", "<\/" }},
+        {%- endif %}
+        "author": {
+          "@type": "Person",
+          "name": {{ "Natasha Roumanoff" | jsonify | replace: "</", "<\/" }}
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": {{ site.title | jsonify | replace: "</", "<\/" }},
+          "url": {{ site.canonical_url | jsonify | replace: "</", "<\/" }}
+        },
+        {%- if sd_app %}
+        "about": {
+          "@type": "SoftwareApplication",
+          "name": {{ sd_app.name | jsonify | replace: "</", "<\/" }},
+          "url": {{ site.canonical_url | append: "/apps/" | append: sd_app.slug | append: "/" | jsonify | replace: "</", "<\/" }}
+        },
+        {%- endif %}
+        "mainEntityOfPage": {{ site.canonical_url | append: page.url | jsonify | replace: "</", "<\/" }}
+      }
+      {%- if page.faq and page.faq.size > 0 %},
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {%- for pair in page.faq %}
+          {
+            "@type": "Question",
+            "name": {{ pair.q | jsonify | replace: "</", "<\/" }},
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": {{ pair.a | jsonify | replace: "</", "<\/" }}
+            }
+          }{% unless forloop.last %},{% endunless %}
+          {%- endfor %}
+        ]
+      }
+      {%- endif %}
+    ]
+  }
+  </script>
 {%- endif -%}
