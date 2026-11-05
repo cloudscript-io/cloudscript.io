@@ -158,7 +158,7 @@ test("scenario: one Jira guide listed on the index under its product with its ch
 test("scenario: each app page lists its own guides, and nothing where it has none", () => {
   for (const app of apps) {
     const html = read(`apps/${app.slug}/index.html`);
-    const mine = all.filter((g) => g.app === app.slug).sort((a, b) => b.checked.localeCompare(a.checked));
+    const mine = all.filter((g) => g.app === app.slug);
     const list = /<h2 id="guides">([^<]*)<\/h2>\s*<ul class="release-history guides-list">([\s\S]*?)<\/ul>/.exec(html);
     if (mine.length === 0) {
       assert.equal(list, null, `${app.slug}: no guides heading`);
@@ -167,7 +167,7 @@ test("scenario: each app page lists its own guides, and nothing where it has non
     } else {
       assert.ok(list, `${app.slug}: guides list`);
       assert.equal(list[1], GUIDES_NAME, `${app.slug}: heading is the display name`);
-      assert.deepEqual(hrefs(list[2]), mine.map((g) => g.url), `${app.slug}: its guides, newest checked first`);
+      assertNewestFirst(hrefs(list[2]), mine);
       for (const g of mine) assert.ok(list[2].includes(`<time datetime="${g.checked}">${shortDate(g.checked)}</time>`), `${app.slug}: ${g.slug} date`);
     }
     // The SoftwareApplication block is unchanged by the list: still exactly one block, still that type.
@@ -277,6 +277,16 @@ function buildWithFixtures() {
   return { scratch, dest, read: (rel) => readFileSync(path.join(dest, rel), "utf8") };
 }
 
+/** `links` lists every guide in `guides` exactly once, in non-increasing `checked` order, then `last` when
+ *  given. Guides sharing a `checked` date may come in either order: the spec fixes only newest first. */
+function assertNewestFirst(links, guides, last) {
+  const real = last === undefined ? links : links.slice(0, -1);
+  if (last !== undefined) assert.equal(links[links.length - 1], last);
+  assert.deepEqual([...real].sort(), guides.map((g) => g.url).sort());
+  const dates = real.map((u) => guides.find((g) => g.url === u).checked);
+  for (let i = 1; i < dates.length; i++) assert.ok(dates[i - 1] >= dates[i], `newest checked first: ${real.join(", ")}`);
+}
+
 test("fixture build: FAQPage, script breakout, see-also fallback, grouping and ordering", () => {
   const fx = buildWithFixtures();
   try {
@@ -313,14 +323,16 @@ test("fixture build: FAQPage, script breakout, see-also fallback, grouping and o
     assert.deepEqual(headings, ["confluence", "jira"]);
     const jiraPart = index.slice(index.indexOf('<h2 id="jira">'));
     const jiraLinks = hrefs(jiraPart).filter((h) => h.startsWith(GUIDES_URL) && h !== GUIDES_URL);
-    const jiraGuides = all.filter((x) => appBySlug(x.app).product === "Jira").sort((a, b) => b.checked.localeCompare(a.checked));
-    assert.deepEqual(jiraLinks, [...jiraGuides.map((g) => g.url), `${GUIDES_URL}zz-fixture-jira-faq`]);
+    // Guides that share a checked date may come in either order, so the real guides are checked as a
+    // set in non-increasing checked order, and the fixture is pinned last.
+    const jiraGuides = all.filter((x) => appBySlug(x.app).product === "Jira");
+    assertNewestFirst(jiraLinks, jiraGuides, `${GUIDES_URL}zz-fixture-jira-faq`);
     assert.ok(index.slice(index.indexOf('<h2 id="confluence">'), index.indexOf('<h2 id="jira">')).includes(`${GUIDES_URL}zz-fixture-confluence`));
 
     // App pages: the Jira email viewer lists the fixture last (oldest); Mermaid now has a list; Typst still none.
     const jiraApp = /<ul class="release-history guides-list">([\s\S]*?)<\/ul>/.exec(fx.read("apps/email-viewer-jira/index.html"))?.[1];
     assert.ok(jiraApp);
-    assert.deepEqual(hrefs(jiraApp), [...all.filter((g) => g.app === "email-viewer-jira").sort((a, b) => b.checked.localeCompare(a.checked)).map((g) => g.url), `${GUIDES_URL}zz-fixture-jira-faq`]);
+    assertNewestFirst(hrefs(jiraApp), all.filter((g) => g.app === "email-viewer-jira"), `${GUIDES_URL}zz-fixture-jira-faq`);
     assert.ok(fx.read("apps/mermaid/index.html").includes(`<h2 id="guides">${GUIDES_NAME}</h2>`));
     assert.ok(!fx.read("apps/typst-renderer/index.html").includes('id="guides"'));
 
