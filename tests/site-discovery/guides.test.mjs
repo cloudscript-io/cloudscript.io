@@ -193,7 +193,17 @@ test("scenario: guides present in the sitemap with lastmod on the checked date",
 });
 
 test("scenario: feeds and the news stream carry no guide", () => {
-  for (const feed of ["news/feed.xml", "news/linkedin.xml"]) assert.ok(!read(feed).includes(GUIDES_URL), `${feed}: no ${GUIDES_URL}`);
+  // A guide must never be a feed ENTRY. A post's body may link to a guide, so the check reads
+  // each entry's <id> and <link href>, not the whole file.
+  for (const feed of ["news/feed.xml", "news/linkedin.xml"]) {
+    const entries = read(feed).match(/<entry>[\s\S]*?<\/entry>/g) ?? [];
+    for (const entry of entries) {
+      const id = /<id>([^<]*)<\/id>/.exec(entry)?.[1] ?? "";
+      const links = [...entry.matchAll(/<link[^>]*\shref="([^"]+)"/g)].map((m) => m[1]);
+      assert.ok(!id.includes(GUIDES_URL), `${feed}: entry id ${id} is not a guide`);
+      for (const h of links) assert.ok(!h.includes(GUIDES_URL), `${feed}: entry link ${h} is not a guide`);
+    }
+  }
   const stream = /<ol class="news-stream">[\s\S]*?<\/ol>/.exec(read("news/index.html"))?.[0];
   assert.ok(stream, "news stream list");
   assert.ok(!hrefs(stream).some((h) => h.startsWith(GUIDES_URL)), "news stream links no guide");
