@@ -3,7 +3,7 @@
 // helpers.mjs for the fresh-build gate.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { CANONICAL, built, builtHtml, canonicalOf, jsonLdBlocks, liveApps, read, readSource } from "./helpers.mjs";
+import { CANONICAL, built, builtHtml, builtPathOf, canonicalOf, guides, jsonLdBlocks, liveApps, read, readSource } from "./helpers.mjs";
 
 const apps = liveApps();
 const guidePath = (slug) => `apps/${slug}/index.html`;
@@ -134,7 +134,8 @@ test("Organization.sameAs lists only profiles the home page already links", () =
   for (const url of organization.sameAs) assert.ok(page.includes(`href="${url}"`), `${url} is linked on the home page`);
 });
 
-test("only the home page and live app guides carry structured data", () => {
+test("only the home page, the live app guides and the guides under /guides/ carry structured data", () => {
   const withBlocks = builtHtml().filter((rel) => jsonLdBlocks(read(rel)).length > 0);
-  assert.deepEqual(withBlocks, ["index.html", ...apps.map((a) => guidePath(a.slug))].sort());
+  const expected = ["index.html", ...apps.map((a) => guidePath(a.slug)), ...guides().map((g) => builtPathOf(g.url))];
+  assert.deepEqual(withBlocks, expected.sort());
 });

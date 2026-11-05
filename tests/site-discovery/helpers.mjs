@@ -21,7 +21,7 @@ export const STANDALONE = new Set(["share/index.html"]);
 
 // --- sources and the fresh-build gate ----------------------------------------------------------
 
-const SOURCE_ROOTS = ["_config.yml", "robots.txt", "sitemap.xml", "_layouts", "_includes", "_data", "_posts", "apps", "news", "share"];
+const SOURCE_ROOTS = ["_config.yml", "robots.txt", "sitemap.xml", "_layouts", "_includes", "_data", "_posts", "_guides", "apps", "news", "guides", "share"];
 const SOURCE_EXTENSIONS = new Set([".html", ".md", ".yml", ".xml", ".txt"]);
 const posix = (p) => p.split(path.sep).join("/");
 
@@ -105,6 +105,20 @@ export function configValue(key) {
 /** `https://cloudscript.io`: the host every canonical URL is built on. */
 export const CANONICAL = configValue("canonical_url");
 
+/** The stream's display name, set once in _config.yml (`guides_name`). */
+export const GUIDES_NAME = configValue("guides_name");
+
+/**
+ * The guides collection's URL segment, from its `permalink: /<segment>/:name` line under
+ * `collections:` in _config.yml: `/guides/`, the path of the stream's index and the prefix of
+ * every guide URL. Read from the config so a rename needs no test edit.
+ */
+export const GUIDES_URL = (() => {
+  const m = /^collections:\n(?:[ \t]+.*\n)*?[ \t]+guides:\n(?:[ \t]+.*\n)*?[ \t]+permalink:[ \t]*(\S+)/m.exec(readSource("_config.yml"));
+  if (!m) throw new Error("_config.yml: no permalink under collections.guides");
+  return m[1].split(":")[0];
+})();
+
 // --- registry and posts -------------------------------------------------------------------------
 
 export const liveApps = () => selectApps(loadRegistry(path.join(repoRoot, "_data", "apps"))).live;
@@ -115,6 +129,39 @@ export function posts() {
     .filter((f) => /^\d{4}-\d{2}-\d{2}-.+\.md$/.test(f))
     .sort()
     .map((f) => ({ file: f, date: f.slice(0, 10), url: `/news/${f.slice(11, -3)}` }));
+}
+
+/**
+ * Every guide in _guides/, with its URL and the scalar front-matter values the tests need
+ * (`title`, `description`, `app`, `date`, `checked`, `image`), unquoted; `faq` is true when
+ * the key holds a non-empty list (a block list or a non-empty flow list).
+ */
+export function guides() {
+  return readdirSync(path.join(repoRoot, "_guides"))
+    .filter((f) => f.endsWith(".md"))
+    .sort()
+    .map((f) => {
+      const fm = frontMatter(readSource(`_guides/${f}`));
+      const scalar = (key) => {
+        const m = new RegExp(`^${key}:[ \\t]*(.*?)[ \\t]*$`, "m").exec(fm);
+        return m ? m[1].replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1") : null;
+      };
+      const faqLine = /^faq:[ \t]*(.*?)[ \t]*$/m.exec(fm)?.[1] ?? null;
+      const faq = faqLine !== null && faqLine !== "[]" && faqLine !== "null" && faqLine !== "~";
+      const slug = f.slice(0, -3);
+      return {
+        file: f,
+        slug,
+        url: `${GUIDES_URL}${slug}`,
+        title: scalar("title"),
+        description: scalar("description"),
+        app: scalar("app"),
+        date: scalar("date"),
+        checked: scalar("checked"),
+        image: scalar("image"),
+        faq,
+      };
+    });
 }
 
 /** The front matter block of a source file as raw text, or "" when it has none. */

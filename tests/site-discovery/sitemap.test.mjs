@@ -8,6 +8,7 @@ import {
   builtPathOf,
   canonicalOf,
   frontMatter,
+  guides,
   isNoindex,
   layoutPages,
   liveApps,
@@ -69,9 +70,20 @@ test("scenario: live app pages and posts are present, posts with a W3C <lastmod>
   }
 });
 
-test("only posts carry a <lastmod>", () => {
-  const postUrls = new Set(posts().map((p) => `${CANONICAL}${p.url}`));
-  for (const entry of entries) assert.equal(entry.lastmod !== null, postUrls.has(entry.loc), entry.loc);
+test("scenario: guides are present, each with a <lastmod> on its checked date", () => {
+  const all = guides();
+  assert.ok(all.length > 0);
+  for (const guide of all) {
+    const entry = entries.find((e) => e.loc === `${CANONICAL}${guide.url}`);
+    assert.ok(entry, guide.url);
+    assert.match(entry.lastmod ?? "", W3C_DATETIME, `${guide.url} lastmod`);
+    assert.equal(entry.lastmod.slice(0, 10), guide.checked, `${guide.url} lastmod is the guide's checked date`);
+  }
+});
+
+test("only posts and guides carry a <lastmod>", () => {
+  const dated = new Set([...posts(), ...guides()].map((p) => `${CANONICAL}${p.url}`));
+  for (const entry of entries) assert.equal(entry.lastmod !== null, dated.has(entry.loc), entry.loc);
 });
 
 test("scenario: non-indexable pages are omitted", () => {
