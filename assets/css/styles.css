@@ -416,6 +416,13 @@ footer.site-footer { background: var(--ink); color: #C8D2E0; padding: 48px 0 30p
   .news-item { grid-template-columns: 1fr; gap: 6px; }
 }
 
+/* ---- Guides (/guides index, guide pages, per-app guides list) ------------ */
+.prose .guide .byline { color: var(--ink); font-weight: 600; }
+.prose .news-item h3 { font-size: 20px; margin: 0 0 6px; }
+.prose .news-item h3 a { color: var(--ink); font-weight: 700; }
+.prose .news-item h3 a:hover { color: var(--blue); }
+.prose ul.see-also { padding-left: 22px; }
+
 /* ---- Responsive --------------------------------------------------------- */
 /* The featured thumbnail costs the description column 242px (image + gap), and that
    column only has room for it while #apps is at its full 1080px max-width. One pixel

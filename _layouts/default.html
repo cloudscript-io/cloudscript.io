@@ -40,6 +40,12 @@
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 <body>
+{% comment %}
+  The guides index link and name come from _config.yml (collection permalink, guides_name),
+  so they are written once; see the Guides comment there.
+{% endcomment %}
+{%- assign guides_collection = site.collections | where: "label", "guides" | first -%}
+{%- assign guides_url = guides_collection.permalink | split: ":" | first %}
 
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -78,6 +84,7 @@
     <nav class="nav-links" aria-label="Primary">
       <a href="/#apps">Apps</a>
       <a href="/news/">News</a>
+      <a href="{{ guides_url }}">{{ site.guides_name | escape }}</a>
       <a href="/trust">Trust Center</a>
       <a href="/support">Support</a>
       <a class="btn btn-primary" href="/#apps">Browse the apps</a>
@@ -122,6 +129,7 @@
           <h5>Company</h5>
           <a href="/about">About</a>
           <a href="/news/">News</a>
+          <a href="{{ guides_url }}">{{ site.guides_name | escape }}</a>
         </div>
         <div>
           <h5>Help</h5>

@@ -1,0 +1,83 @@
+---
+layout: default
+---
+{% comment %}
+  Guide layout: a standalone how-to article, one question and one app each (CLAUDE.md §3,
+  "Guides"). A guide's front matter carries:
+    title        — the question or task, as a person would ask it; the <h1>, <title>, og:title
+                   and the TechArticle headline
+    description  — one factual sentence: meta description, the index entry, TechArticle
+                   description
+    app          — registry slug from _data/apps/ (required): the app chip, the CTA buttons
+                   (Marketplace URL from the registry, never retyped), the product grouping on
+                   the index, the per-app list on the app page and the TechArticle `about`
+    date         — first published (TechArticle datePublished)
+    checked      — the date the steps were last verified: the "Checked on" line, TechArticle
+                   dateModified, the sitemap <lastmod> and the ordering on the index
+    image        — root-relative raster share image (og:image), same rule as posts
+    see_also     — optional list: a guide slug (no slash) or an absolute site path, with an
+                   optional #fragment; each becomes a link whose text is the target's title
+    faq          — optional list of {q, a}; a non-empty list adds a FAQPage node to the page's
+                   JSON-LD (_includes/structured-data.html); it is not rendered here
+  The byline is a name only. No email address belongs on a guide.
+  The stream's display name is site.guides_name and its URL segment the collection permalink
+  (_config.yml), both read here rather than written.
+{% endcomment %}
+{% assign guides_collection = site.collections | where: "label", "guides" | first %}
+{% assign guides_url = guides_collection.permalink | split: ":" | first %}
+{% assign app = site.data.apps[page.app] %}
+<div class="page wrap">
+  <article class="prose post guide">
+    <p class="post-kicker"><a href="{{ guides_url }}">{{ site.guides_name | escape }}</a></p>
+    <h1>{{ page.title | escape }}</h1>
+    <div class="meta post-meta">
+      <span class="byline">By Natasha Roumanoff</span>
+      <span class="checked">Checked on <time datetime="{{ page.checked | date: "%Y-%m-%d" }}">{{ page.checked | date: "%-d %B %Y" }}</time></span>
+      {% if app %}
+      <a class="app-chip" href="/apps/{{ app.slug }}">
+        <img src="/assets/img/icons/{{ app.slug }}.svg" alt="" width="20" height="20">{{ app.name | escape }}
+      </a>
+      {% endif %}
+    </div>
+
+    {{ content }}
+
+    {% if app %}
+    <p class="cta-row">
+      {% if app.marketplace_url %}<a class="btn btn-primary" href="{{ app.marketplace_url }}" target="_blank" rel="noopener">View on Marketplace</a>{% endif %}
+      <a class="btn btn-ghost" href="/apps/{{ app.slug }}">{{ app.name | escape }} user guide</a>
+    </p>
+    {% endif %}
+
+    {% if page.see_also and page.see_also.size > 0 %}
+    <h2 id="see-also">See also</h2>
+    <ul class="see-also">
+      {% for item in page.see_also %}
+      {% assign label = item %}
+      {% assign href = item %}
+      {% assign first_char = item | slice: 0, 1 %}
+      {% if first_char == "/" %}
+        {% assign parts = item | split: "#" %}
+        {% assign target_url = parts[0] %}
+        {% assign fragment = parts[1] %}
+        {% assign target = site.posts | where: "url", target_url | first %}
+        {% unless target %}{% assign target = site.pages | where: "url", target_url | first %}{% endunless %}
+        {% unless target %}{% assign target = site.guides | where: "url", target_url | first %}{% endunless %}
+        {% if target and target.title %}
+          {% assign label = target.title %}
+          {% if fragment %}{% assign label = label | append: ": " | append: fragment | replace: "-", " " %}{% endif %}
+        {% endif %}
+      {% else %}
+        {% assign target_url = guides_url | append: item %}
+        {% assign href = target_url %}
+        {% assign target = site.guides | where: "url", target_url | first %}
+        {% if target and target.title %}{% assign label = target.title %}{% endif %}
+      {% endif %}
+      <li><a href="{{ href }}">{{ label | escape }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <p class="back-link"><a href="{{ guides_url }}">&larr; All {{ site.guides_name | downcase | escape }}</a></p>
+  </article>
+</div>

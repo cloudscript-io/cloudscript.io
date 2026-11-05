@@ -1,0 +1,21 @@
+{% comment %}
+  The guides for one app, drawn from the _guides/ collection. Usage on an app page, directly
+  before the release-history include:
+    {% include guides-list.html app="email-viewer-jira" %}
+  Lists every guide whose `app` front-matter key matches, newest `checked` first, and renders
+  nothing at all for an app with no guides, so it is safe to include on every app page.
+  kb-sync strips Liquid tags from the app page source before mirroring it, so this include
+  never reaches the Confluence knowledge base.
+{% endcomment %}
+{% assign app_guides = site.guides | where: "app", include.app | sort: "checked" | reverse %}
+{% if app_guides.size > 0 %}
+{% assign guides_collection = site.collections | where: "label", "guides" | first %}
+{% assign guides_url = guides_collection.permalink | split: ":" | first %}
+    <h2 id="guides">{{ site.guides_name | escape }}</h2>
+    <ul class="release-history guides-list">
+      {% for guide in app_guides %}
+      <li><time datetime="{{ guide.checked | date: "%Y-%m-%d" }}">{{ guide.checked | date: "%-d %b %Y" }}</time> <a href="{{ guide.url }}">{{ guide.title | escape }}</a></li>
+      {% endfor %}
+    </ul>
+    <p>Every guide, for every app, is on the <a href="{{ guides_url }}">{{ site.guides_name | escape }}</a> page.</p>
+{% endif %}

@@ -39,6 +39,24 @@ default_image: /assets/img/share-default.png
 # and that block is the body (no fallback to `description`).
 permalink: /news/:title
 
+# Guides (standalone how-to articles, one question and one app each; added 5 Nov 2026).
+# Each is a Markdown file in _guides/ built by the collection below and served at
+# /guides/<slug> (extensionless, no trailing slash, like the posts); the stream's index is the
+# directory index guides/index.html (-> /guides/). The name and the URL segment are each set
+# ONCE: the segment only in the collection permalink below, the display name only in
+# `guides_name`. Every link to the index and every mention of the name in the nav, the footer,
+# the index, the guide layout and the per-app include is derived from these two values, and
+# the site-discovery tests read them from here, so a rename before publish is:
+#   display name: change `guides_name` (and the `title:` of guides/index.html, which is front
+#                 matter and cannot read it);
+#   URL segment:  change the permalink below and `git mv guides/ <segment>/`.
+# Guides are not posts: they never enter news/feed.xml, news/linkedin.xml, /news/ or kb-sync.
+collections:
+  guides:
+    output: true
+    permalink: /guides/:name
+guides_name: Guides
+
 # Internal / authoring files must NOT be published to the live site.
 exclude:
   - CLAUDE.md

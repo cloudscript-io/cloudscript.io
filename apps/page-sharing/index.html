@@ -702,6 +702,14 @@ image: /apps/page-sharing/publisher-share.png
       </div>
     </section>
 
+    <!-- Guides for this app (renders nothing until a Page Sharing guide exists). Outside any
+         <section>: the include's <h2 id="guides"> must not sit inside a section that already
+         has an id (site-discovery heading rule). NOT class="prose": kb-sync takes the first
+         div.prose as the guide root and would mirror this empty block instead of the page. -->
+    <div class="wrap ps-guides">
+      {% include guides-list.html app="page-sharing" %}
+    </div>
+
     <!-- Click any screenshot to view it full-resolution -->
     <dialog class="lightbox" aria-label="Zoomed screenshot">
       <img alt="" />

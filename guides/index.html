@@ -1,0 +1,56 @@
+---
+layout: default
+title: "Guides"
+description: "Step-by-step answers to questions about Confluence Cloud and Jira Cloud, written and checked by the people who build CloudScript.io's apps, each with the date it was last verified."
+---
+{% comment %}
+  The guides index. Every file in _guides/ appears here, grouped by product (Confluence, then
+  Jira, the same fixed order as the home page, from the registry `product` of the guide's
+  app), newest `checked` first within a product, with its description and app chip. A product
+  with no guide is skipped. Nothing to edit when a guide is added.
+  Built as a directory index (guides/index.html -> /guides/) so it cannot collide with the
+  guide files Jekyll writes into guides/ (CLAUDE.md §4, the same reason as /news/).
+  The heading and <title> are the stream's display name: the <h1> reads site.guides_name; the
+  `title:` above is front matter and must be changed by hand with it (see _config.yml).
+{% endcomment %}
+{% assign all_guides = site.guides | sort: "checked" | reverse %}
+{% assign products = "Confluence,Jira" | split: "," %}
+<div class="page wrap">
+  <div class="prose">
+    <h1>{{ site.guides_name | escape }}</h1>
+    <p class="lede">{{ page.description | escape }}</p>
+
+    {% if all_guides.size > 0 %}
+    {% for product in products %}
+      {% assign shown = 0 %}
+      {% for guide in all_guides %}
+        {% assign app = site.data.apps[guide.app] %}
+        {% if app and app.product == product %}
+          {% if shown == 0 %}
+    <h2 id="{{ product | downcase }}">{{ product | escape }}</h2>
+    <ol class="news-stream guides-stream">
+          {% endif %}
+          {% assign shown = shown | plus: 1 %}
+      <li class="news-item">
+        <time datetime="{{ guide.checked | date: "%Y-%m-%d" }}">{{ guide.checked | date: "%-d %b %Y" }}</time>
+        <div class="news-body">
+          <h3><a href="{{ guide.url }}">{{ guide.title | escape }}</a></h3>
+          {% if guide.description %}<p>{{ guide.description | escape }}</p>{% endif %}
+          <div class="news-tags">
+            <a class="app-chip" href="/apps/{{ app.slug }}"><img src="/assets/img/icons/{{ app.slug }}.svg" alt="" width="18" height="18">{{ app.name | escape }}</a>
+          </div>
+        </div>
+      </li>
+        {% endif %}
+      {% endfor %}
+      {% if shown > 0 %}
+    </ol>
+      {% endif %}
+    {% endfor %}
+    {% else %}
+    <p>Nothing here yet.</p>
+    {% endif %}
+
+    <p class="back-link"><a href="/">&larr; Back to home</a></p>
+  </div>
+</div>
