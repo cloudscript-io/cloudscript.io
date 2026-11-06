@@ -55,7 +55,7 @@ collections:
   guides:
     output: true
     permalink: /guides/:name
-guides_name: Guides
+guides_name: How-to
 
 # Internal / authoring files must NOT be published to the live site.
 exclude:
