@@ -73,7 +73,7 @@ layout: default
         {% assign target = site.guides | where: "url", target_url | first %}
         {% if target and target.title %}{% assign label = target.title %}{% endif %}
       {% endif %}
-      <li><a href="{{ href }}">{{ label | escape }}</a></li>
+      <li><a href="{{ href }}">{{ label | escape_once }}</a></li>
       {% endfor %}
     </ul>
     {% endif %}
