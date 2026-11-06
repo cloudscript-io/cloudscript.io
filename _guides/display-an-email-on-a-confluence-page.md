@@ -1,7 +1,7 @@
 ---
 layout: guide
 title: "How do I display an email on a Confluence page?"
-description: "Pasting an email into a Confluence page keeps its words and nothing else, and attaching the .msg or .eml file keeps everything but gives readers a download. How to show the email itself on the page, who can then see it, and what happens when the file is replaced or the page is copied."
+description: "How an email usually ends up on a Confluence page, what Confluence shows for an attached .msg or .eml file, how to display the email itself in place, who can then see it, and what happens when the file is replaced or the page is copied."
 app: email-viewer
 date: 2026-11-05
 checked: 2026-11-05
@@ -9,7 +9,7 @@ image: /apps/email-viewer/guide-hero.png
 see_also: ["/apps/email-viewer/#known-limitations", "original-email-on-jira-work-items-created-by-email"]
 faq:
   - q: "Can I paste an email into a Confluence page?"
-    a: "Yes, but only the words arrive. The headers, the formatting and the attachments are lost, and the pasted text can be edited like any other."
+    a: "Yes, but only the wording arrives. The sender, the date, the formatting and the attached files stay behind, and a reader later cannot tell the paste from the original."
   - q: "What happens if I attach the .msg or .eml file instead?"
     a: "Confluence keeps the whole email as a file. Readers see a tile and a download option, not the email. Whether a reader can open and view the downloaded file depends on the file format and the software available to them."
   - q: "Does Confluence preview an attached email?"
@@ -25,32 +25,30 @@ faq:
   - q: "What happens if the page is duplicated?"
     a: "Confluence copies the attachments, and the macro on the copy finds its file by name."
   - q: "Does the app fetch emails from a mailbox?"
-    a: "No. It renders a file already attached to the page."
+    a: "No. Something has to attach the email file to the page first; the macro only displays what is already there."
   - q: "Are the email's own attachments shown?"
     a: "They are listed at the foot of the email, each with a Download. An email attached inside the email is listed, not opened."
 ---
 
-Some emails belong on a page. The client's written approval of a scope change, the supplier's confirmation of a delivery date, the board member's objection that explains why a decision went the way it did. The page is where the work is written up, and the email is the evidence for it. The question is how to put it there so that a reader next year sees what was actually sent, and not somebody's summary of it.
+A year from now someone will open the page and want to know what was actually sent, not what the person writing the page remembered of it. That is the test for an email on a Confluence page: can a reader later see the message as it arrived, with its sender, its date, its wording and whatever came with it, and be sure that is what they are looking at?
 
-This guide covers the three things people do today and what each one loses, what Confluence itself does with an attached email file, how to show the email in place on the page, who can see it once it is there, and what happens when the file is replaced or the page is copied.
+This guide looks at how emails usually end up on pages, what Confluence itself does with an email file, how to show the email in place on the page, who can see it once it is there, and what happens when the file is replaced or the page is copied. We make an app for the showing-it-in-place part, and say so here so that you read the rest with that in mind.
 
-## What do people do with the email today, and what does each lose?
+## How do emails usually end up on a page?
 
-**Paste the text in.** Select the body of the email, copy, paste. The words arrive. The headers do not: who sent it, to whom, when, and from which mail server. Tables and signatures flatten, images drop out, and the attachments stay behind in the mailbox. The pasted words are also ordinary page text, so anyone with edit rights can change them, and a reader later has no way to tell the paste from the original.
+Most often as pasted text: the body selected in the mail program and dropped into the page. What reaches the page is the wording. The sender, the recipients, the date and the sending server stay in the mailbox, tables and signatures flatten, images drop out, and anything that was attached does not come along. Once it is page text it is only page text. A reader later cannot tell the paste from the original, and has nothing to check it against.
 
-**Attach the email file.** Save the email from Outlook as a .msg, or from most other mail programs as an .eml, and drag it onto the page. Confluence accepts it like any other file ([Atlassian: Upload a file](https://support.atlassian.com/confluence-cloud/docs/upload-a-file/){:target="_blank" rel="noopener"}). This keeps everything: the headers, the formatting, the attachments inside it. The cost is that nothing of the email is visible on the page. A reader sees a file tile and a download.
-
-**Screenshot it, or print it to PDF.** The email's look survives and the rest goes. There are no attachments to open, no headers to check, and an image of a table is not a table.
+Some people save the email as a file instead, a .msg from Outlook or an .eml from most other mail programs, and drag it onto the page, where Confluence accepts it like any other upload ([Atlassian: Upload a file](https://support.atlassian.com/confluence-cloud/docs/upload-a-file/){:target="_blank" rel="noopener"}). The message then travels with the page as the mail program wrote it, headers, formatting and attached files included. What the page shows for it is a file tile. The third habit is a screenshot or a PDF printout of the email, which preserves its appearance and nothing else: there is no attached file to open, no header to read, and an image of a table is not a table.
 
 ## What does Confluence do with an attached .eml or .msg?
 
 It stores it and lists it. The file appears on the page as a tile with Preview and Download options ([Atlassian: Display files and images](https://support.atlassian.com/confluence-cloud/docs/display-files-and-images/){:target="_blank" rel="noopener"}), and in the page's attachments view under its name, size, uploader and date. The attachments macro lists it the same way ([Atlassian: Insert the attachments macro](https://support.atlassian.com/confluence-cloud/docs/insert-the-attachments-macro/){:target="_blank" rel="noopener"}).
 
-Confluence's preview is where it stops. Not every file type can be displayed on a page ([Atlassian: Upload a file](https://support.atlassian.com/confluence-cloud/docs/upload-a-file/){:target="_blank" rel="noopener"}), and when we opened the previews on our own site, Confluence said it could not preview the .msg and offered a download instead, and showed the .eml as its raw source: the header lines, the MIME boundaries, the HTML tags, and the inline image and the attached PDF as blocks of encoded text. Either way, reading the email means downloading it and opening it in a mail program, which not everyone reading the page has to hand.
+Confluence's preview is where it stops. Not every file type can be displayed on a page ([Atlassian: Upload a file](https://support.atlassian.com/confluence-cloud/docs/upload-a-file/){:target="_blank" rel="noopener"}), and when we opened the previews on our own site, Confluence said it could not preview the .msg and offered a download instead, and showed the .eml as its raw source: the header lines, the MIME boundaries, the HTML tags, and the inline image and the attached PDF as blocks of encoded text. What a reader gets from either preview is the container rather than the message: a download prompt for the .msg, and for the .eml the encoded source, with the body and its images as blocks of text. Neither shows the email as the sender wrote it.
 
 ## How do I show the email itself on the page?
 
-We make an app for this, so read the rest of this section knowing that. [MSG & EML Email Viewer for Confluence](/apps/email-viewer) is a macro that displays an email file attached to the page as a readable email, in place, without copying anything out of the file into the page.
+[MSG & EML Email Viewer for Confluence](/apps/email-viewer), our app, is a macro that displays an email file attached to the page as a readable email, in place, without copying anything out of the file into the page.
 
 Edit the page, type `/` and part of the macro's name, and insert it. Its panel lists the .msg and .eml files already attached to the page; choose one, or drop the file onto the panel and it is attached when you save. Publish the page and the email renders where the macro sits.
 
@@ -70,7 +68,7 @@ What the reader gets is the email as it was sent: subject, From, To and Cc, the 
 
 Everyone who can see the page. The email is a page attachment, and anyone with permission to view a page can download its attachments ([Atlassian: Manage uploaded files](https://support.atlassian.com/confluence-cloud/docs/manage-uploaded-files/){:target="_blank" rel="noopener"}). The macro reads the file as the person viewing the page, under Confluence's own permissions, so it shows the email to exactly the people Confluence would let download it, including guests and, where a space allows them, anonymous readers.
 
-If the email is confidential, restrict the page. View restrictions carry down to child pages, and restricted content does not appear for people without access, in the page tree or in macros ([Atlassian: Change who can find content](https://support.atlassian.com/confluence-cloud/docs/add-or-remove-page-restrictions/){:target="_blank" rel="noopener"}). The file is parsed in the reader's browser, and the app keeps no copy of it anywhere.
+If the email is confidential, restrict the page. View restrictions carry down to child pages, and restricted content does not appear for people without access, in the page tree or in macros ([Atlassian: Change who can find content](https://support.atlassian.com/confluence-cloud/docs/add-or-remove-page-restrictions/){:target="_blank" rel="noopener"}). The macro writes nothing of the email into the page, and we run no server or store that could hold a copy; the page's attachment is the only copy there is.
 
 ## What happens when the file is replaced, or the page is copied?
 
@@ -86,7 +84,7 @@ On 5 November 2026, on our own Confluence Cloud site, we opened a page with a .m
 
 ## Quick answers
 
-**Can I paste an email into a Confluence page?** Yes, but only the words arrive. The headers, the formatting and the attachments are lost, and the pasted text can be edited like any other.
+**Can I paste an email into a Confluence page?** Yes, but only the wording arrives. The sender, the date, the formatting and the attached files stay behind, and a reader later cannot tell the paste from the original.
 
 **What happens if I attach the .msg or .eml file instead?** Confluence keeps the whole email as a file. Readers see a tile and a download option, not the email. Whether a reader can open and view the downloaded file depends on the file format and the software available to them.
 
@@ -102,6 +100,6 @@ On 5 November 2026, on our own Confluence Cloud site, we opened a page with a .m
 
 **What happens if the page is duplicated?** Confluence copies the attachments, and the macro on the copy finds its file by name.
 
-**Does the app fetch emails from a mailbox?** No. It renders a file already attached to the page.
+**Does the app fetch emails from a mailbox?** No. Something has to attach the email file to the page first; the macro only displays what is already there.
 
 **Are the email's own attachments shown?** They are listed at the foot of the email, each with a Download. An email attached inside the email is listed, not opened.
