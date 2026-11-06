@@ -36,7 +36,7 @@ This guide looks at how emails usually end up on pages, what Confluence itself d
 
 ## How do emails usually end up on a page?
 
-Most often as pasted text: the body selected in the mail program and dropped into the page. What reaches the page is the wording. The sender, the recipients, the date and the sending server stay in the mailbox, tables and signatures flatten, images drop out, and anything that was attached does not come along. Once it is page text it is only page text. A reader later cannot tell the paste from the original, and has nothing to check it against.
+Most often as pasted text: the body selected in the mail program and dropped into the page. What reaches the page is the wording. The sender, the recipients, the date and the sending server stay in the mailbox, tables and signatures flatten, images drop out, and the email's attached files are left behind in the mailbox. Once it is page text it is only page text. A reader later cannot tell the paste from the original, and has nothing to check it against.
 
 Some people save the email as a file instead, a .msg from Outlook or an .eml from most other mail programs, and drag it onto the page, where Confluence accepts it like any other upload ([Atlassian: Upload a file](https://support.atlassian.com/confluence-cloud/docs/upload-a-file/){:target="_blank" rel="noopener"}). The message then travels with the page as the mail program wrote it, headers, formatting and attached files included. What the page shows for it is a file tile. The third habit is a screenshot or a PDF printout of the email, which preserves its appearance and nothing else: there is no attached file to open, no header to read, and an image of a table is not a table.
 
@@ -48,7 +48,7 @@ Confluence's preview is where it stops. Not every file type can be displayed on 
 
 ## How do I show the email itself on the page?
 
-[MSG & EML Email Viewer for Confluence](/apps/email-viewer), our app, is a macro that displays an email file attached to the page as a readable email, in place, without copying anything out of the file into the page.
+[MSG & EML Email Viewer for Confluence](/apps/email-viewer), our app, is a macro that displays an email file attached to the page as a readable email, in place.
 
 Edit the page, type `/` and part of the macro's name, and insert it. Its panel lists the .msg and .eml files already attached to the page; choose one, or drop the file onto the panel and it is attached when you save. Publish the page and the email renders where the macro sits.
 
