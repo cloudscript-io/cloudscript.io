@@ -422,6 +422,9 @@ footer.site-footer { background: var(--ink); color: #C8D2E0; padding: 48px 0 30p
 .prose .news-item h3 a { color: var(--ink); font-weight: 700; }
 .prose .news-item h3 a:hover { color: var(--blue); }
 .prose ul.see-also { padding-left: 22px; }
+.prose figure.shot { margin: 28px 0; }
+.prose figure.shot img { border: 1px solid var(--line); border-radius: 12px; background: var(--cloud); }
+.prose figure.shot figcaption { font-size: 14px; color: var(--slate); margin-top: 8px; text-align: center; }
 
 /* ---- Responsive --------------------------------------------------------- */
 /* The featured thumbnail costs the description column 242px (image + gap), and that
