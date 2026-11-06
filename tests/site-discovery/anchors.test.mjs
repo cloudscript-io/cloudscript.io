@@ -87,8 +87,14 @@ test("scenario: deep link to a section (Mermaid, Layout engines)", () => {
 test("scenario: heading inside a section that already has an id (Page Sharing)", () => {
   for (const html of [readSource("apps/page-sharing/index.html"), read("apps/page-sharing/index.html")]) {
     const list = headings(html);
-    assert.deepEqual(list.map((h) => h.sectionId), PAGE_SHARING_SECTIONS);
-    for (const h of list) assert.equal(h.id, null, `"${h.text}" carries no id of its own`);
+    const inSections = list.filter((h) => h.sectionId);
+    assert.deepEqual(inSections.map((h) => h.sectionId), PAGE_SHARING_SECTIONS);
+    for (const h of inSections) assert.equal(h.id, null, `"${h.text}" carries no id of its own`);
+    // The per-app guides list (_includes/guides-list.html) renders a Guides heading outside every
+    // section once the app has a guide; it is the one heading allowed there, and it is its own
+    // address. The source holds only the Liquid tag, so it has no heading outside a section.
+    const outside = list.filter((h) => !h.sectionId);
+    assert.deepEqual(outside.map((h) => h.id), outside.length ? ["guides"] : [], "only the Guides heading sits outside the sections");
     for (const id of PAGE_SHARING_SECTIONS) assert.equal(idsOf(html).filter((x) => x === id).length, 1, `#${id} names one element`);
   }
 });

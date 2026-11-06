@@ -140,6 +140,7 @@ NOT carry an `id` of its own (the section's `id` addresses it). The IDs `attach`
 - **GIVEN** the Page Sharing guide, where every `<h2>` sits inside a `<section>` with an `id` (`how`, `data-flow`, `publisher`, `subscriber`, `space-admin`, `admin`, `faq`)
 - **THEN** each such `<h2>` has no `id` of its own and its enclosing `<section>` has one
 - **AND** `https://cloudscript.io/apps/page-sharing/#<section id>` scrolls to that section
+- **AND** the only `<h2>` outside those sections on the built page is the per-app guides list's `<h2 id="guides">`, present once the app has a guide
 
 #### Scenario: Knowledge base unaffected
 - **GIVEN** the guides with new heading IDs
