@@ -6,7 +6,7 @@ app: email-viewer-jira
 date: 2026-11-05
 checked: 2026-11-05
 image: /apps/email-viewer-jira/guide-emails-tab.png
-see_also: ["original-email-on-jira-work-items-created-by-email", "/apps/email-viewer-jira/#which-files-are-shown"]
+see_also: ["original-email-on-jira-work-items-created-by-email", "/apps/email-viewer-jira/#which-files-are-shown", "share-an-email-with-your-team-when-outlook-is-down"]
 faq:
   - q: "Why does Jira show the email as raw text?"
     a: "Because a .eml file is text, and Jira previews it as text. Email is not among the file types Jira renders."

@@ -6,7 +6,7 @@ app: email-viewer
 date: 2026-11-05
 checked: 2026-11-05
 image: /apps/email-viewer/guide-hero.png
-see_also: ["/apps/email-viewer/#known-limitations", "original-email-on-jira-work-items-created-by-email"]
+see_also: ["/apps/email-viewer/#known-limitations", "original-email-on-jira-work-items-created-by-email", "share-an-email-with-your-team-when-outlook-is-down"]
 faq:
   - q: "Can I paste an email into a Confluence page?"
     a: "Yes, but only the wording arrives. The sender, the date, the formatting and the attached files stay behind, and a reader later cannot tell the paste from the original."
